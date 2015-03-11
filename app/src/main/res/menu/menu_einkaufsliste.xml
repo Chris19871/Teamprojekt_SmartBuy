@@ -10,6 +10,10 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item android:id="@+id/action_newProduct"
+        android:icon="@drawable/action_add"
+        android:title="New"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/action_Einkaufsmodus"
         android:icon="@drawable/shoppingcar"
         android:title="New"
         app:showAsAction="ifRoom" />
