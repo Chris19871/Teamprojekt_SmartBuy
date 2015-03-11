@@ -1,6 +1,7 @@
 package smartbuy.teamproject.application;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Dialog;
@@ -22,6 +23,7 @@ public class MainActivity extends ActionBarActivity
 {
 
     final Context context = this;
+    //private ActionBar smartBuyactionBar;
     private Button button;
     private ActionBar smartBuyActionBar;
 
@@ -30,6 +32,11 @@ public class MainActivity extends ActionBarActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Typeface font = Typeface.createFromAsset(getAssets(),"fonts/BAUHS93.TTF");
+        TextView startText = (TextView) findViewById(R.id.startScreenText);
+        startText.setTypeface(font);
+
         smartBuyActionBar = getSupportActionBar();
         smartBuyActionBar.setDisplayShowTitleEnabled(false);
     }
