@@ -23,7 +23,6 @@ public class MainActivity extends ActionBarActivity
 {
 
     final Context context = this;
-    //private ActionBar smartBuyactionBar;
     private Button button;
     private ActionBar smartBuyActionBar;
 
@@ -88,6 +87,11 @@ public class MainActivity extends ActionBarActivity
 
         uberDialog.show();
     }
+    public void wechsel()
+    {
+        final Intent einkaufsliste = new Intent(this,Einkaufsliste.class);
+        startActivity(einkaufsliste);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -117,7 +121,11 @@ public class MainActivity extends ActionBarActivity
         if (id == R.id.action_add) {
                 onClick();
                 return true;
-            }
+         }
+        if (id == R.id.action_Einkauf) {
+            wechsel();
+            return true;
+        }
 
             return super.onOptionsItemSelected(item);
     }

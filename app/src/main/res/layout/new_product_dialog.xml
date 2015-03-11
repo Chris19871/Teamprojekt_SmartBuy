@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    style="@style/newProduct">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/newProductLogo"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/smartbuy_logo"
+        android:clickable="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="141dp"
+        android:layout_height="wrap_content"
+        android:text="Beschreibung"
+        android:id="@+id/textBeschreibung"
+        android:layout_weight="0.03"
+        style="@style/newProductBeschreibung"
+        android:layout_below="@+id/newProductLogo"
+        android:layout_alignLeft="@+id/textnewProduct"
+        android:layout_alignStart="@+id/textnewProduct" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abbrechen"
+        android:id="@+id/newProductCancel"
+        style="@style/newProductButton"
+        android:padding="10dp"
+        android:layout_gravity="right"
+        android:layout_below="@+id/textnewProduct"
+        android:layout_alignRight="@+id/textBeschreibung"
+        android:layout_alignEnd="@+id/textBeschreibung" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Speichern"
+        android:id="@+id/newProductSave"
+        style="@style/newProductButton"
+        android:elegantTextHeight="false"
+        android:focusable="false"
+        android:longClickable="false"
+        android:shadowColor="#ff000000"
+        android:padding="10dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/textnewProduct"
+        android:layout_alignRight="@+id/newProductLogo"
+        android:layout_alignEnd="@+id/newProductLogo" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:text="Logo von SmartBuy"
+        android:id="@+id/textnewProduct"
+        android:layout_weight="0.36"
+        style="@style/newProduct"
+        android:layout_below="@+id/textBeschreibung"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

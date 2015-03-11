@@ -8,5 +8,9 @@
     <string name="stoppUhrEinstellungen">StoppUhr</string>
     <string name="stoppUhrBeschreibung">Aktiviert oder Deaktiviert das Stoppen der Zeit während eines Einkaufs</string>
     <string name="allgemein">Allgemein</string>
+    <string name="title_activity_einkaufsliste">Einkaufsliste</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
