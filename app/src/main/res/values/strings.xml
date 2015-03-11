@@ -1,5 +1,12 @@
 <resources>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="app_name">Application</string>
+    <string name="app_name">SmartBuy</string>
+    <string name="einstellungen">Einstellungen</string>
+    <string name="ueber">Über</string>
+
+    <!-- Strings für Einstellungen-->
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="stoppUhrEinstellungen">StoppUhr</string>
+    <string name="stoppUhrBeschreibung">Aktiviert oder Deaktiviert das Stoppen der Zeit während eines Einkaufs</string>
+    <string name="allgemein">Allgemein</string>
+
 </resources>
