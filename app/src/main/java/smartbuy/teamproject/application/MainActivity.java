@@ -30,26 +30,26 @@ public class MainActivity extends ActionBarActivity
     public void onClick()
     {
 
-        // custom dialog
+        // custom add_new_einkaufsmodus
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog);
+        dialog.setContentView(R.layout.add_new_einkaufsmodus);
 
 
 
-        // set the custom dialog components - text, image and button
+        // set the custom add_new_einkaufsmodus components - text, image and button
         TextView text = (TextView) dialog.findViewById(R.id.dialogName);
         text.setText("Beispiel!");
 
         Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
-        // if button is clicked, close the custom dialog
+        // if button is clicked, close the custom add_new_einkaufsmodus
         dialogButtonOk.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-               // dialog.dismiss();
+               // add_new_einkaufsmodus.dismiss();
             }
         });
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-        // if button is clicked, close the custom dialog
+        // if button is clicked, close the custom add_new_einkaufsmodus
         dialogButtonCancel.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 dialog.dismiss();
