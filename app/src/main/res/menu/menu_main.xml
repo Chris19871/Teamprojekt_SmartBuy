@@ -11,7 +11,7 @@
         app:showAsAction="never" />
     <!-- Search, should appear as action button -->
     <item android:id="@+id/action_add"
-        android:icon="@drawable/ic_action_content_add_circle_outline"
+        android:icon="@drawable/action_add"
         android:title="Hinzufügen"
         app:showAsAction="ifRoom" />
 
