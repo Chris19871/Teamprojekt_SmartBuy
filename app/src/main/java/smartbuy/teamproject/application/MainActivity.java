@@ -1,5 +1,7 @@
 package smartbuy.teamproject.application;
 
+
+import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Dialog;
@@ -18,6 +20,7 @@ public class MainActivity extends ActionBarActivity
 {
 
     final Context context = this;
+    //private ActionBar smartBuyactionBar;
     private Button button;
 
     @Override
@@ -25,6 +28,9 @@ public class MainActivity extends ActionBarActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+      //  smartBuyactionBar = getSupportActionBar();
+        //smartBuyactionBar.setDisplayShowTitleEnabled(false);
+
     }
 
     public void onClick()
@@ -62,6 +68,15 @@ public class MainActivity extends ActionBarActivity
     {
         final Intent settings = new Intent(this,SettingsActivity.class);
         startActivity(settings);
+
+    }
+    public void uberOpen()
+    {
+        final Dialog uberDialog = new Dialog(context);
+        uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        uberDialog.setContentView(R.layout.ueber_dialog);
+
+        uberDialog.show();
     }
 
 
@@ -86,9 +101,13 @@ public class MainActivity extends ActionBarActivity
             settingsOpen();
             return true;
         }
+        if (id == R.id.ueber) {
+            uberOpen();
+            return true;
+        }
         if (id == R.id.action_add) {
-                onClick();
-                return true;
+            onClick();
+            return true;
             }
 
             return super.onOptionsItemSelected(item);

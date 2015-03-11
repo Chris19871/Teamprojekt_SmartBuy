@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="startseitenfarbe">#FF60E2FF</color>
+    <color name="startScreen">#FF60E2FF</color>
+    <color name="actionbar">#FF4FBAFF</color>
+
 </resources>

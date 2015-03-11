@@ -1,8 +1,28 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/startScreen</item>
+
+
+
     </style>
+    <!-- Startbildschrim Schriftzug. -->
+    <style name="startscreen" parent="android:Widget.TextView">
+        <item name="android:background">@color/startScreen</item>
+        <item name="android:textSize">60sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:text"><u>SmartBuy</u></item>
+
+    </style>
+
+    <!-- ÜberView Style -->
+    <style name="uberTextView" parent="android:Widget.TextView">
+        <item name="android:background">@color/startScreen</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
 
 </resources>
