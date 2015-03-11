@@ -6,9 +6,9 @@ package purchase;
 public class PreselectionItem
 {
     private String name;
-    private PurchaseItems items;
+    private PurchaseItems[] items;
 
-    public PreselectionItem(String name, PurchaseItems items)
+    public PreselectionItem(String name, PurchaseItems[] items)
     {
         this.name = name;
         this.items = items;
