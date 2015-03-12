@@ -15,7 +15,7 @@ import android.widget.Button;
 
 
 
-public class Einkaufsliste extends ActionBarActivity{
+public class Einkaufsliste extends ActionBarActivity {
 
     final Context context = this;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="300dp"
+    android:layout_height="350dp"
     style="@style/newProduct">
 
     <EditText
@@ -10,77 +10,66 @@
         android:id="@+id/dialogName"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:hint="Artikelname" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/dialogSpinner"
+        android:spinnerMode="dropdown"
+        android:focusable="false"
+        android:minHeight="50dp"
+        style="@style/newProduct"
+        android:popupBackground="#ff60e2ff"
+        android:dropDownSelector="#ff60e2ff"
         android:layout_below="@+id/dialogName"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#ff42c5ff" />
+
+    <Button
+        android:layout_width="100dp"
+        style="@style/newProductButton"
+        android:layout_height="50dp"
+        android:text="Cancel"
+        android:id="@+id/dialogButtonCancel"
+        android:nestedScrollingEnabled="false"
+        android:layout_row="10"
+        android:layout_column="0"
+        android:layout_below="@+id/gridLayout"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
-        android:spinnerMode="dialog"
-        android:layout_alignRight="@+id/dialogButtonOK"
-        android:layout_alignEnd="@+id/dialogButtonOK"
-        android:focusable="false"
-        android:layout_alignParentEnd="false"
-        android:minHeight="50dp" />
+        android:height="50dp" />
+
+    <Button
+        android:id="@+id/dialogButtonOK"
+        style="@style/newProductButton"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:longClickable="false"
+        android:onClick="showDialog"
+        android:text="OK"
+        android:layout_row="10"
+        android:layout_column="7"
+        android:layout_marginRight="71dp"
+        android:layout_marginEnd="71dp"
+        android:height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <GridLayout
         android:layout_width="fill_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:id="@+id/gridLayout"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/dialogSpinner">
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/dialogSpinner"
+        android:layout_alignParentEnd="true">
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Box1"
-            android:id="@+id/box1"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:checked="false"
-            android:clickable="true" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Box2"
-            android:id="@+id/box2"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:checked="false"
-            android:clickable="true" />
 
-        <Button
-            android:layout_width="100dp"
-            style="@style/newProductButton"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:id="@+id/dialogButtonCancel"
-            android:nestedScrollingEnabled="false"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_row="8"
-            android:layout_column="1" />
-
-        <Button
-            android:id="@+id/dialogButtonOK"
-            style="@style/newProductButton"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:longClickable="false"
-            android:onClick="showDialog"
-            android:text="OK"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/dialogButtonCancel"
-            android:layout_toEndOf="@+id/dialogButtonCancel"
-            android:layout_row="8"
-            android:layout_column="3" />
     </GridLayout>
 
 </RelativeLayout>

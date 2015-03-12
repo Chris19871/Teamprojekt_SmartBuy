@@ -14,5 +14,17 @@ public class PreselectionItem
         this.items = items;
     }
 
+    public PurchaseItems[] getItems() {
+        return items;
+    }
 
+    public void setItems(PurchaseItems[] items) {
+        this.items = items;
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
+    }
 }

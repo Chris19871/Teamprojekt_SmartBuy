@@ -7,11 +7,24 @@ import java.util.ArrayList;
  */
 public class ItemList {
     private ArrayList<PurchaseItems> items;
+    private String name;
 
 
-    public ItemList(ArrayList<PurchaseItems> items)
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ItemList(String name, ArrayList<PurchaseItems> items)
     {
+
         this.items = items;
+        this.name = name;
     }
 
     public void addItem(PurchaseItems pItem)
