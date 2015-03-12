@@ -17,7 +17,7 @@
         android:layout_width="288dp"
         android:layout_height="wrap_content"
         android:text="Teamprojekt der Hochschule Trier"
-        android:id="@+id/textnewProduct"
+        android:id="@+id/descnewProduct"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.16"
         style="@style/uberTextView" />

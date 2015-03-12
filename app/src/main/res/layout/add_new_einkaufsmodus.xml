@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="300dp" >
+    android:layout_height="300dp"
+    style="@style/newProduct">
 
     <EditText
         android:layout_width="wrap_content"
@@ -24,27 +25,6 @@
         android:focusable="false"
         android:layout_alignParentEnd="false"
         android:minHeight="50dp" />
-
-    <Button
-        android:id="@+id/dialogButtonOK"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:longClickable="false"
-        android:onClick="showDialog"
-        android:text="OK"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/dialogButtonCancel"
-        android:layout_toEndOf="@+id/dialogButtonCancel" />
-
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:id="@+id/dialogButtonCancel"
-        android:nestedScrollingEnabled="false"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <GridLayout
         android:layout_width="fill_parent"
@@ -74,6 +54,33 @@
             android:layout_column="1"
             android:checked="false"
             android:clickable="true" />
+
+        <Button
+            android:layout_width="100dp"
+            style="@style/newProductButton"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/dialogButtonCancel"
+            android:nestedScrollingEnabled="false"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_row="8"
+            android:layout_column="1" />
+
+        <Button
+            android:id="@+id/dialogButtonOK"
+            style="@style/newProductButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:longClickable="false"
+            android:onClick="showDialog"
+            android:text="OK"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/dialogButtonCancel"
+            android:layout_toEndOf="@+id/dialogButtonCancel"
+            android:layout_row="8"
+            android:layout_column="3" />
     </GridLayout>
 
 </RelativeLayout>
