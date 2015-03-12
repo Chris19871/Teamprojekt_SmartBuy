@@ -72,6 +72,11 @@ public class Einkaufsliste extends ActionBarActivity {
         startActivity(einkaufsmodus);
 
     }
+    public void switchHome()
+    {
+        final Intent home = new Intent(this,MainActivity.class);
+        startActivity(home);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,8 +105,13 @@ public class Einkaufsliste extends ActionBarActivity {
             newProduct();
             return true;
 
-        }if (id == R.id.action_Einkaufsmodus) {
+        }
+        if (id == R.id.action_Einkaufsmodus) {
             openEinkaufsmodus();
+            return true;
+        }
+        if (id == R.id.action_Home) {
+            switchHome();
             return true;
         }
 

@@ -1,13 +1,19 @@
 package smartbuy.teamproject.application;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 
 public class Einkaufmodus extends ActionBarActivity {
+
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,6 +21,25 @@ public class Einkaufmodus extends ActionBarActivity {
         setContentView(R.layout.einkaufmodus);
 
 
+    }
+    public void settingsOpen()
+    {
+        final Intent settings = new Intent(this,SettingsActivity.class);
+        startActivity(settings);
+    }
+    public void uberOpen()
+    {
+        final Dialog uberDialog = new Dialog(context);
+        uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        uberDialog.setContentView(R.layout.ueber_dialog);
+
+        uberDialog.show();
+    }
+
+    public void switchHome()
+    {
+        final Intent home = new Intent(this,MainActivity.class);
+        startActivity(home);
     }
 
 
@@ -33,7 +58,16 @@ public class Einkaufmodus extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.settings) {
+            settingsOpen();
+            return true;
+        }
+        if (id == R.id.ueber) {
+            uberOpen();
+            return true;
+        }
+        if (id == R.id.action_Home) {
+            switchHome();
             return true;
         }
 

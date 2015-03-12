@@ -12,9 +12,13 @@
     <item android:id="@+id/action_newProduct"
         android:icon="@drawable/action_add"
         android:title="New"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item android:id="@+id/action_Einkaufsmodus"
         android:icon="@drawable/shoppingcar"
-        android:title="New"
-        app:showAsAction="ifRoom" />
+        android:title="Einkaufsmodus"
+        app:showAsAction="always" />
+    <item android:id="@+id/action_Home"
+        android:icon="@drawable/ic_action_action_home"
+        android:title="Home"
+        app:showAsAction="always" />
 </menu>
