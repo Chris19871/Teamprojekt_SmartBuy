@@ -132,7 +132,7 @@ public class MainActivity extends ActionBarActivity
 
             b[i] = new CheckBox(this);
             b[i].setText(pItems[i].getName());
-            b[i].setWidth(250);
+            b[i].setMinimumWidth(250);
         }
 
         for (int i = 0; i < b.length; i++)
