@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.EditText;
+import android.widget.Button;
+
+
 
 
 public class Einkaufsliste extends ActionBarActivity {
@@ -32,6 +34,7 @@ public class Einkaufsliste extends ActionBarActivity {
         uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         uberDialog.setContentView(R.layout.ueber_dialog);
 
+
         uberDialog.show();
     }
 
@@ -42,7 +45,11 @@ public class Einkaufsliste extends ActionBarActivity {
         newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
         newProducts.setContentView(R.layout.new_product_dialog);
 
-        newProducts.show();
+        Button newProductCancelButton = (Button) findViewById(R.id.newProductCancel);
+        newProductCancelButton.setOnClickListener((v) -> {newProducts.dismiss();});
+
+
+            newProducts.show();
     }
 
     @Override
