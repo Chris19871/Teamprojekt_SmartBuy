@@ -6,14 +6,16 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View.OnClickListener;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
 
 
 
-public class Einkaufsliste extends ActionBarActivity {
+public class Einkaufsliste extends ActionBarActivity{
 
     final Context context = this;
 
@@ -34,7 +36,6 @@ public class Einkaufsliste extends ActionBarActivity {
         uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         uberDialog.setContentView(R.layout.ueber_dialog);
 
-
         uberDialog.show();
     }
 
@@ -45,11 +46,25 @@ public class Einkaufsliste extends ActionBarActivity {
         newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
         newProducts.setContentView(R.layout.new_product_dialog);
 
-        Button newProductCancelButton = (Button) findViewById(R.id.newProductCancel);
-        newProductCancelButton.setOnClickListener((v) -> {newProducts.dismiss();});
+        Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
+        dialogButtonSave.setOnClickListener(new OnClickListener() {
+            public void onClick(View v)
+            {
+
+            }
+        });
+
+        Button dialogButtonCancel = (Button) newProducts.findViewById(R.id.newProductCancel);
+        dialogButtonCancel.setOnClickListener(new OnClickListener() {
+            public void onClick(View v)
+            {
+                newProducts.dismiss();
+            }
+        });
 
 
-            newProducts.show();
+
+        newProducts.show();
     }
 
     @Override

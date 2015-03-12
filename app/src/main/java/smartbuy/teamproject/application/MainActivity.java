@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity
         smartBuyActionBar.setDisplayShowTitleEnabled(false);
     }
 
-    public void onClick()
+    public void newEinkaufsliste()
     {
         // custom add_new_einkaufsmodus
         final Dialog dialog = new Dialog(context);
@@ -119,7 +119,7 @@ public class MainActivity extends ActionBarActivity
             return true;
         }
         if (id == R.id.action_add) {
-                onClick();
+                newEinkaufsliste();
                 return true;
          }
         if (id == R.id.action_Einkauf) {
