@@ -205,7 +205,7 @@ public class MainActivity extends ActionBarActivity
 
     public void wechsel()
     {
-        final Intent einkaufsliste = new Intent(this, smartbuy.teamproject.application.Einkaufsliste.class);
+        final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
         startActivity(einkaufsliste);
     }
 

@@ -13,10 +13,10 @@ import android.view.Window;
 import android.widget.Button;
 
 
-public class Einkaufsliste extends ActionBarActivity
+public class EinkaufslisteActivity extends ActionBarActivity
 {
     private String listenName;
-    private Einkaufsliste aktListe;
+    private EinkaufslisteActivity aktListe;
     final Context context = this;
 
     @Override
@@ -72,7 +72,7 @@ public class Einkaufsliste extends ActionBarActivity
 
     public void openEinkaufsmodus()
     {
-        final Intent einkaufsmodus = new Intent(this, Einkaufmodus.class);
+        final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
         startActivity(einkaufsmodus);
 
     }
@@ -141,12 +141,12 @@ public class Einkaufsliste extends ActionBarActivity
         this.listenName = listenName;
     }
 
-    public Einkaufsliste getAktListe()
+    public EinkaufslisteActivity getAktListe()
     {
         return aktListe;
     }
 
-    public void setAktListe(Einkaufsliste aktListe)
+    public void setAktListe(EinkaufslisteActivity aktListe)
     {
         this.aktListe = aktListe;
     }

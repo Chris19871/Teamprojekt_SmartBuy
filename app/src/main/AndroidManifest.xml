@@ -19,7 +19,7 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name=".Einkaufsliste"
+            android:name=".EinkaufslisteActivity"
             android:label="@string/title_activity_einkaufsliste" >
         </activity>
         <activity
@@ -27,7 +27,7 @@
             android:label="@string/title_activity_einkaufsmodus" >
         </activity>
         <activity
-            android:name=".Einkaufmodus"
+            android:name=".EinkaufmodusActivity"
             android:label="@string/title_activity_einkaufmodus" >
         </activity>
         <activity

@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.view.Window;
 
 
-public class Einkaufmodus extends ActionBarActivity
+public class EinkaufmodusActivity extends ActionBarActivity
 {
 
     final Context context = this;
