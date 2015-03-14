@@ -1,33 +1,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
-    android:background="@color/startseitenfarbe">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="SmartBuy"
-        android:id="@+id/SmartBuy"
+        android:id="@+id/startScreenText"
         android:layout_weight="0.27"
         android:enabled="true"
-        android:textSize="60dp"
         android:autoText="false"
-        android:gravity="bottom|center_horizontal"
         android:layout_row="1"
         android:layout_column="11"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        style="@style/startscreen" />
 
-    <ExpandableListView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/expandableListView"
-        android:layout_below="@+id/SmartBuy"
-        android:layout_centerHorizontal="true"
-        android:choiceMode="singleChoice" />
+        android:id="@+id/ListView"
+        android:choiceMode="singleChoice"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/startScreenText" />
 
 </RelativeLayout>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="350dp"
+    style="@style/newProduct">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialogName"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Listenname" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialogSpinner"
+        android:spinnerMode="dropdown"
+        android:focusable="false"
+        android:minHeight="50dp"
+        style="@style/newProduct"
+        android:popupBackground="#ff60e2ff"
+        android:dropDownSelector="#ff60e2ff"
+        android:layout_below="@+id/dialogName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#ff42c5ff" />
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:id="@+id/gridLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/dialogSpinner"
+        android:layout_alignParentEnd="true">
+
+
+
+    </GridLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/gridLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            style="@style/newProductButton"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/dialogButtonCancel"
+            android:nestedScrollingEnabled="false"
+            android:layout_row="10"
+            android:layout_column="0"
+            android:layout_below="@+id/gridLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
+            android:layout_marginRight="20dp" />
+
+        <Button
+            android:id="@+id/dialogButtonOK"
+            style="@style/newProductButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:longClickable="false"
+            android:onClick="showDialog"
+            android:text="OK"
+            android:layout_row="10"
+            android:layout_column="7"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="20dp" />
+    </LinearLayout>
+
+</RelativeLayout>

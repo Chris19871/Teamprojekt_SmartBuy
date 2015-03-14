@@ -5,12 +5,13 @@ import android.graphics.Picture;
 /**
  * Created by Christian Meisberger on 09.03.2015.
  */
-public class PurchaseItems {
+public class EinkaufsArtikel
+{
     private String name;
     private String desc;
     private Picture pic;
 
-    public PurchaseItems(String name, String desc, Picture pic)
+    public EinkaufsArtikel(String name, String desc, Picture pic)
     {
         this.name = name;
         this.desc = desc;

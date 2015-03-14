@@ -8,5 +8,21 @@
     <string name="stoppUhrEinstellungen">StoppUhr</string>
     <string name="stoppUhrBeschreibung">Aktiviert oder Deaktiviert das Stoppen der Zeit während eines Einkaufs</string>
     <string name="allgemein">Allgemein</string>
+    <string name="title_activity_einkaufsliste">Einkaufsliste</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_einkaufsmodus">Einkaufsmodus</string>
+
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_einkaufmodus">Einkaufmodus</string>
+    <string name="title_activity_test1">Test1</string>
+    <string name="title_activity_test2">Test2</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

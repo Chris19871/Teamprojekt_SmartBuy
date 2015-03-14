@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:weightSum="1"
+    style="@style/newProduct"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/newProductLogo"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/smartbuy_logo"
+        android:clickable="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/productName"
+        android:editable="true"
+        android:gravity="center_horizontal"
+        android:autoText="false"
+        android:layout_below="@+id/newProductLogo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:hint="Produktname"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Beschreibung"
+        android:id="@+id/textBeschreibung"
+        android:layout_weight="0.03"
+        style="@style/newProductBeschreibung"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/productName" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:hint="Logo von SmartBuy"
+        android:id="@+id/descnewProduct"
+        style="@style/newProduct"
+        android:layout_below="@+id/textBeschreibung"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:gravity="top"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/newProductLogo"
+        android:layout_alignStart="@+id/newProductLogo"
+        android:layout_below="@+id/descnewProduct"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Abbrechen"
+            android:id="@+id/newProductCancel"
+            style="@style/newProductButton"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/newProductSave"
+            android:layout_toStartOf="@+id/newProductSave"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Speichern"
+            android:id="@+id/newProductSave"
+            style="@style/newProductButton"
+            android:elegantTextHeight="false"
+            android:focusable="false"
+            android:longClickable="false"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/newProductLogo"
+            android:layout_alignEnd="@+id/newProductLogo"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+    </LinearLayout>
+
+</RelativeLayout>
