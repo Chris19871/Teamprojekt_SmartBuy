@@ -15,7 +15,8 @@ import android.widget.Button;
 
 public class Einkaufsliste extends ActionBarActivity
 {
-
+    private String listenName;
+    private Einkaufsliste aktListe;
     final Context context = this;
 
     @Override
@@ -128,5 +129,25 @@ public class Einkaufsliste extends ActionBarActivity
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public String getListenName()
+    {
+        return listenName;
+    }
+
+    public void setListenName(String listenName)
+    {
+        this.listenName = listenName;
+    }
+
+    public Einkaufsliste getAktListe()
+    {
+        return aktListe;
+    }
+
+    public void setAktListe(Einkaufsliste aktListe)
+    {
+        this.aktListe = aktListe;
     }
 }

@@ -5,12 +5,10 @@ import java.util.ArrayList;
 /**
  * Created by Christian Meisberger on 09.03.2015.
  */
-public class ItemList {
-    private ArrayList<PurchaseItems> items;
+public class Einkaufsliste
+{
+    private ArrayList<EinkaufsArtikel> items;
     private String name;
-
-
-
 
     public String getName() {
         return name;
@@ -20,14 +18,14 @@ public class ItemList {
         this.name = name;
     }
 
-    public ItemList(String name, ArrayList<PurchaseItems> items)
+    public Einkaufsliste(String name, ArrayList<EinkaufsArtikel> items)
     {
 
         this.items = items;
         this.name = name;
     }
 
-    public void addItem(PurchaseItems pItem)
+    public void addItem(EinkaufsArtikel pItem)
     {
         items.add(pItem);
     }

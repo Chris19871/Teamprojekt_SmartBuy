@@ -24,22 +24,22 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import purchase.ItemList;
-import purchase.PreselectionItem;
-import purchase.PurchaseItems;
+import purchase.EinkaufsArtikel;
+import purchase.Einkaufsliste;
+import purchase.VorauswahlArtikel;
 
 public class MainActivity extends ActionBarActivity
 {
     final Context context = this;
     private Button button;
     private GridLayout grid;
-    private ArrayAdapter<PreselectionItem> items;
+    private ArrayAdapter<VorauswahlArtikel> items;
     private ListView listView;
-    private ArrayAdapter<ItemList> itemListsAdapter;
+    private ArrayAdapter<Einkaufsliste> itemListsAdapter;
     private CheckBox[] b;
     private int boxCounter = 0;
-    private PurchaseItems[] addNewList;
-    ArrayList<ItemList> itemList;
+    private EinkaufsArtikel[] addNewList;
+    ArrayList<Einkaufsliste> einkaufsliste;
     private EditText listName;
 
     @Override
@@ -55,10 +55,10 @@ public class MainActivity extends ActionBarActivity
         ActionBar smartBuyActionBar = getSupportActionBar();
         smartBuyActionBar.setDisplayShowTitleEnabled(false);
 
-        itemList = new ArrayList<>();
+        einkaufsliste = new ArrayList<>();
         listView = (ListView) findViewById(R.id.ListView);
-        itemListsAdapter = new ArrayAdapter<ItemList>(this,
-                android.R.layout.simple_list_item_1, itemList);
+        itemListsAdapter = new ArrayAdapter<Einkaufsliste>(this,
+                android.R.layout.simple_list_item_1, einkaufsliste);
         listView.setAdapter(itemListsAdapter);
     }
 
@@ -71,16 +71,16 @@ public class MainActivity extends ActionBarActivity
         listName = (EditText) dialog.findViewById(R.id.dialogName);
         grid = (GridLayout) dialog.findViewById(R.id.gridLayout);
 
-        PurchaseItems[] gebItems = {new PurchaseItems("Partyhüte", null, null), new PurchaseItems("Besteck", null, null)};
-        PreselectionItem geburtstag = new PreselectionItem("Geburtstag", gebItems);
-        PurchaseItems[] partyItems = {new PurchaseItems("Fleisch", null, null), new PurchaseItems("Bier", null, null)};
-        PreselectionItem party = new PreselectionItem("Party", partyItems);
+        EinkaufsArtikel[] gebItems = {new EinkaufsArtikel("Partyhüte", null, null), new EinkaufsArtikel("Besteck", null, null)};
+        VorauswahlArtikel geburtstag = new VorauswahlArtikel("Geburtstag", gebItems);
+        EinkaufsArtikel[] partyItems = {new EinkaufsArtikel("Fleisch", null, null), new EinkaufsArtikel("Bier", null, null)};
+        VorauswahlArtikel party = new VorauswahlArtikel("Party", partyItems);
 
-        ArrayList<PreselectionItem> list = new ArrayList<>();
+        ArrayList<VorauswahlArtikel> list = new ArrayList<>();
         list.add(geburtstag);
         list.add(party);
 
-        items = new ArrayAdapter<PreselectionItem>(getApplicationContext(),
+        items = new ArrayAdapter<VorauswahlArtikel>(getApplicationContext(),
                 android.R.layout.simple_dropdown_item_1line, list);
 
 
@@ -133,8 +133,8 @@ public class MainActivity extends ActionBarActivity
 
     public void addBox(int index)
     {
-        PreselectionItem item = items.getItem(index);
-        PurchaseItems[] pItems = item.getItems();
+        VorauswahlArtikel item = items.getItem(index);
+        EinkaufsArtikel[] pItems = item.getItems();
         addNewList = pItems;
         grid.removeAllViews();
         grid.setColumnCount(2);
@@ -172,20 +172,20 @@ public class MainActivity extends ActionBarActivity
     public void generateItemList()
     {
         String name = listName.getText().toString();
-        ArrayList<PurchaseItems> newList = new ArrayList<>();
-        for(int i=0;i< boxCounter; i++)
+        ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
+        for (int i = 0; i < boxCounter; i++)
         {
-            if(b[i].isChecked())
+            if (b[i].isChecked())
             {
                 newList.add(addNewList[i]);
             }
         }
-        addList(new ItemList(name, newList));
+        addList(new Einkaufsliste(name, newList));
     }
 
-    public void addList(ItemList list)
+    public void addList(Einkaufsliste list)
     {
-        itemList.add(list);
+        einkaufsliste.add(list);
     }
 
     public void settingsOpen()
@@ -205,7 +205,7 @@ public class MainActivity extends ActionBarActivity
 
     public void wechsel()
     {
-        final Intent einkaufsliste = new Intent(this, Einkaufsliste.class);
+        final Intent einkaufsliste = new Intent(this, smartbuy.teamproject.application.Einkaufsliste.class);
         startActivity(einkaufsliste);
     }
 
