@@ -11,22 +11,26 @@ import android.view.MenuItem;
 import android.view.Window;
 
 
-public class Einkaufmodus extends ActionBarActivity {
+public class Einkaufmodus extends ActionBarActivity
+{
 
     final Context context = this;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufmodus);
 
 
     }
+
     public void settingsOpen()
     {
-        final Intent settings = new Intent(this,SettingsActivity.class);
+        final Intent settings = new Intent(this, SettingsActivity.class);
         startActivity(settings);
     }
+
     public void uberOpen()
     {
         final Dialog uberDialog = new Dialog(context);
@@ -38,35 +42,40 @@ public class Einkaufmodus extends ActionBarActivity {
 
     public void switchHome()
     {
-        final Intent home = new Intent(this,MainActivity.class);
+        final Intent home = new Intent(this, MainActivity.class);
         startActivity(home);
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_einkaufmodus, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
+        if (id == R.id.settings)
+        {
             settingsOpen();
             return true;
         }
-        if (id == R.id.ueber) {
+        if (id == R.id.ueber)
+        {
             uberOpen();
             return true;
         }
-        if (id == R.id.action_Home) {
+        if (id == R.id.action_Home)
+        {
             switchHome();
             return true;
         }

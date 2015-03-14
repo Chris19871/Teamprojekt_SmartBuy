@@ -16,7 +16,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,12 +30,17 @@ import purchase.PurchaseItems;
 
 public class MainActivity extends ActionBarActivity
 {
-
     final Context context = this;
     private Button button;
     private GridLayout grid;
-    private ActionBar smartBuyActionBar;
     private ArrayAdapter<PreselectionItem> items;
+    private ListView listView;
+    private ArrayAdapter<ItemList> itemListsAdapter;
+    private CheckBox[] b;
+    private int boxCounter = 0;
+    private PurchaseItems[] addNewList;
+    ArrayList<ItemList> itemList;
+    private EditText listName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,26 +48,32 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Typeface font = Typeface.createFromAsset(getAssets(),"fonts/BAUHS93.TTF");
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/BAUHS93.TTF");
         TextView startText = (TextView) findViewById(R.id.startScreenText);
         startText.setTypeface(font);
 
-        smartBuyActionBar = getSupportActionBar();
+        ActionBar smartBuyActionBar = getSupportActionBar();
         smartBuyActionBar.setDisplayShowTitleEnabled(false);
+
+        itemList = new ArrayList<>();
+        listView = (ListView) findViewById(R.id.ListView);
+        itemListsAdapter = new ArrayAdapter<ItemList>(this,
+                android.R.layout.simple_list_item_1, itemList);
+        listView.setAdapter(itemListsAdapter);
     }
 
     public void newEinkaufsliste()
     {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.add_new_einkaufsmodus);
+        dialog.setContentView(R.layout.preselection_dialog);
 
+        listName = (EditText) dialog.findViewById(R.id.dialogName);
         grid = (GridLayout) dialog.findViewById(R.id.gridLayout);
 
-
-        PurchaseItems[] gebItems = {new PurchaseItems("Partyhüte",null,null), new PurchaseItems("Besteck",null,null)};
+        PurchaseItems[] gebItems = {new PurchaseItems("Partyhüte", null, null), new PurchaseItems("Besteck", null, null)};
         PreselectionItem geburtstag = new PreselectionItem("Geburtstag", gebItems);
-        PurchaseItems[] partyItems = {new PurchaseItems("Fleisch",null,null), new PurchaseItems("Bier",null,null)};
+        PurchaseItems[] partyItems = {new PurchaseItems("Fleisch", null, null), new PurchaseItems("Bier", null, null)};
         PreselectionItem party = new PreselectionItem("Party", partyItems);
 
         ArrayList<PreselectionItem> list = new ArrayList<>();
@@ -71,73 +84,76 @@ public class MainActivity extends ActionBarActivity
                 android.R.layout.simple_dropdown_item_1line, list);
 
 
-        // custom add_new_einkaufsmodus
-
-
-        // set the custom add_new_einkaufsmodus components - text, spinner, layout and button
+        // set the preselection_dialog dialog components - text, spinner, layout and button
         TextView text = (TextView) dialog.findViewById(R.id.dialogName);
         Spinner spinner = (Spinner) dialog.findViewById(R.id.dialogSpinner);
         spinner.setAdapter(items);
 
-
-
         Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
+                                       int arg2, long arg3)
+            {
                 addBox(arg2);
-
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
+            public void onNothingSelected(AdapterView<?> arg0)
+            {
                 // TODO Auto-generated method stub
-
             }
         });
 
-        dialogButtonOk.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-               // add_new_einkaufsmodus.dismiss();
+        dialogButtonOk.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                generateItemList();
+                itemListsAdapter.notifyDataSetChanged();
+                dialog.dismiss();
             }
         });
+
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-        // if button is clicked, close the custom add_new_einkaufsmodus
-        dialogButtonCancel.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+        // if button is clicked, close the custom preselection_dialog
+        dialogButtonCancel.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 dialog.dismiss();
             }
         });
 
         dialog.show();
     }
+
     public void addBox(int index)
     {
-
         PreselectionItem item = items.getItem(index);
         PurchaseItems[] pItems = item.getItems();
+        addNewList = pItems;
         grid.removeAllViews();
         grid.setColumnCount(2);
 
-        int columnIndex=0; //cols index to which i add the button
+        int columnIndex = 0;
+        int rowIndex = 0;
 
-        int rowIndex=0; //row index to which i add the button
-
-        CheckBox[] b = new CheckBox[pItems.length];
-        for(int i = 0; i < pItems.length; i++)
+        b = new CheckBox[pItems.length];
+        for (int i = 0; i < pItems.length; i++)
         {
-
             b[i] = new CheckBox(this);
             b[i].setText(pItems[i].getName());
             b[i].setMinimumWidth(255);
         }
 
+        boxCounter = b.length;
+
         for (int i = 0; i < b.length; i++)
         {
-
             if (i > 1 && i % 2 == 0)
             {
                 rowIndex++;
@@ -151,18 +167,33 @@ public class MainActivity extends ActionBarActivity
             columnIndex++;
         }
 
-
     }
+
+    public void generateItemList()
+    {
+        String name = listName.getText().toString();
+        ArrayList<PurchaseItems> newList = new ArrayList<>();
+        for(int i=0;i< boxCounter; i++)
+        {
+            if(b[i].isChecked())
+            {
+                newList.add(addNewList[i]);
+            }
+        }
+        addList(new ItemList(name, newList));
+    }
+
     public void addList(ItemList list)
     {
-
+        itemList.add(list);
     }
 
     public void settingsOpen()
     {
-        final Intent settings = new Intent(this,SettingsActivity.class);
+        final Intent settings = new Intent(this, SettingsActivity.class);
         startActivity(settings);
     }
+
     public void uberOpen()
     {
         final Dialog uberDialog = new Dialog(context);
@@ -171,9 +202,10 @@ public class MainActivity extends ActionBarActivity
 
         uberDialog.show();
     }
+
     public void wechsel()
     {
-        final Intent einkaufsliste = new Intent(this,Einkaufsliste.class);
+        final Intent einkaufsliste = new Intent(this, Einkaufsliste.class);
         startActivity(einkaufsliste);
     }
 
@@ -194,24 +226,28 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
+        if (id == R.id.settings)
+        {
             settingsOpen();
             return true;
         }
-        if (id == R.id.ueber) {
+        if (id == R.id.ueber)
+        {
             uberOpen();
             return true;
         }
-        if (id == R.id.action_add) {
-                newEinkaufsliste();
-                return true;
-         }
-        if (id == R.id.action_Einkauf) {
+        if (id == R.id.action_add)
+        {
+            newEinkaufsliste();
+            return true;
+        }
+        if (id == R.id.action_Einkauf)
+        {
             wechsel();
             return true;
         }
 
-            return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
 }

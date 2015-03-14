@@ -32,5 +32,8 @@ public class ItemList {
         items.add(pItem);
     }
 
-
+    public String toString()
+    {
+        return name;
+    }
 }

@@ -13,23 +13,24 @@ import android.view.Window;
 import android.widget.Button;
 
 
-
-
-public class Einkaufsliste extends ActionBarActivity {
+public class Einkaufsliste extends ActionBarActivity
+{
 
     final Context context = this;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufsliste);
     }
 
     public void settingsOpen()
     {
-        final Intent settings = new Intent(this,SettingsActivity.class);
+        final Intent settings = new Intent(this, SettingsActivity.class);
         startActivity(settings);
     }
+
     public void uberOpen()
     {
         final Dialog uberDialog = new Dialog(context);
@@ -47,7 +48,8 @@ public class Einkaufsliste extends ActionBarActivity {
         newProducts.setContentView(R.layout.new_product_dialog);
 
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
-        dialogButtonSave.setOnClickListener(new OnClickListener() {
+        dialogButtonSave.setOnClickListener(new OnClickListener()
+        {
             public void onClick(View v)
             {
 
@@ -55,7 +57,8 @@ public class Einkaufsliste extends ActionBarActivity {
         });
 
         Button dialogButtonCancel = (Button) newProducts.findViewById(R.id.newProductCancel);
-        dialogButtonCancel.setOnClickListener(new OnClickListener() {
+        dialogButtonCancel.setOnClickListener(new OnClickListener()
+        {
             public void onClick(View v)
             {
                 newProducts.dismiss();
@@ -63,54 +66,62 @@ public class Einkaufsliste extends ActionBarActivity {
         });
 
 
-
         newProducts.show();
     }
+
     public void openEinkaufsmodus()
     {
-        final Intent einkaufsmodus = new Intent(this,Einkaufmodus.class);
+        final Intent einkaufsmodus = new Intent(this, Einkaufmodus.class);
         startActivity(einkaufsmodus);
 
     }
+
     public void switchHome()
     {
-        final Intent home = new Intent(this,MainActivity.class);
+        final Intent home = new Intent(this, MainActivity.class);
         startActivity(home);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_einkaufsliste, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
+        if (id == R.id.settings)
+        {
             settingsOpen();
             return true;
         }
-        if (id == R.id.ueber) {
+        if (id == R.id.ueber)
+        {
             uberOpen();
             return true;
         }
-        if (id == R.id.action_newProduct) {
+        if (id == R.id.action_newProduct)
+        {
             newProduct();
             return true;
 
         }
-        if (id == R.id.action_Einkaufsmodus) {
+        if (id == R.id.action_Einkaufsmodus)
+        {
             openEinkaufsmodus();
             return true;
         }
-        if (id == R.id.action_Home) {
+        if (id == R.id.action_Home)
+        {
             switchHome();
             return true;
         }
