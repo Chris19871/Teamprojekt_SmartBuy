@@ -11,8 +11,13 @@ import android.view.View.OnClickListener;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+
+import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
 
 
@@ -21,6 +26,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
     private String listenName;
     private Einkaufsliste aktListe;
     final Context context = this;
+    private ArrayAdapter<EinkaufsArtikel> itemAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,6 +38,13 @@ public class EinkaufslisteActivity extends ActionBarActivity
         aktListe = MainActivity.getAktListe();
         listenName = aktListe.getName();
         einkaufslisteActionBar.setTitle(listenName);
+
+        ListView listView = (ListView) findViewById(R.id.listView);
+        ArrayList<EinkaufsArtikel> items = aktListe.getItems();
+
+        itemAdapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_dropdown_item_1line, items);
+        listView.setAdapter(itemAdapter);
     }
 
     public void settingsOpen()
