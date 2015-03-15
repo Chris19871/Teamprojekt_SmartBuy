@@ -40,7 +40,8 @@ public class MainActivity extends ActionBarActivity
     private EinkaufsArtikel[] addNewList;
     ArrayList<Einkaufsliste> einkaufsliste;
     private EditText listName;
-    private String tmpListName;
+    private static Einkaufsliste aktListe;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,6 +61,21 @@ public class MainActivity extends ActionBarActivity
         itemListsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, einkaufsliste);
         listView.setAdapter(itemListsAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                startEinkaufsliste(position);
+            }
+        });
+    }
+
+    public void startEinkaufsliste(int pos)
+    {
+        aktListe = einkaufsliste.get(pos);
+        wechsel();
     }
 
     public void newEinkaufsliste()
@@ -116,8 +132,7 @@ public class MainActivity extends ActionBarActivity
                 {
                     listName.setHintTextColor(Color.parseColor("#FF0000"));
                     listName.setHint("Feld muss ausgefüllt werden!");
-                }
-                else
+                } else
                 {
                     generateItemList();
                     itemListsAdapter.notifyDataSetChanged();
@@ -170,7 +185,6 @@ public class MainActivity extends ActionBarActivity
             GridLayout.Spec row = GridLayout.spec(rowIndex, 1);
             GridLayout.Spec colspan = GridLayout.spec(columnIndex, 1);
             GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(row, colspan);
-            //grid.add(b[i], i % 2, k);
             grid.addView(b[i], gridLayoutParam);
             columnIndex++;
         }
@@ -179,7 +193,6 @@ public class MainActivity extends ActionBarActivity
 
     public void generateItemList()
     {
-        tmpListName = listName.getText().toString();
         ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
         for (int i = 0; i < boxCounter; i++)
         {
@@ -188,7 +201,7 @@ public class MainActivity extends ActionBarActivity
                 newList.add(addNewList[i]);
             }
         }
-        addList(new Einkaufsliste(tmpListName, newList));
+        addList(new Einkaufsliste(listName.getText().toString(), newList));
     }
 
     public void addList(Einkaufsliste list)
@@ -256,6 +269,11 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static Einkaufsliste getAktListe()
+    {
+        return aktListe;
     }
 
 }

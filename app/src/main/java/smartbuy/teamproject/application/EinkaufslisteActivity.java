@@ -3,6 +3,7 @@ package smartbuy.teamproject.application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,11 +13,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
+import purchase.Einkaufsliste;
+
 
 public class EinkaufslisteActivity extends ActionBarActivity
 {
     private String listenName;
-    private EinkaufslisteActivity aktListe;
+    private Einkaufsliste aktListe;
     final Context context = this;
 
     @Override
@@ -24,6 +27,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufsliste);
+        ActionBar einkaufslisteActionBar = getSupportActionBar();
+
+        aktListe = MainActivity.getAktListe();
+        listenName = aktListe.getName();
+        einkaufslisteActionBar.setTitle(listenName);
     }
 
     public void settingsOpen()
@@ -141,12 +149,12 @@ public class EinkaufslisteActivity extends ActionBarActivity
         this.listenName = listenName;
     }
 
-    public EinkaufslisteActivity getAktListe()
+    public Einkaufsliste getAktListe()
     {
         return aktListe;
     }
 
-    public void setAktListe(EinkaufslisteActivity aktListe)
+    public void setAktListe(Einkaufsliste aktListe)
     {
         this.aktListe = aktListe;
     }
