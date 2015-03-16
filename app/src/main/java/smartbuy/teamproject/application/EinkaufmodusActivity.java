@@ -15,10 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
+import android.widget.TabWidget;
 import android.widget.TextView;
+
+import badge.BadgeView;
 
 
 public class EinkaufmodusActivity extends ActionBarActivity
@@ -40,7 +44,11 @@ public class EinkaufmodusActivity extends ActionBarActivity
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("regal").setIndicator("", getResources().getDrawable(R.drawable.ic_action_navigation_apps)), EinkaufmodusFragment.class, null);
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkauf").setIndicator("", getResources().getDrawable(R.drawable.shoppingcar)), EinkaufswagenFragment.class, null);
 
+        TabWidget tabs = einkaufmodusTabHost.getTabWidget();
 
+        BadgeView badge7 = new BadgeView(this, tabs, 1);
+        badge7.setText("5");
+        badge7.toggle();
     }
 
     public void settingsOpen()
