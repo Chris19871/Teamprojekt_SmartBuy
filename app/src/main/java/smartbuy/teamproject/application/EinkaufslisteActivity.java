@@ -45,6 +45,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_dropdown_item_1line, items);
         listView.setAdapter(itemAdapter);
+
     }
 
     public void settingsOpen()
