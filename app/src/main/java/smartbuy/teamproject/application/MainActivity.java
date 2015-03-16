@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +58,7 @@ public class MainActivity extends ActionBarActivity
         smartBuyActionBar.setDisplayShowTitleEnabled(false);
 
         einkaufsliste = new ArrayList<>();
+        registerForContextMenu(findViewById(R.id.ListView));
         ListView listView = (ListView) findViewById(R.id.ListView);
         itemListsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, einkaufsliste);
@@ -67,15 +69,33 @@ public class MainActivity extends ActionBarActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                startEinkaufsliste(position);
+                aktListe = einkaufsliste.get(position);
+                wechsel();
             }
         });
     }
-
-    public void startEinkaufsliste(int pos)
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
     {
-        aktListe = einkaufsliste.get(pos);
-        wechsel();
+        if(v.getId() == R.id.ListView)
+        {
+            getMenuInflater().inflate(R.menu.mainactivitycontextmenu,menu);
+        }
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item)
+    {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId())
+        {
+            case R.id.action_ContextMenu_Einkaufsmodus:
+            {
+                openEinkaufsmodus();
+            }
+        }
+        return  super.onContextItemSelected(item);
     }
 
     public void newEinkaufsliste()
@@ -229,6 +249,12 @@ public class MainActivity extends ActionBarActivity
         final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
         startActivity(einkaufsliste);
     }
+    public void openEinkaufsmodus()
+    {
+        final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
+        startActivity(einkaufsmodus);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -260,11 +286,6 @@ public class MainActivity extends ActionBarActivity
         if (id == R.id.action_add)
         {
             newEinkaufsliste();
-            return true;
-        }
-        if (id == R.id.action_Einkauf)
-        {
-            wechsel();
             return true;
         }
 

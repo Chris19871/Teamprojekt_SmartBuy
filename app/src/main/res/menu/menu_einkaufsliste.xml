@@ -17,8 +17,4 @@
         android:icon="@drawable/shoppingcar"
         android:title="Einkaufsmodus"
         app:showAsAction="always" />
-    <item android:id="@+id/action_Home"
-        android:icon="@drawable/ic_action_action_home"
-        android:title="Home"
-        app:showAsAction="always" />
 </menu>
