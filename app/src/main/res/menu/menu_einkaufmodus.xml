@@ -9,8 +9,4 @@
         android:title="@string/einstellungen"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item android:id="@+id/action_Home"
-        android:icon="@drawable/ic_action_action_home"
-        android:title="Home"
-        app:showAsAction="always" />
 </menu>

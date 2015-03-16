@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="smartbuy.teamproject.application" >
+    package="smartbuy.teamproject.application">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/smartbuy_logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity" >
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -16,28 +16,14 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
+            android:label="@string/title_activity_settings"></activity>
         <activity
             android:name=".EinkaufslisteActivity"
-            android:label="@string/title_activity_einkaufsliste" >
-        </activity>
-        <activity
-            android:name=".Ei"
-            android:label="@string/title_activity_einkaufsmodus" >
-        </activity>
+            android:label="@string/title_activity_einkaufsliste"></activity>
+
         <activity
             android:name=".EinkaufmodusActivity"
-            android:label="@string/title_activity_einkaufmodus" >
-        </activity>
-        <activity
-            android:name=".Test1"
-            android:label="@string/title_activity_test1" >
-        </activity>
-        <activity
-            android:name=".Test2"
-            android:label="@string/title_activity_test2" >
-        </activity>
+            android:label="@string/title_activity_einkaufmodus"></activity>
     </application>
 
 </manifest>

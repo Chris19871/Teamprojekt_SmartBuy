@@ -34,4 +34,14 @@ public class Einkaufsliste
     {
         return name;
     }
+
+    public ArrayList<EinkaufsArtikel> getItems()
+    {
+        return items;
+    }
+
+    public void setItems(ArrayList<EinkaufsArtikel> items)
+    {
+        this.items = items;
+    }
 }

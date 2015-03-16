@@ -3,6 +3,7 @@ package smartbuy.teamproject.application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,20 +11,41 @@ import android.view.View.OnClickListener;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import purchase.EinkaufsArtikel;
+import purchase.Einkaufsliste;
 
 
 public class EinkaufslisteActivity extends ActionBarActivity
 {
     private String listenName;
-    private EinkaufslisteActivity aktListe;
+    private Einkaufsliste aktListe;
     final Context context = this;
+    private ArrayAdapter<EinkaufsArtikel> itemAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufsliste);
+        ActionBar einkaufslisteActionBar = getSupportActionBar();
+
+        aktListe = MainActivity.getAktListe();
+        listenName = aktListe.getName();
+        einkaufslisteActionBar.setTitle(listenName);
+
+        ListView listView = (ListView) findViewById(R.id.listView);
+        ArrayList<EinkaufsArtikel> items = aktListe.getItems();
+
+        itemAdapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_dropdown_item_1line, items);
+        listView.setAdapter(itemAdapter);
+
     }
 
     public void settingsOpen()
@@ -77,12 +99,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     }
 
-    public void switchHome()
-    {
-        final Intent home = new Intent(this, MainActivity.class);
-        startActivity(home);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -121,12 +137,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
             openEinkaufsmodus();
             return true;
         }
-        if (id == R.id.action_Home)
-        {
-            switchHome();
-            return true;
-        }
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -141,12 +151,12 @@ public class EinkaufslisteActivity extends ActionBarActivity
         this.listenName = listenName;
     }
 
-    public EinkaufslisteActivity getAktListe()
+    public Einkaufsliste getAktListe()
     {
         return aktListe;
     }
 
-    public void setAktListe(EinkaufslisteActivity aktListe)
+    public void setAktListe(Einkaufsliste aktListe)
     {
         this.aktListe = aktListe;
     }

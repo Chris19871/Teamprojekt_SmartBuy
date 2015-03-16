@@ -32,4 +32,9 @@ public class EinkaufsArtikel
     {
         return pic;
     }
+
+    public String toString()
+    {
+        return name;
+    }
 }

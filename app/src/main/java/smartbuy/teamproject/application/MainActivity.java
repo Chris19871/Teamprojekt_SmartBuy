@@ -1,12 +1,14 @@
 package smartbuy.teamproject.application;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,16 +33,16 @@ import purchase.VorauswahlArtikel;
 public class MainActivity extends ActionBarActivity
 {
     final Context context = this;
-    private Button button;
     private GridLayout grid;
     private ArrayAdapter<VorauswahlArtikel> items;
-    private ListView listView;
     private ArrayAdapter<Einkaufsliste> itemListsAdapter;
     private CheckBox[] b;
     private int boxCounter = 0;
     private EinkaufsArtikel[] addNewList;
     ArrayList<Einkaufsliste> einkaufsliste;
     private EditText listName;
+    private static Einkaufsliste aktListe;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,10 +58,52 @@ public class MainActivity extends ActionBarActivity
         smartBuyActionBar.setDisplayShowTitleEnabled(false);
 
         einkaufsliste = new ArrayList<>();
-        listView = (ListView) findViewById(R.id.ListView);
-        itemListsAdapter = new ArrayAdapter<Einkaufsliste>(this,
+        registerForContextMenu(findViewById(R.id.ListView));
+        ListView listView = (ListView) findViewById(R.id.ListView);
+        itemListsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, einkaufsliste);
         listView.setAdapter(itemListsAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                aktListe = einkaufsliste.get(position);
+                wechsel();
+            }
+        });
+    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        if(v.getId() == R.id.ListView)
+        {
+            getMenuInflater().inflate(R.menu.mainactivitycontextmenu,menu);
+        }
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item)
+    {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId())
+        {
+            case R.id.action_ContextMenu_Einkaufsmodus:
+            {
+                openEinkaufsmodus();
+            }
+            case R.id.action_ContextMenu_Löschen:
+            {
+
+            }
+            case R.id.action_ContextMenu_Zurücksetzen:
+            {
+
+            }
+        }
+        return  super.onContextItemSelected(item);
     }
 
     public void newEinkaufsliste()
@@ -80,12 +124,11 @@ public class MainActivity extends ActionBarActivity
         list.add(geburtstag);
         list.add(party);
 
-        items = new ArrayAdapter<VorauswahlArtikel>(getApplicationContext(),
+        items = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_dropdown_item_1line, list);
 
 
         // set the preselection_dialog dialog components - text, spinner, layout and button
-        TextView text = (TextView) dialog.findViewById(R.id.dialogName);
         Spinner spinner = (Spinner) dialog.findViewById(R.id.dialogSpinner);
         spinner.setAdapter(items);
 
@@ -110,11 +153,19 @@ public class MainActivity extends ActionBarActivity
 
         dialogButtonOk.setOnClickListener(new OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View v) throws IllegalArgumentException
             {
-                generateItemList();
-                itemListsAdapter.notifyDataSetChanged();
-                dialog.dismiss();
+                // Prüfung, ob der neuen Liste ein Name gegeben wurde.
+                if (listName.getText().toString().equals(""))
+                {
+                    listName.setHintTextColor(Color.parseColor("#FF0000"));
+                    listName.setHint("Feld muss ausgefüllt werden!");
+                } else
+                {
+                    generateItemList();
+                    itemListsAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -162,7 +213,6 @@ public class MainActivity extends ActionBarActivity
             GridLayout.Spec row = GridLayout.spec(rowIndex, 1);
             GridLayout.Spec colspan = GridLayout.spec(columnIndex, 1);
             GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(row, colspan);
-            //grid.add(b[i], i % 2, k);
             grid.addView(b[i], gridLayoutParam);
             columnIndex++;
         }
@@ -171,7 +221,6 @@ public class MainActivity extends ActionBarActivity
 
     public void generateItemList()
     {
-        String name = listName.getText().toString();
         ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
         for (int i = 0; i < boxCounter; i++)
         {
@@ -180,7 +229,7 @@ public class MainActivity extends ActionBarActivity
                 newList.add(addNewList[i]);
             }
         }
-        addList(new Einkaufsliste(name, newList));
+        addList(new Einkaufsliste(listName.getText().toString(), newList));
     }
 
     public void addList(Einkaufsliste list)
@@ -207,6 +256,12 @@ public class MainActivity extends ActionBarActivity
     {
         final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
         startActivity(einkaufsliste);
+    }
+    public void openEinkaufsmodus()
+    {
+        final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
+        startActivity(einkaufsmodus);
+
     }
 
     @Override
@@ -241,13 +296,13 @@ public class MainActivity extends ActionBarActivity
             newEinkaufsliste();
             return true;
         }
-        if (id == R.id.action_Einkauf)
-        {
-            wechsel();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static Einkaufsliste getAktListe()
+    {
+        return aktListe;
     }
 
 }

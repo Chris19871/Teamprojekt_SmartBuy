@@ -3,4 +3,6 @@
     <string name="app_name">Anwendung</string>
     <string name="action_settings">Einstellungen</string>
     <string name="hello_world">Hallo Welt!</string>
+    <string name="AddList">Liste hinzufügen</string>
+    <string name="Cancel">Abbrechen</string>
 </resources>
