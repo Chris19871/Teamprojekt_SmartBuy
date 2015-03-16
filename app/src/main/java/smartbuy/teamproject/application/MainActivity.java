@@ -94,6 +94,14 @@ public class MainActivity extends ActionBarActivity
             {
                 openEinkaufsmodus();
             }
+            case R.id.action_ContextMenu_Löschen:
+            {
+
+            }
+            case R.id.action_ContextMenu_Zurücksetzen:
+            {
+
+            }
         }
         return  super.onContextItemSelected(item);
     }
