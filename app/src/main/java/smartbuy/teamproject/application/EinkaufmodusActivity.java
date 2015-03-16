@@ -5,13 +5,20 @@ package smartbuy.teamproject.application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TabHost;
+import android.widget.TextView;
 
 
 public class EinkaufmodusActivity extends ActionBarActivity
@@ -30,15 +37,8 @@ public class EinkaufmodusActivity extends ActionBarActivity
         einkaufmodusTabHost = (FragmentTabHost) findViewById(R.id.tabHost);
         einkaufmodusTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
-
-        einkaufmodusTabHost.addTab(
-                einkaufmodusTabHost.newTabSpec("tab1").setIndicator("Tab 1", null),
-                EinkaufmodusFragment.class, null);
-
-        einkaufmodusTabHost.addTab(
-                einkaufmodusTabHost.newTabSpec("tab2").setIndicator("Tab 1", null),
-                EinkaufswagenFragment.class, null);
-
+        einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("regal").setIndicator("", getResources().getDrawable(R.drawable.ic_action_navigation_apps)), EinkaufmodusFragment.class, null);
+        einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkauf").setIndicator("", getResources().getDrawable(R.drawable.shoppingcar)), EinkaufswagenFragment.class, null);
 
 
     }

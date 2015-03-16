@@ -3,5 +3,6 @@
     <color name="startScreen">#FF60E2FF</color>
     <color name="newProductButton">#040303</color>
     <color name="newProductButtonText">#FF60E2FF</color>
+    <color name="tabHintergrund">#ED082A</color>
 
 </resources>
