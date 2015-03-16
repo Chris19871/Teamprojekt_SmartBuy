@@ -4,8 +4,6 @@
     <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowBackground">@color/startScreen</item>
 
-
-
     </style>
     <!-- Startbildschrim Schriftzug. -->
     <style name="startscreen" parent="android:Widget.TextView">

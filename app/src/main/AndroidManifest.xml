@@ -25,5 +25,4 @@
             android:name=".EinkaufmodusActivity"
             android:label="@string/title_activity_einkaufmodus"></activity>
     </application>
-
 </manifest>
