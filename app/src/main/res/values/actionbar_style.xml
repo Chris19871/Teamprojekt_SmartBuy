@@ -8,13 +8,16 @@
 
         <item name="android:windowBackground">@color/startScreen</item>
 
-        <item name="android:textColorPrimary">@color/actionBar</item>
+
 
         <item name="android:dropDownListViewStyle">@style/PopupMenu</item>
         <item name="dropDownListViewStyle">@style/PopupMenu</item>
 
+        <item name="android:textColor">@color/actionBar</item>
+        <item name="android:textColorSecondary">@color/actionBar</item>
+        <item name="android:textColorPrimary">@color/actionBar</item>
 
-        <item name="android:checkboxStyle">@style/MyCeckBox</item>
+
 
     </style>
 
@@ -27,9 +30,7 @@
         <item name="android:background">@color/startScreen</item>
     </style>
 
-    <style name="MyCeckBox" parent="android:Widget.CompoundButton.CheckBox">
-        <item name="android:buttonStyle">@color/testcolor</item>
-    </style>
+
 
 
 
