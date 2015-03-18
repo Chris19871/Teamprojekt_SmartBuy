@@ -29,7 +29,7 @@ public class EinkaufsArtikel
         return desc;
     }
 
-    public ImageView getPic()
+    public ImageView getImage()
     {
         return pic;
     }

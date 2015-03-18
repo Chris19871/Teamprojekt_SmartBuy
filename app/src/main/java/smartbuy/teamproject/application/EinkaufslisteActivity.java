@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
     private Einkaufsliste aktListe;
     final Context context = this;
     private ArrayAdapter<EinkaufsArtikel> itemAdapter;
+    private EinkaufsArtikel aktArtikel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,12 +46,21 @@ public class EinkaufslisteActivity extends ActionBarActivity
         einkaufslisteActionBar.setTitle(listenName);
 
         ListView listView = (ListView) findViewById(R.id.listView);
-        ArrayList<EinkaufsArtikel> items = aktListe.getItems();
+        final ArrayList<EinkaufsArtikel> items = aktListe.getItems();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_dropdown_item_1line, items);
+                android.R.layout.simple_expandable_list_item_1, items);
         listView.setAdapter(itemAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                aktArtikel = items.get(position);
+                changeArtikelDialog(position);
+            }
+        });
     }
 
     public void settingsOpen()
@@ -90,7 +101,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 }
                 else
                 {
-                    addArtikel(name.toString(), desc.toString(), image);
+                    addArtikel(name.getText().toString(), desc.getText().toString(), image);
                     itemAdapter.notifyDataSetChanged();
                     newProducts.dismiss();
                 }
@@ -117,11 +128,64 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     }
 
+    public void changeArtikelDialog(final int pos)
+    {
+
+        final Dialog newProducts = new Dialog(context);
+        newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        newProducts.setContentView(R.layout.new_product_dialog);
+
+        final EditText name = (EditText) newProducts.findViewById(R.id.productName);
+        final TextView desc = (TextView) newProducts.findViewById(R.id.textBeschreibung);
+        final ImageView image = aktArtikel.getImage();
+
+        name.setText(aktArtikel.getName());
+        desc.setText(aktArtikel.getDesc());
+
+        Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
+        dialogButtonSave.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if(name.getText().toString().equals(""))
+                {
+                    name.setHintTextColor(Color.parseColor("#FF0000"));
+                    name.setHint("Feld muss ausgefüllt werden!");
+                }
+                else
+                {
+                    changeArtikel(name.getText().toString(), desc.getText().toString(), image, pos);
+                    itemAdapter.notifyDataSetChanged();
+                    newProducts.dismiss();
+                }
+            }
+        });
+
+        Button dialogButtonCancel = (Button) newProducts.findViewById(R.id.newProductCancel);
+        dialogButtonCancel.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                newProducts.dismiss();
+            }
+        });
+
+
+        newProducts.show();
+    }
+
     public void addArtikel(String name, String desc, ImageView image)
     {
         EinkaufsArtikel newArtikel = new EinkaufsArtikel(name,desc,image);
         aktListe.addItem(newArtikel);
         MainActivity.setAktListe(aktListe);
+    }
+
+    public void changeArtikel(String name, String desc, ImageView image, int pos)
+    {
+        EinkaufsArtikel newArtikel = new EinkaufsArtikel(name,desc,image);
+        aktListe.delItem(pos);
+        aktListe.addItemPos(newArtikel, pos);
     }
 
     @Override

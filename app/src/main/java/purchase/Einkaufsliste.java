@@ -25,9 +25,23 @@ public class Einkaufsliste
         this.name = name;
     }
 
+
     public void addItem(EinkaufsArtikel pItem)
     {
         items.add(pItem);
+    }
+
+    public void addItemPos(EinkaufsArtikel pItem, int pos)
+    {
+        items.add(pos, pItem);
+    }
+
+    public void delItem(int pos)
+    {
+        if(!items.isEmpty())
+        {
+            items.remove(pos);
+        }
     }
 
     public String toString()
