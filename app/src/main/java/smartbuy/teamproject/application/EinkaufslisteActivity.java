@@ -3,6 +3,7 @@ package smartbuy.teamproject.application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,7 +14,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -70,12 +74,26 @@ public class EinkaufslisteActivity extends ActionBarActivity
         newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
         newProducts.setContentView(R.layout.new_product_dialog);
 
+        final EditText name = (EditText) newProducts.findViewById(R.id.productName);
+        final TextView desc = (TextView) newProducts.findViewById(R.id.textBeschreibung);
+        final ImageView image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
+
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
         dialogButtonSave.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-
+                if(name.getText().toString().equals(""))
+                {
+                    name.setHintTextColor(Color.parseColor("#FF0000"));
+                    name.setHint("Feld muss ausgefüllt werden!");
+                }
+                else
+                {
+                    addArtikel(name.toString(), desc.toString(), image);
+                    itemAdapter.notifyDataSetChanged();
+                    newProducts.dismiss();
+                }
             }
         });
 
@@ -97,6 +115,13 @@ public class EinkaufslisteActivity extends ActionBarActivity
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
         startActivity(einkaufsmodus);
 
+    }
+
+    public void addArtikel(String name, String desc, ImageView image)
+    {
+        EinkaufsArtikel newArtikel = new EinkaufsArtikel(name,desc,image);
+        aktListe.addItem(newArtikel);
+        MainActivity.setAktListe(aktListe);
     }
 
     @Override

@@ -47,9 +47,12 @@ public class EinkaufmodusActivity extends ActionBarActivity
 
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
 
-        BadgeView badge7 = new BadgeView(this, tabs, 1);
+        BadgeView badge7 = new BadgeView(this, tabs, 0);
         badge7.setText("5");
-        badge7.toggle();
+        badge7.setBadgePosition(BadgeView.POSITION_CENTER);
+        badge7.show();
+
+
     }
 
     public void settingsOpen()
