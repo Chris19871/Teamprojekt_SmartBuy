@@ -1,83 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/newProduct"
     android:layout_width="fill_parent"
-    android:layout_height="350dp"
-    style="@style/newProduct">
+    android:layout_height="wrap_content">
 
-    <EditText
-        android:layout_width="wrap_content"
+
+    <ScrollView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dialogName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Listenname" />
+        android:id="@+id/scrollView">
+
+        <EditText
+            android:id="@+id/dialogName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:maxLines="3"
+            android:hint="Listenname                                                                 " />
+    </ScrollView>
 
     <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/dialogSpinner"
-        android:spinnerMode="dropdown"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:focusable="false"
         android:minHeight="50dp"
-        style="@style/newProduct"
-        android:popupBackground="#ff60e2ff"
-        android:dropDownSelector="#ff60e2ff"
-        android:layout_below="@+id/dialogName"
+        android:spinnerMode="dropdown"
+        android:layout_below="@+id/scrollView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="#ff42c5ff" />
+        android:popupBackground="@color/actionBar"
+        android:background="@color/actionBar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
-    <GridLayout
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="200dp"
-        android:id="@+id/gridLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView2"
         android:layout_below="@+id/dialogSpinner"
-        android:layout_alignParentEnd="true">
-
-
-
-    </GridLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/gridLayout"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:gravity="center_horizontal">
+        android:layout_alignParentStart="true">
 
-        <Button
-            android:layout_width="wrap_content"
-            style="@style/newProductButton"
-            android:layout_height="wrap_content"
-            android:text="@string/Cancel"
-            android:id="@+id/dialogButtonCancel"
-            android:nestedScrollingEnabled="false"
-            android:layout_row="10"
-            android:layout_column="0"
-            android:layout_below="@+id/gridLayout"
+        <GridLayout
+            android:id="@+id/gridLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
-            android:layout_marginRight="20dp" />
+            android:layout_below="@+id/dialogSpinner"
+            android:minHeight="100dp">
+
+
+        </GridLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_below="@+id/scrollView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/dialogButtonCancel"
+            style="@style/newProductButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/gridLayout"
+            android:layout_column="0"
+            android:layout_marginRight="20dp"
+            android:layout_row="10"
+            android:nestedScrollingEnabled="false"
+            android:text="@string/Cancel"
+            android:layout_marginBottom="10dp" />
 
         <Button
             android:id="@+id/dialogButtonOK"
             style="@style/newProductButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_column="7"
+            android:layout_marginLeft="20dp"
+            android:layout_row="10"
             android:longClickable="false"
             android:onClick="showDialog"
             android:text="@string/AddList"
-            android:layout_row="10"
-            android:layout_column="7"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginLeft="20dp" />
+            android:layout_marginBottom="10dp" />
     </LinearLayout>
 
 </RelativeLayout>

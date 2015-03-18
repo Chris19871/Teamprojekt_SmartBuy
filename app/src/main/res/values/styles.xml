@@ -33,4 +33,11 @@
         <item name="android:textColor">@color/newProductButtonText</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="list" parent="android:Widget.Spinner.DropDown">
+        <item name="android:background">@color/actionBar</item>
+        <item name="android:text"></item>
+    </style>
+
+
 </resources>
