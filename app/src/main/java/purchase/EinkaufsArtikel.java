@@ -34,6 +34,7 @@ public class EinkaufsArtikel
         return pic;
     }
 
+    @Override
     public String toString()
     {
         return name;

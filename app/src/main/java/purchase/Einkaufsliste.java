@@ -25,7 +25,6 @@ public class Einkaufsliste
         this.name = name;
     }
 
-
     public void addItem(EinkaufsArtikel pItem)
     {
         items.add(pItem);

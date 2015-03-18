@@ -2,14 +2,14 @@
 
     <PreferenceCategory
         android:title="@string/allgemein">
-
     </PreferenceCategory>
 
     <CheckBoxPreference
         android:key="example_checkbox"
         android:title="@string/stoppUhrEinstellungen"
         android:summary="@string/stoppUhrBeschreibung"
-        android:defaultValue="true" />
+        android:defaultValue="true"
+        android:="@color/testcolor"/>
 
 
 </PreferenceScreen>
