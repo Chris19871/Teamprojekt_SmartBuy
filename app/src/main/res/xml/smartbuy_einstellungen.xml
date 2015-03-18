@@ -8,8 +8,7 @@
         android:key="example_checkbox"
         android:title="@string/stoppUhrEinstellungen"
         android:summary="@string/stoppUhrBeschreibung"
-        android:defaultValue="true"
-        android:="@color/testcolor"/>
+        android:defaultValue="true"/>
 
 
 </PreferenceScreen>

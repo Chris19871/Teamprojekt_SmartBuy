@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View.OnClickListener;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
+import swipe.SwipeDismissListViewTouchListener;
 
 
 public class EinkaufslisteActivity extends ActionBarActivity
@@ -33,10 +35,16 @@ public class EinkaufslisteActivity extends ActionBarActivity
     final Context context = this;
     private ArrayAdapter<EinkaufsArtikel> itemAdapter;
     private EinkaufsArtikel aktArtikel;
+    private float historicX = Float.NaN, historicY = Float.NaN;
+    private static final int DELTA = 50;
+    private enum Direction {LEFT, RIGHT;}
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufsliste);
         ActionBar einkaufslisteActionBar = getSupportActionBar();
@@ -45,7 +53,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         listenName = aktListe.getName();
         einkaufslisteActionBar.setTitle(listenName);
 
-        ListView listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
         final ArrayList<EinkaufsArtikel> items = aktListe.getItems();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -61,7 +69,30 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 changeArtikelDialog(position);
             }
         });
+
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        listView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    itemAdapter.remove(itemAdapter.getItem(position));
+                                }
+                                itemAdapter.notifyDataSetChanged();
+                            }
+                        });
+        listView.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        listView.setOnScrollListener(touchListener.makeScrollListener());
     }
+
 
     public void settingsOpen()
     {
@@ -125,19 +156,21 @@ public class EinkaufslisteActivity extends ActionBarActivity
     {
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
         startActivity(einkaufsmodus);
-
     }
 
     public void changeArtikelDialog(final int pos)
     {
+        final EditText name;
+        final EditText desc;
+        final ImageView image;
 
         final Dialog newProducts = new Dialog(context);
         newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
         newProducts.setContentView(R.layout.new_product_dialog);
 
-        final EditText name = (EditText) newProducts.findViewById(R.id.productName);
-        final TextView desc = (TextView) newProducts.findViewById(R.id.textBeschreibung);
-        final ImageView image = aktArtikel.getImage();
+        name = (EditText) newProducts.findViewById(R.id.productName);
+        desc = (EditText) newProducts.findViewById(R.id.descnewProduct);
+        image = aktArtikel.getImage();
 
         name.setText(aktArtikel.getName());
         desc.setText(aktArtikel.getDesc());
