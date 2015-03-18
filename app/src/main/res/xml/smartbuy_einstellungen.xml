@@ -2,16 +2,20 @@
     <PreferenceCategory>
         <EditTextPreference
             android:title="@string/allgemein"
+            android:editable="false"
+            android:clickable="false"
+            android:enabled="false"
+
             android:textColor="@color/actionBar">
         </EditTextPreference>
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="example_checkbox"
             android:title="@string/stoppUhrEinstellungen"
             android:summary="@string/stoppUhrBeschreibung"
             android:defaultValue="true">
 
-         </CheckBoxPreference>
+         </SwitchPreference>
 
     </PreferenceCategory>
 
