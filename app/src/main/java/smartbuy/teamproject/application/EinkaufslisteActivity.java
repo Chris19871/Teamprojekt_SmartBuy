@@ -117,7 +117,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         newProducts.setContentView(R.layout.new_product_dialog);
 
         final EditText name = (EditText) newProducts.findViewById(R.id.productName);
-        final TextView desc = (TextView) newProducts.findViewById(R.id.textBeschreibung);
+        final TextView desc = (TextView) newProducts.findViewById(R.id.descnewProduct);
         final ImageView image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
 
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
