@@ -3,11 +3,17 @@ package smartbuy.teamproject.application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 public class Auswahllisten extends ActionBarActivity {
@@ -42,6 +48,37 @@ public class Auswahllisten extends ActionBarActivity {
     }
     public void addAuswahlliste()
     {
+        final Dialog auswahllistenDialog = new Dialog(context);
+        auswahllistenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        auswahllistenDialog.setContentView(R.layout.add_auswahllisten_dialog);
+
+        final EditText name = (EditText) auswahllistenDialog.findViewById(R.id.addAuswahllisteTextView);
+
+        Button dialogButtonSave = (Button) auswahllistenDialog.findViewById(R.id.addAuswahllisteSave);
+        dialogButtonSave.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (name.getText().toString().equals(""))
+                {
+                    name.setHintTextColor(Color.parseColor("#FF0000"));
+                    name.setHint("Feld muss ausgefüllt werden!");
+                } else
+                {
+                    auswahllistenDialog.dismiss();
+                }
+            }
+        });
+
+        Button dialogButtonCancel = (Button) auswahllistenDialog.findViewById(R.id.addAuswahllisteCancel);
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                auswahllistenDialog.dismiss();
+            }
+        });
+        auswahllistenDialog.show();
 
     }
 

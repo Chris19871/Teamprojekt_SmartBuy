@@ -41,6 +41,25 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- add_auswahlliste Style -->
+    <style name="add_auswahlliste">
+        <item name="android:background">@color/startScreen</item>
+    </style>
+    <style name="add_auswahllisteText" parent="android:Widget.TextView">
+        <item name="android:background">@color/startScreen</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="add_auswahllisteButton" parent="android:Widget.Button">
+        <item name="android:background">@color/addAuswahllistenButton</item>
+        <item name="android:textColor">@color/addAuswahllistenButtonText</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+
+
     <style name="list" parent="android:Widget.Spinner.DropDown">
         <item name="android:background">@color/actionBar</item>
         <item name="android:text"></item>
