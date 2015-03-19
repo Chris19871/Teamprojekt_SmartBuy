@@ -34,6 +34,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- löschen_rück Style -->
+    <style name="loeschenRueckButton" parent="android:Widget.Button">
+        <item name="android:background">@color/loeschenRueckButton</item>
+        <item name="android:textColor">@color/loeschenRueckButtonText</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="list" parent="android:Widget.Spinner.DropDown">
         <item name="android:background">@color/actionBar</item>
         <item name="android:text"></item>
