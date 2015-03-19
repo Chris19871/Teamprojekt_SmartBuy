@@ -42,6 +42,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
     private ArrayList<EinkaufsArtikel> items;
     private ActionBar einkaufslisteActionBar;
     private boolean longClickEnabled;
+    private boolean test = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -176,6 +177,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 {
                     addArtikel(name.getText().toString(), desc.getText().toString(), image);
                     itemAdapter.notifyDataSetChanged();
+                    test();
                     newProducts.dismiss();
                 }
             }
@@ -186,12 +188,25 @@ public class EinkaufslisteActivity extends ActionBarActivity
         {
             public void onClick(View v)
             {
+                test2();
                 newProducts.dismiss();
             }
         });
 
 
         newProducts.show();
+    }
+    public void test()
+    {
+        test = true;
+        invalidateOptionsMenu();
+
+    }
+    public void test2()
+    {
+        test = false;
+        invalidateOptionsMenu();
+
     }
 
     public void openEinkaufsmodus()
@@ -268,6 +283,20 @@ public class EinkaufslisteActivity extends ActionBarActivity
     {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_einkaufsliste, menu);
+
+        MenuItem item = menu.findItem(R.id.action_delete_Einkaufliste);
+
+        if (test == true)
+        {
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            item.setVisible(true);
+        }
+        else
+        {
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            item.setVisible(false);
+        }
+
         return true;
     }
 
