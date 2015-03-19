@@ -14,5 +14,10 @@
         android:icon="@drawable/action_add"
         android:title="Hinzufügen"
         app:showAsAction="ifRoom" />
+    <item android:id="@+id/action_delete"
+        android:icon="@drawable/ic_action_action_delete"
+        android:title="Löschen"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
 
 </menu>

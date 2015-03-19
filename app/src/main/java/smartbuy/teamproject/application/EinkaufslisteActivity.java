@@ -260,6 +260,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
             openEinkaufsmodus();
             return true;
         }
+        if (id == R.id.action_delete_Einkaufliste)
+        {
+           
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

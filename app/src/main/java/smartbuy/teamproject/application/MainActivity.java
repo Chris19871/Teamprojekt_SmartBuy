@@ -296,6 +296,11 @@ public class MainActivity extends ActionBarActivity
             newEinkaufsliste();
             return true;
         }
+        if (id == R.id.action_delete)
+        {
+
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
