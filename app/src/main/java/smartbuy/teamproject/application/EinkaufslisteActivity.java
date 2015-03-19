@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;

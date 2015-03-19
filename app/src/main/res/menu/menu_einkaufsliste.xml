@@ -25,5 +25,5 @@
         android:icon="@drawable/ic_action_action_delete"
         android:title="Löschen"
         android:visible="false"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>
