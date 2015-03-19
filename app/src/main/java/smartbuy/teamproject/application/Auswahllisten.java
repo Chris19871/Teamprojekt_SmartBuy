@@ -10,19 +10,49 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ListView;
+import java.util.ArrayList;
+import purchase.EinkaufsArtikel;
+import purchase.VorauswahlListe;
 
 
 public class Auswahllisten extends ActionBarActivity {
 
     final Context context = this;
+    private ArrayAdapter<VorauswahlListe> newVorauswahllistenListsAdapter;
+    private ArrayList<VorauswahlListe> newVorauswahllisten;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auswahllisten);
+
+        newVorauswahllisten = new ArrayList<>();
+
+        registerForContextMenu(findViewById(R.id.auswahllistenlistView));
+        ListView listView = (ListView) findViewById(R.id.auswahllistenlistView);
+        newVorauswahllistenListsAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, newVorauswahllisten);
+
+        listView.setAdapter(newVorauswahllistenListsAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                wechsel();
+            }
+        });
+    }
+    public void wechsel()
+    {
+        final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
+        startActivity(einkaufsliste);
     }
 
 
@@ -32,6 +62,7 @@ public class Auswahllisten extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_auswahllisten, menu);
         return true;
     }
+
     public void settingsOpen()
     {
         final Intent settings = new Intent(this, SettingsActivity.class);
@@ -65,6 +96,11 @@ public class Auswahllisten extends ActionBarActivity {
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else
                 {
+                    ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
+                    VorauswahlListe liste = new VorauswahlListe(name.getText().toString(),newList);
+                    newVorauswahllisten.add(liste);
+
+                    newVorauswahllistenListsAdapter.notifyDataSetChanged();
                     auswahllistenDialog.dismiss();
                 }
             }
