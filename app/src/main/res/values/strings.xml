@@ -9,6 +9,7 @@
     <string name="stoppUhrBeschreibung">Aktiviert oder Deaktiviert das Stoppen der Zeit während eines Einkaufs</string>
     <string name="allgemein">Allgemein</string>
     <string name="title_activity_einkaufsliste">Einkaufsliste</string>
+    <string name="auswahlliste">Auswahllisten_Typen</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -26,5 +27,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="AddList">Add List</string>
     <string name="Cancel">Cancel</string>
+    <string name="title_activity_auswahllisten">Auswahllisten</string>
 
 </resources>

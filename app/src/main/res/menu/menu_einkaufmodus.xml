@@ -9,4 +9,8 @@
         android:title="@string/einstellungen"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item android:id="@+id/auswahlliste"
+        android:title="@string/auswahlliste"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

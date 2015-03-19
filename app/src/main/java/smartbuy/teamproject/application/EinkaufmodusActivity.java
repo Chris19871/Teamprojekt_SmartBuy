@@ -69,6 +69,11 @@ public class EinkaufmodusActivity extends ActionBarActivity
 
         uberDialog.show();
     }
+    public void auswahlliste()
+    {
+        final Intent auswahl = new Intent(this, Auswahllisten.class);
+        startActivity(auswahl);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -95,6 +100,11 @@ public class EinkaufmodusActivity extends ActionBarActivity
         if (id == R.id.ueber)
         {
             uberOpen();
+            return true;
+        }
+        if (id == R.id.auswahlliste)
+        {
+            auswahlliste();
             return true;
         }
         return super.onOptionsItemSelected(item);

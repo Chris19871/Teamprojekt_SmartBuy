@@ -251,6 +251,11 @@ public class MainActivity extends ActionBarActivity
 
         uberDialog.show();
     }
+    public void auswahlliste()
+    {
+        final Intent auswahl = new Intent(this, Auswahllisten.class);
+        startActivity(auswahl);
+    }
 
     public void wechsel()
     {
@@ -289,6 +294,11 @@ public class MainActivity extends ActionBarActivity
         if (id == R.id.ueber)
         {
             uberOpen();
+            return true;
+        }
+        if (id == R.id.auswahlliste)
+        {
+            auswahlliste();
             return true;
         }
         if (id == R.id.action_add)

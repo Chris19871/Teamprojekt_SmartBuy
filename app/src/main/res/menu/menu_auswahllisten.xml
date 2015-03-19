@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context="smartbuy.teamproject.application.Auswahllisten">
     <item android:id="@+id/ueber"
         android:title="@string/ueber"
         app:showAsAction="never" />
@@ -9,20 +9,8 @@
         android:title="@string/einstellungen"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item android:id="@+id/auswahlliste"
-        android:title="@string/auswahlliste"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-
-    <!-- Search, should appear as action button -->
-    <item android:id="@+id/action_add"
+    <item android:id="@+id/action_add_Auswahlliste"
         android:icon="@drawable/action_add"
         android:title="Hinzufügen"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/action_delete"
-        android:icon="@drawable/ic_action_action_delete"
-        android:title="Löschen"
-        android:visible="false"
-        app:showAsAction="ifRoom" />
-
 </menu>

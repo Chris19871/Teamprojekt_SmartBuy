@@ -109,6 +109,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
         uberDialog.show();
     }
+    public void auswahlliste()
+    {
+        final Intent auswahl = new Intent(this, Auswahllisten.class);
+        startActivity(auswahl);
+    }
 
     public void newProduct()
     {
@@ -249,6 +254,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
             uberOpen();
             return true;
         }
+        if (id == R.id.auswahlliste)
+        {
+            auswahlliste();
+            return true;
+        }
         if (id == R.id.action_newProduct)
         {
             newProduct();
@@ -262,7 +272,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         }
         if (id == R.id.action_delete_Einkaufliste)
         {
-           
+
             return true;
         }
 
