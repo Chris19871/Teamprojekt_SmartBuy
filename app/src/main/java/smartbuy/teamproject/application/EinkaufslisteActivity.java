@@ -36,29 +36,27 @@ public class EinkaufslisteActivity extends ActionBarActivity
     final Context context = this;
     private ArrayAdapter<EinkaufsArtikel> itemAdapter;
     private EinkaufsArtikel aktArtikel;
-    private float historicX = Float.NaN, historicY = Float.NaN;
-    private static final int DELTA = 50;
-    private enum Direction {LEFT, RIGHT;}
     private ListView listView;
+    private ArrayList<EinkaufsArtikel> items;
+    private ActionBar einkaufslisteActionBar;
+    private boolean longClickEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufsliste);
-        ActionBar einkaufslisteActionBar = getSupportActionBar();
+        einkaufslisteActionBar = getSupportActionBar();
 
         aktListe = MainActivity.getAktListe();
         listenName = aktListe.getName();
         einkaufslisteActionBar.setTitle(listenName);
 
         listView = (ListView) findViewById(R.id.listView);
-        final ArrayList<EinkaufsArtikel> items = aktListe.getItems();
+        items = aktListe.getItems();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_expandable_list_item_1, items);
+                android.R.layout.simple_list_item_1, items);
         listView.setAdapter(itemAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -66,23 +64,44 @@ public class EinkaufslisteActivity extends ActionBarActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
+                if (!longClickEnabled)
+                {
+                    aktArtikel = items.get(position);
+                    changeArtikelDialog(position);
+                }
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                longClickEnabled = true;
                 aktArtikel = items.get(position);
-                changeArtikelDialog(position);
+                openDeleteMenu();
+
+
+                return true;
             }
         });
 
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         listView,
-                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                        new SwipeDismissListViewTouchListener.DismissCallbacks()
+                        {
                             @Override
-                            public boolean canDismiss(int position) {
+                            public boolean canDismiss(int position)
+                            {
                                 return true;
                             }
 
                             @Override
-                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions)
+                            {
+                                for (int position : reverseSortedPositions)
+                                {
                                     itemAdapter.remove(itemAdapter.getItem(position));
                                 }
                                 itemAdapter.notifyDataSetChanged();
@@ -94,6 +113,22 @@ public class EinkaufslisteActivity extends ActionBarActivity
         listView.setOnScrollListener(touchListener.makeScrollListener());
     }
 
+
+    public void openDeleteMenu()
+    {
+        listView.setAdapter(new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_list_item_multiple_choice, items));
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        einkaufslisteActionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void normalMode()
+    {
+        listView.setAdapter(new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_list_item_1, items));
+        listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+        longClickEnabled = false;
+    }
 
     public void settingsOpen()
     {
@@ -131,12 +166,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
         {
             public void onClick(View v)
             {
-                if(name.getText().toString().equals(""))
+                if (name.getText().toString().equals(""))
                 {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
-                }
-                else
+                } else
                 {
                     addArtikel(name.getText().toString(), desc.getText().toString(), image);
                     itemAdapter.notifyDataSetChanged();
@@ -186,7 +220,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         {
             public void onClick(View v)
             {
-                if(name.getText().toString().equals(""))
+                if (name.getText().toString().equals(""))
                 {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
@@ -273,6 +307,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
         if (id == R.id.action_delete_Einkaufliste)
         {
 
+            return true;
+        }
+        if(id == android.R.id.home)
+        {
+            normalMode();
             return true;
         }
 

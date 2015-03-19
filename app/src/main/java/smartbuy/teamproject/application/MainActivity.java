@@ -111,13 +111,14 @@ public class MainActivity extends ActionBarActivity
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.preselection_dialog);
+        final String empty = "";
 
         listName = (EditText) dialog.findViewById(R.id.dialogName);
         grid = (GridLayout) dialog.findViewById(R.id.gridLayout);
 
-        EinkaufsArtikel[] gebItems = {new EinkaufsArtikel("Partyhüte", null, null), new EinkaufsArtikel("Besteck", null, null)};
+        EinkaufsArtikel[] gebItems = {new EinkaufsArtikel("Partyhüte", empty, null), new EinkaufsArtikel("Besteck", empty, null)};
         VorauswahlArtikel geburtstag = new VorauswahlArtikel("Geburtstag", gebItems);
-        EinkaufsArtikel[] partyItems = {new EinkaufsArtikel("Fleisch", null, null), new EinkaufsArtikel("Bier", null, null)};
+        EinkaufsArtikel[] partyItems = {new EinkaufsArtikel("Fleisch", empty, null), new EinkaufsArtikel("Bier", empty, null)};
         VorauswahlArtikel party = new VorauswahlArtikel("Party", partyItems);
 
         ArrayList<VorauswahlArtikel> list = new ArrayList<>();
