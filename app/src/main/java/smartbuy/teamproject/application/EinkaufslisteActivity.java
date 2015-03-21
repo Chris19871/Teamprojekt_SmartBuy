@@ -430,19 +430,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         checkedItemPositions.clear();
         itemAdapter.notifyDataSetChanged();
         normalMode();
-        /*
-        SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
 
-
-        for (int i = 0; i < (checkedItems.size()); i++)
-        {
-            zuletztGeleoschtPosition = checkedItems.keyAt(i);
-            zuletztGeleoscht = itemAdapter.getItem(checkedItems.keyAt(i));
-            itemAdapter.remove(itemAdapter.getItem(checkedItems.keyAt(i)));
-        }
-        itemAdapter.notifyDataSetChanged();
-        normalMode();
-        */
     }
 
     public String getListenName()

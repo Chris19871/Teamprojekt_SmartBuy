@@ -43,7 +43,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
         einkaufmodusTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("regal").setIndicator("", getResources().getDrawable(R.drawable.ic_action_regal_black)), EinkaufmodusFragment.class, null);
-        einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkauf").setIndicator("", getResources().getDrawable(R.drawable.ic_action_shop_black)), EinkaufswagenFragment.class, null);
+        einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkauf").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_shoppingcar_black)), EinkaufswagenFragment.class, null);
 
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
 
