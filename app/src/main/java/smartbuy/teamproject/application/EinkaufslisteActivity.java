@@ -45,6 +45,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     private ArrayList<EinkaufsArtikel> geloschteArtikel;
     private ArrayList<Integer> geloschteArtikelPositionen;
+    private boolean nichtsGeloscht = false;
 
 
     @Override
@@ -169,28 +170,31 @@ public class EinkaufslisteActivity extends ActionBarActivity
         deleteEnable = false;
         invalidateOptionsMenu();
 
-        final Dialog loeschen_rueck = new Dialog(context);
-        loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
-        loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
-        loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-        Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.loeschen_RuckButton);
-        loeschen_Ruck.setOnClickListener(new OnClickListener()
+        if ( nichtsGeloscht == false)
         {
-            @Override
-            public void onClick(View v)
-            {
-                for(int i=(geloschteArtikel.size()-1); i >= 0; i--)
-                {
-                    itemAdapter.insert(geloschteArtikel.get(i),geloschteArtikelPositionen.get(i));
-                }
-                loeschen_rueck.dismiss();
-            }
-        });
+            final Dialog loeschen_rueck = new Dialog(context);
+            loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
+            loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
+            loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-        loeschen_rueck.show();
+            Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.loeschen_RuckButton);
+            loeschen_Ruck.setOnClickListener(new OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    for(int i=(geloschteArtikel.size()-1); i >= 0; i--)
+                    {
+                        itemAdapter.insert(geloschteArtikel.get(i),geloschteArtikelPositionen.get(i));
+                    }
+                    loeschen_rueck.dismiss();
+                }
+            });
+            loeschen_rueck.show();
+        }
+        nichtsGeloscht = false;
         itemAdapter.notifyDataSetChanged();
     }
 
@@ -398,6 +402,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         }
         if(id == android.R.id.home)
         {
+            nichtsGeloscht = true;
             normalMode();
             return true;
         }
