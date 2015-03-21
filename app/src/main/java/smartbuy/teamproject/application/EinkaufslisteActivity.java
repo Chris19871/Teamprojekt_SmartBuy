@@ -42,8 +42,10 @@ public class EinkaufslisteActivity extends ActionBarActivity
     private ActionBar einkaufslisteActionBar;
     private boolean longClickEnabled;
     private boolean deleteEnable = false;
-    private EinkaufsArtikel zuletztGeleoscht;
-    private int zuletztGeleoschtPosition;
+
+    private ArrayList<EinkaufsArtikel> geloschteArtikel;
+    private ArrayList<Integer> geloschteArtikelPositionen;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,6 +53,9 @@ public class EinkaufslisteActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufsliste);
         einkaufslisteActionBar = getSupportActionBar();
+
+        geloschteArtikel = new ArrayList<>();
+        geloschteArtikelPositionen = new ArrayList<>();
 
         aktListe = MainActivity.getAktListe();
         listenName = aktListe.getName();
@@ -104,8 +109,10 @@ public class EinkaufslisteActivity extends ActionBarActivity
                             {
                                 for (int position : reverseSortedPositions)
                                 {
-                                    zuletztGeleoschtPosition = position;
-                                    zuletztGeleoscht=itemAdapter.getItem(position);
+                                    geloschteArtikel.clear();
+                                    geloschteArtikelPositionen.clear();
+                                    geloschteArtikelPositionen.add(position);
+                                    geloschteArtikel.add(itemAdapter.getItem(position));
                                     itemAdapter.remove(itemAdapter.getItem(position));
                                 }
                                 final Dialog loeschen_rueck = new Dialog(context);
@@ -121,7 +128,8 @@ public class EinkaufslisteActivity extends ActionBarActivity
                                     @Override
                                     public void onClick(View v)
                                     {
-                                        itemAdapter.insert(zuletztGeleoscht,zuletztGeleoschtPosition);
+
+                                        itemAdapter.insert(geloschteArtikel.get(0), geloschteArtikelPositionen.get(0));
                                         itemAdapter.notifyDataSetChanged();
                                         loeschen_rueck.dismiss();
                                     }
@@ -174,7 +182,10 @@ public class EinkaufslisteActivity extends ActionBarActivity
             @Override
             public void onClick(View v)
             {
-                itemAdapter.insert(zuletztGeleoscht,zuletztGeleoschtPosition);
+                for(int i=(geloschteArtikel.size()-1); i >= 0; i--)
+                {
+                    itemAdapter.insert(geloschteArtikel.get(i),geloschteArtikelPositionen.get(i));
+                }
                 loeschen_rueck.dismiss();
             }
         });
@@ -396,6 +407,24 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     public void deleteSelectedItems()
     {
+        geloschteArtikel.clear();
+        geloschteArtikelPositionen.clear();
+        SparseBooleanArray checkedItemPositions = listView.getCheckedItemPositions();
+        int itemCount = listView.getCount();
+
+        for(int i=itemCount-1; i >= 0; i--)
+        {
+            if(checkedItemPositions.get(i))
+            {
+                geloschteArtikel.add(items.get(i));
+                geloschteArtikelPositionen.add(i);
+                itemAdapter.remove(items.get(i));
+            }
+        }
+        checkedItemPositions.clear();
+        itemAdapter.notifyDataSetChanged();
+        normalMode();
+        /*
         SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
 
 
@@ -407,6 +436,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         }
         itemAdapter.notifyDataSetChanged();
         normalMode();
+        */
     }
 
     public String getListenName()
