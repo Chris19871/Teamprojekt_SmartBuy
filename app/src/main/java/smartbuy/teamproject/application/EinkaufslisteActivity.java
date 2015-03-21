@@ -8,14 +8,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
-import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MotionEvent;
 import android.view.View.OnClickListener;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,7 +24,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
@@ -43,7 +41,9 @@ public class EinkaufslisteActivity extends ActionBarActivity
     private ArrayList<EinkaufsArtikel> items;
     private ActionBar einkaufslisteActionBar;
     private boolean longClickEnabled;
-    private boolean test = false;
+    private boolean deleteEnable = false;
+    private EinkaufsArtikel zuletztGeleoscht;
+    private int zuletztGeleoschtPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -83,7 +83,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
             {
                 longClickEnabled = true;
                 aktArtikel = items.get(position);
-                openDeleteMenu();
+                deleteMode();
                 return true;
             }
         });
@@ -104,9 +104,30 @@ public class EinkaufslisteActivity extends ActionBarActivity
                             {
                                 for (int position : reverseSortedPositions)
                                 {
+                                    zuletztGeleoschtPosition = position;
+                                    zuletztGeleoscht=itemAdapter.getItem(position);
                                     itemAdapter.remove(itemAdapter.getItem(position));
                                 }
-                                itemAdapter.notifyDataSetChanged();
+                                final Dialog loeschen_rueck = new Dialog(context);
+                                loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
+                                loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                                loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
+                                loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.loeschen_RuckButton);
+                                loeschen_Ruck.setOnClickListener(new OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View v)
+                                    {
+                                        itemAdapter.insert(zuletztGeleoscht,zuletztGeleoschtPosition);
+                                        itemAdapter.notifyDataSetChanged();
+                                        loeschen_rueck.dismiss();
+                                    }
+                                });
+
+                                loeschen_rueck.show();
                             }
                         });
         listView.setOnTouchListener(touchListener);
@@ -116,23 +137,50 @@ public class EinkaufslisteActivity extends ActionBarActivity
     }
 
 
-    public void openDeleteMenu()
+    public void deleteMode()
     {
-        listView.setAdapter(new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_multiple_choice, items));
+        itemAdapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_list_item_multiple_choice, items);
+        listView.setAdapter(itemAdapter);
+
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         einkaufslisteActionBar.setDisplayHomeAsUpEnabled(true);
-        test();
+        deleteEnable = true;
+        invalidateOptionsMenu();
     }
 
     public void normalMode()
     {
-        listView.setAdapter(new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, items));
-        listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+        itemAdapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_list_item_1, items);
+        listView.setAdapter(itemAdapter);
+
         einkaufslisteActionBar.setDisplayHomeAsUpEnabled(false);
-        test2();
         longClickEnabled = false;
+
+        deleteEnable = false;
+        invalidateOptionsMenu();
+
+        final Dialog loeschen_rueck = new Dialog(context);
+        loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
+        loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
+        loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.loeschen_RuckButton);
+        loeschen_Ruck.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                itemAdapter.insert(zuletztGeleoscht,zuletztGeleoschtPosition);
+                loeschen_rueck.dismiss();
+            }
+        });
+
+        loeschen_rueck.show();
+        itemAdapter.notifyDataSetChanged();
     }
 
     public void settingsOpen()
@@ -179,7 +227,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 {
                     addArtikel(name.getText().toString(), desc.getText().toString(), image);
                     itemAdapter.notifyDataSetChanged();
-                    //test();
                     newProducts.dismiss();
                 }
             }
@@ -190,25 +237,12 @@ public class EinkaufslisteActivity extends ActionBarActivity
         {
             public void onClick(View v)
             {
-                //test2();
                 newProducts.dismiss();
             }
         });
 
 
         newProducts.show();
-    }
-    public void test()
-    {
-        test = true;
-        invalidateOptionsMenu();
-
-    }
-    public void test2()
-    {
-        test = false;
-        invalidateOptionsMenu();
-
     }
 
     public void openEinkaufsmodus()
@@ -291,7 +325,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         MenuItem cart = menu.findItem(R.id.action_Einkaufsmodus);
 
 
-        if (test)
+        if (deleteEnable)
         {
             delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             delete.setVisible(true);
@@ -362,16 +396,16 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     public void deleteSelectedItems()
     {
-        ArrayAdapter<EinkaufsArtikel> tempList = itemAdapter;
-
         SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
-        for (int i = 0; i < checkedItems.size(); i++) {
-            if(checkedItems.valueAt(i)) {
-                itemAdapter.remove(tempList.getItem(checkedItems.keyAt(i)));
-                itemAdapter.notifyDataSetChanged();
-            }
-        }
 
+
+        for (int i = 0; i < (checkedItems.size()); i++)
+        {
+            zuletztGeleoschtPosition = checkedItems.keyAt(i);
+            zuletztGeleoscht = itemAdapter.getItem(checkedItems.keyAt(i));
+            itemAdapter.remove(itemAdapter.getItem(checkedItems.keyAt(i)));
+        }
+        itemAdapter.notifyDataSetChanged();
         normalMode();
     }
 

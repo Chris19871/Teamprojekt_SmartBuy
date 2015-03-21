@@ -12,7 +12,7 @@
     <item android:id="@+id/auswahlliste"
         android:title="@string/auswahlliste"
         android:orderInCategory="100"
-        android:visible="false"
+        android:visible="true"
         app:showAsAction="never" />
     <item android:id="@+id/action_newProduct"
         android:icon="@drawable/action_add"

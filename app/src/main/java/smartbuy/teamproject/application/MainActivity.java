@@ -9,12 +9,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,6 +34,7 @@ import java.util.ArrayList;
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
 import purchase.VorauswahlListe;
+import swipe.SwipeDismissListViewTouchListener;
 
 public class MainActivity extends ActionBarActivity
 {
@@ -45,7 +49,8 @@ public class MainActivity extends ActionBarActivity
     private ArrayList<VorauswahlListe> vorauswahllisten;
     private EditText listName;
     private static Einkaufsliste aktListe;
-
+    private Einkaufsliste zuletztGeleoscht;
+    private int zuletztGeleoschtPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -78,8 +83,55 @@ public class MainActivity extends ActionBarActivity
                 wechsel();
             }
         });
-    }
 
+                SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        listView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks()
+                        {
+                            @Override
+                            public boolean canDismiss(int position)
+                            {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions)
+                            {
+                                for (int position : reverseSortedPositions)
+                                {
+                                    zuletztGeleoschtPosition = position;
+                                    zuletztGeleoscht=itemListsAdapter.getItem(position);
+                                    itemListsAdapter.remove(itemListsAdapter.getItem(position));
+                                }
+
+                                final Dialog loeschen_rueck = new Dialog(context);
+                                loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
+                                loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                                loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
+                                loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.loeschen_RuckButton);
+                                loeschen_Ruck.setOnClickListener(new OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View v)
+                                    {
+                                        itemListsAdapter.insert(zuletztGeleoscht,zuletztGeleoschtPosition);
+                                        itemListsAdapter.notifyDataSetChanged();
+                                        loeschen_rueck.dismiss();
+                                    }
+                                });
+
+                                loeschen_rueck.show();
+                            }
+                        });
+        listView.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        listView.setOnScrollListener(touchListener.makeScrollListener());
+    }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
     {
@@ -100,15 +152,81 @@ public class MainActivity extends ActionBarActivity
             case R.id.action_ContextMenu_Einkaufsmodus:
             {
                 openEinkaufsmodus();
+                break;
+            }
+            case R.id.action_ContextMenu_Name_ändern:
+            {
+                final Dialog nameAndern = new Dialog(context);
+                nameAndern.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                nameAndern.setContentView(R.layout.add_auswahllisten_dialog);
+
+                final EditText name = (EditText) nameAndern.findViewById(R.id.addAuswahllisteTextView);
+                name.setText(itemListsAdapter.getItem(info.position).getName());
+
+                Button dialogButtonSave = (Button) nameAndern.findViewById(R.id.addAuswahllisteSave);
+                dialogButtonSave.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        if (name.getText().toString().equals(""))
+                        {
+                            name.setHintTextColor(Color.parseColor("#FF0000"));
+                            name.setHint("Feld muss ausgefüllt werden!");
+                        } else
+                        {
+
+                            itemListsAdapter.getItem(info.position).setName(name.getText().toString());
+                            itemListsAdapter.notifyDataSetChanged();
+                            nameAndern.dismiss();
+                        }
+                    }
+                });
+
+                Button dialogButtonCancel = (Button) nameAndern.findViewById(R.id.addAuswahllisteCancel);
+                dialogButtonCancel.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        nameAndern.dismiss();
+                    }
+                });
+                nameAndern.show();
+                break;
             }
             case R.id.action_ContextMenu_Löschen:
             {
+                zuletztGeleoschtPosition = info.position;
+                zuletztGeleoscht = itemListsAdapter.getItem(info.position);
+                itemListsAdapter.remove(itemListsAdapter.getItem(info.position));
+
+                final Dialog loeschen_rueck = new Dialog(context);
+                loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
+                loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
+                loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.loeschen_RuckButton);
+                loeschen_Ruck.setOnClickListener(new OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        itemListsAdapter.insert(zuletztGeleoscht,zuletztGeleoschtPosition);
+                        itemListsAdapter.notifyDataSetChanged();
+                        loeschen_rueck.dismiss();
+                    }
+                });
+
+                loeschen_rueck.show();
+                break;
 
             }
             case R.id.action_ContextMenu_Zurücksetzen:
             {
 
             }
+            break;
         }
         return super.onContextItemSelected(item);
     }
