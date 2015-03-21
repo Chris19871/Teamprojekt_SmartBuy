@@ -61,6 +61,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         aktListe = MainActivity.getAktListe();
         listenName = aktListe.getName();
         einkaufslisteActionBar.setTitle(listenName);
+        einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
 
         listView = (ListView) findViewById(R.id.listView);
         items = aktListe.getItems();
