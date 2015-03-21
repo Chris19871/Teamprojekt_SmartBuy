@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
     style="@style/newProduct"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -15,32 +16,33 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:clickable="true"
-        android:src="@mipmap/smartbuy_logo" />
+        android:src="@mipmap/smartbuy_logo"/>
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView3"
-        android:minHeight="20dp"
-        android:layout_below="@+id/newProductLogo"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/newProductLogo"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:minHeight="20dp">
 
         <EditText
             android:id="@+id/productName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autoText="false"
-            android:editable="true"
-            android:hint="Produktname"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:layout_below="@+id/newProductLogo"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:gravity="center_horizontal" />
+            android:layout_below="@+id/newProductLogo"
+            android:autoText="false"
+            android:editable="true"
+            android:gravity="center_horizontal"
+            android:hint="Produktname"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:textStyle="bold"/>
     </ScrollView>
 
     <TextView
@@ -48,21 +50,21 @@
         style="@style/newProductBeschreibung"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.03"
-        android:text="Beschreibung"
-        android:layout_below="@+id/scrollView3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/scrollView3"
+        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_weight="0.03"
+        android:text="Beschreibung"/>
 
     <ScrollView
+        android:id="@+id/scrollView4"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView4"
-        android:layout_below="@+id/textBeschreibung"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/textBeschreibung"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
@@ -71,23 +73,23 @@
             style="@style/newProduct"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:gravity="top"
-            android:hint="Logo von SmartBuy"
-            android:layout_below="@+id/textBeschreibung"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:minLines="4"
-            android:maxLines="6" />
+            android:layout_below="@+id/textBeschreibung"
+            android:gravity="top"
+            android:hint="Logo von SmartBuy"
+            android:maxLines="6"
+            android:minLines="4"/>
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:id="@+id/linearLayout"
         android:layout_below="@+id/scrollView4"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/newProductCancel"
@@ -95,12 +97,12 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/newProductSave"
             android:layout_toStartOf="@+id/newProductSave"
-            android:text="Abbrechen"
-            android:layout_marginBottom="10dp" />
+            android:text="Abbrechen"/>
 
         <Button
             android:id="@+id/newProductSave"
@@ -110,13 +112,13 @@
             android:layout_alignEnd="@+id/newProductLogo"
             android:layout_alignParentTop="true"
             android:layout_alignRight="@+id/newProductLogo"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:elegantTextHeight="false"
             android:focusable="false"
             android:longClickable="false"
-            android:text="Speichern"
-            android:layout_marginBottom="10dp" />
+            android:text="Speichern"/>
     </LinearLayout>
 
 </RelativeLayout>

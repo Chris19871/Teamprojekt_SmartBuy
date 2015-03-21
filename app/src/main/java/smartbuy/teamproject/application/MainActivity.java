@@ -79,16 +79,18 @@ public class MainActivity extends ActionBarActivity
             }
         });
     }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
     {
-        if(v.getId() == R.id.ListView)
+        if (v.getId() == R.id.ListView)
         {
-            getMenuInflater().inflate(R.menu.mainactivitycontextmenu,menu);
+            getMenuInflater().inflate(R.menu.mainactivitycontextmenu, menu);
         }
         super.onCreateContextMenu(menu, v, menuInfo);
 
     }
+
     @Override
     public boolean onContextItemSelected(MenuItem item)
     {
@@ -108,7 +110,7 @@ public class MainActivity extends ActionBarActivity
 
             }
         }
-        return  super.onContextItemSelected(item);
+        return super.onContextItemSelected(item);
     }
 
     public void newEinkaufsliste()
@@ -122,12 +124,12 @@ public class MainActivity extends ActionBarActivity
         grid = (GridLayout) dialog.findViewById(R.id.gridLayout);
 
         // SmartBuy Vorauswahllisten erstellen
-        String[] geburstagArtikel = {"Partyhüte","Besteck"};
+        String[] geburstagArtikel = {"Partyhüte", "Besteck"};
         ArrayList<EinkaufsArtikel> gebItems = new ArrayList<>();
         EinkaufsArtikel artikel;
-        for(int i=0; i<geburstagArtikel.length;i++)
+        for (int i = 0; i < geburstagArtikel.length; i++)
         {
-            artikel = new EinkaufsArtikel(geburstagArtikel[i],"",null);
+            artikel = new EinkaufsArtikel(geburstagArtikel[i], "", null);
             gebItems.add(artikel);
 
         }
@@ -135,11 +137,11 @@ public class MainActivity extends ActionBarActivity
         VorauswahlListe geburtstag = new VorauswahlListe("Geburtstag", gebItems);
         vorauswahllisten.add(geburtstag);
 
-        String[] partyArtikel = {"Fleisch","Bier"};
+        String[] partyArtikel = {"Fleisch", "Bier"};
         ArrayList<EinkaufsArtikel> partyItems = new ArrayList<>();
-        for(int i=0; i<partyArtikel.length;i++)
+        for (int i = 0; i < partyArtikel.length; i++)
         {
-            artikel = new EinkaufsArtikel(partyArtikel[i],"",null);
+            artikel = new EinkaufsArtikel(partyArtikel[i], "", null);
             partyItems.add(artikel);
 
         }
@@ -274,6 +276,7 @@ public class MainActivity extends ActionBarActivity
 
         uberDialog.show();
     }
+
     public void auswahlliste()
     {
         final Intent auswahl = new Intent(this, Auswahllisten.class);
@@ -285,6 +288,7 @@ public class MainActivity extends ActionBarActivity
         final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
         startActivity(einkaufsliste);
     }
+
     public void openEinkaufsmodus()
     {
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
@@ -342,6 +346,7 @@ public class MainActivity extends ActionBarActivity
     {
         return aktListe;
     }
+
     public static void setAktListe(Einkaufsliste aktListe)
     {
         MainActivity.aktListe = aktListe;

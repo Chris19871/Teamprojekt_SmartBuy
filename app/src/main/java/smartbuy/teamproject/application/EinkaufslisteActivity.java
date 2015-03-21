@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -83,8 +84,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 longClickEnabled = true;
                 aktArtikel = items.get(position);
                 openDeleteMenu();
-
-
                 return true;
             }
         });
@@ -123,6 +122,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 android.R.layout.simple_list_item_multiple_choice, items));
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         einkaufslisteActionBar.setDisplayHomeAsUpEnabled(true);
+        test();
     }
 
     public void normalMode()
@@ -130,6 +130,8 @@ public class EinkaufslisteActivity extends ActionBarActivity
         listView.setAdapter(new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, items));
         listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+        einkaufslisteActionBar.setDisplayHomeAsUpEnabled(false);
+        test2();
         longClickEnabled = false;
     }
 
@@ -177,7 +179,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 {
                     addArtikel(name.getText().toString(), desc.getText().toString(), image);
                     itemAdapter.notifyDataSetChanged();
-                    test();
+                    //test();
                     newProducts.dismiss();
                 }
             }
@@ -188,7 +190,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         {
             public void onClick(View v)
             {
-                test2();
+                //test2();
                 newProducts.dismiss();
             }
         });
@@ -284,17 +286,26 @@ public class EinkaufslisteActivity extends ActionBarActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_einkaufsliste, menu);
 
-        MenuItem item = menu.findItem(R.id.action_delete_Einkaufliste);
+        MenuItem delete = menu.findItem(R.id.action_delete_Einkaufliste);
+        MenuItem add = menu.findItem(R.id.action_newProduct);
+        MenuItem cart = menu.findItem(R.id.action_Einkaufsmodus);
 
-        if (test == true)
+
+        if (test)
         {
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            item.setVisible(true);
+            delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            delete.setVisible(true);
+            add.setVisible(false);
+            cart.setVisible(false);
+
+
         }
         else
         {
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            item.setVisible(false);
+            delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            delete.setVisible(false);
+            //add.setVisible(true);
+           // cart.setVisible(true);
         }
 
         return true;
@@ -337,7 +348,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         }
         if (id == R.id.action_delete_Einkaufliste)
         {
-
+            deleteSelectedItems();
             return true;
         }
         if(id == android.R.id.home)
@@ -347,6 +358,21 @@ public class EinkaufslisteActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void deleteSelectedItems()
+    {
+        ArrayAdapter<EinkaufsArtikel> tempList = itemAdapter;
+
+        SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
+        for (int i = 0; i < checkedItems.size(); i++) {
+            if(checkedItems.valueAt(i)) {
+                itemAdapter.remove(tempList.getItem(checkedItems.keyAt(i)));
+                itemAdapter.notifyDataSetChanged();
+            }
+        }
+
+        normalMode();
     }
 
     public String getListenName()
