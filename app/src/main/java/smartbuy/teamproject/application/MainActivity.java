@@ -225,7 +225,7 @@ public class MainActivity extends ActionBarActivity
             }
             case R.id.action_ContextMenu_Zurücksetzen:
             {
-
+                resetList(info.position);
             }
             break;
         }
@@ -366,6 +366,7 @@ public class MainActivity extends ActionBarActivity
     public void generateItemList()
     {
         ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
+        ArrayList<EinkaufsArtikel> newListBought = new ArrayList<>();
         for (int i = 0; i < boxCounter; i++)
         {
             if (b[i].isChecked())
@@ -373,7 +374,7 @@ public class MainActivity extends ActionBarActivity
                 newList.add(addNewList.get(i));
             }
         }
-        addList(new Einkaufsliste(listName.getText().toString(), newList));
+        addList(new Einkaufsliste(listName.getText().toString(), newList, newListBought));
     }
 
     public void addList(Einkaufsliste list)
@@ -413,6 +414,25 @@ public class MainActivity extends ActionBarActivity
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
         startActivity(einkaufsmodus);
 
+    }
+
+    public void resetList(int pos)
+    {
+        Einkaufsliste list = itemListsAdapter.getItem(pos);
+        ArrayList<EinkaufsArtikel> itemList = list.getItems();
+        ArrayList<EinkaufsArtikel> itemListBought = list.getItemsBought();
+
+        for(int i = 0; i < itemList.size(); i++)
+        {
+            itemListBought.add(itemList.get(i));
+        }
+
+        itemList.clear();
+        itemList = itemListBought;
+        itemListBought.clear();
+
+        list.setItems(itemList);
+        list.setItemsBought(itemListBought);
     }
 
     @Override

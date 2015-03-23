@@ -30,12 +30,14 @@ public class MyAdapter extends BaseAdapter {
 
     Einkaufsliste liste = MainActivity.getAktListe();
     private ArrayList<EinkaufsArtikel> listeArtikel;
+    private ArrayList<EinkaufsArtikel> listeArtikelGekauft;
 
     public MyAdapter(Context c)
     {
         mContext = c;
         liste = MainActivity.getAktListe();
         listeArtikel = liste.getItems();
+        listeArtikelGekauft = liste.getItemsBought();
     }
 
     @Override

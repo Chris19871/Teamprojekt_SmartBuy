@@ -8,7 +8,9 @@ import java.util.ArrayList;
 public class Einkaufsliste
 {
     private ArrayList<EinkaufsArtikel> items;
+    private ArrayList<EinkaufsArtikel> itemsBought;
     private String name;
+
 
     public String getName() {
         return name;
@@ -18,7 +20,7 @@ public class Einkaufsliste
         this.name = name;
     }
 
-    public Einkaufsliste(String name, ArrayList<EinkaufsArtikel> items)
+    public Einkaufsliste(String name, ArrayList<EinkaufsArtikel> items, ArrayList<EinkaufsArtikel> itemsBought)
     {
 
         this.items = items;
@@ -57,4 +59,16 @@ public class Einkaufsliste
     {
         this.items = items;
     }
+
+
+    public ArrayList<EinkaufsArtikel> getItemsBought()
+    {
+        return itemsBought;
+    }
+
+    public void setItemsBought(ArrayList<EinkaufsArtikel> itemsBought)
+    {
+        this.itemsBought = itemsBought;
+    }
+
 }

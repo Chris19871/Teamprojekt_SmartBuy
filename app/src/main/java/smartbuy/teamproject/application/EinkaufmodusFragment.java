@@ -31,6 +31,3 @@ public class EinkaufmodusFragment extends Fragment {
         return view;
     }
 }
-
-
-
