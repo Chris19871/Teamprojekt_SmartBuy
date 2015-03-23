@@ -11,12 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:horizontalSpacing="4dp"
-        android:padding="2dp"
+        android:horizontalSpacing="10dp"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="4dp"
+        android:verticalSpacing="10dp"
         android:clickable="false"
-        android:numColumns="3">
+        android:numColumns="3"
+        android:paddingTop="10dp"
+        android:scrollingCache="false"
+        android:touchscreenBlocksFocus="false">
 
     </GridView>
 </RelativeLayout>

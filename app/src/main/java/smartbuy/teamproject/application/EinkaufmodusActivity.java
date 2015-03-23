@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 import badge.BadgeView;
+import purchase.Einkaufsliste;
 
 
 public class EinkaufmodusActivity extends ActionBarActivity
@@ -31,6 +33,8 @@ public class EinkaufmodusActivity extends ActionBarActivity
 
     final Context context = this;
     private FragmentTabHost einkaufmodusTabHost;
+    private ActionBar einkaufsmodusActionBar;
+    Einkaufsliste liste;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,6 +42,14 @@ public class EinkaufmodusActivity extends ActionBarActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufmodus);
+
+
+
+        einkaufsmodusActionBar = getSupportActionBar();
+
+        einkaufsmodusActionBar.setTitle(MainActivity.getAktListe().getName());
+        einkaufsmodusActionBar.setDisplayShowTitleEnabled(true);
+
 
         einkaufmodusTabHost = (FragmentTabHost) findViewById(R.id.tabHost);
         einkaufmodusTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
@@ -47,7 +59,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
 
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
 
-        BadgeView badge7 = new BadgeView(this, tabs, 0);
+        BadgeView badge7 = new BadgeView(this, tabs, 1);
         badge7.setText("4");
         badge7.setBadgePosition(BadgeView.POSITION_CENTER);
         badge7.show();

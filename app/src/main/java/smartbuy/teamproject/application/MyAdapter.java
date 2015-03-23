@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
 import android.widget.Button;
@@ -31,6 +32,7 @@ public class MyAdapter extends BaseAdapter {
     Einkaufsliste liste = MainActivity.getAktListe();
     private ArrayList<EinkaufsArtikel> listeArtikel;
     private ArrayList<EinkaufsArtikel> listeArtikelGekauft;
+    private EinkaufsArtikel zuletztGekauft;
 
     public MyAdapter(Context c)
     {
@@ -61,31 +63,65 @@ public class MyAdapter extends BaseAdapter {
         final LinearLayout layout = new LinearLayout(mContext);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        LinearLayout.LayoutParams lpl = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setMinimumWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout.setMinimumHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        layout.setLayoutParams(lpl);
         layout.setBackgroundResource(R.drawable.background_border);
         layout.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        lp.setMargins(0,10,0,0);
+
+
 
         ImageView image = new ImageView(layout.getContext());
         image.setBackgroundColor(Color.parseColor("#FF5CC1DE"));
-        image.setImageResource(R.drawable.smartbuy_logo);
-        image.setLayoutParams(lp);
+        image.setImageResource(R.mipmap.ic_launcher_shoppingcar_black);
+        image.setClickable(true);
+
+        image.setMinimumWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        image.setMinimumHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+
 
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listeArtikelGekauft.add(listeArtikel.get(position));
+                zuletztGekauft = listeArtikel.get(position);
                 listeArtikel.remove(position);
                 notifyDataSetChanged();
                 liste.setItems(listeArtikel);
                 liste.setItemsBought(listeArtikelGekauft);
                 MainActivity.setAktListe(liste);
+
+                final Dialog loeschen_rueck = new Dialog(mContext);
+                loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
+                loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
+                loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.loeschen_RuckButton);
+                loeschen_Ruck.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        listeArtikel.add(position,zuletztGekauft);
+                        listeArtikelGekauft.remove(zuletztGekauft);
+
+                        notifyDataSetChanged();
+
+                        liste.setItems(listeArtikel);
+                        liste.setItemsBought(listeArtikelGekauft);
+                        MainActivity.setAktListe(liste);
+
+                        loeschen_rueck.dismiss();
+                    }
+                });
+
+                loeschen_rueck.show();
             }
+
         });
 
         layout.addView(image);
@@ -95,10 +131,8 @@ public class MyAdapter extends BaseAdapter {
         textView.setClickable(true);
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        LinearLayout.LayoutParams lptv = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        lptv.setMargins(20,0,20,20);
-
-        textView.setLayoutParams(lptv);
+        textView.setMinimumWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        textView.setMinimumHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override

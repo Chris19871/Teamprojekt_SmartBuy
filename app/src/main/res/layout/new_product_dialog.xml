@@ -42,7 +42,10 @@
             android:hint="Produktname"
             android:imeOptions="actionDone"
             android:maxLines="1"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:capitalize="words"
+            android:singleLine="false"
+            android:maxLength="20" />
     </ScrollView>
 
     <TextView
