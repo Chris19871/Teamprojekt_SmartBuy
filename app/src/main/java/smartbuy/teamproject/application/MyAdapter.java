@@ -82,6 +82,9 @@ public class MyAdapter extends BaseAdapter {
                 listeArtikelGekauft.add(listeArtikel.get(position));
                 listeArtikel.remove(position);
                 notifyDataSetChanged();
+                liste.setItems(listeArtikel);
+                liste.setItemsBought(listeArtikelGekauft);
+                MainActivity.setAktListe(liste);
             }
         });
 
