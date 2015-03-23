@@ -24,7 +24,10 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import badge.BadgeView;
+import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
 
 
@@ -34,7 +37,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
     final Context context = this;
     private FragmentTabHost einkaufmodusTabHost;
     private ActionBar einkaufsmodusActionBar;
-    Einkaufsliste liste;
+    ArrayList<EinkaufsArtikel> liste;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,7 +46,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufmodus);
 
-
+        liste = MainActivity.getAktListe().getItemsBought();
 
         einkaufsmodusActionBar = getSupportActionBar();
 
@@ -57,13 +60,14 @@ public class EinkaufmodusActivity extends ActionBarActivity
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("regal").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_regal_black)), EinkaufmodusFragment.class, null);
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkauf").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_shoppingcar_black)), EinkaufswagenFragment.class, null);
 
+
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
 
         BadgeView badge7 = new BadgeView(this, tabs, 1);
-        badge7.setText("4");
-        badge7.setBadgePosition(BadgeView.POSITION_CENTER);
-        badge7.show();
-
+        String anzahlGekauft = Integer.toString(liste.size());
+        badge7.setText(anzahlGekauft);
+        badge7.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+        badge7.toggle();
 
     }
 
