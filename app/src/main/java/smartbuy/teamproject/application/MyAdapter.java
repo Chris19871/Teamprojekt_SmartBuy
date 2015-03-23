@@ -62,9 +62,10 @@ public class MyAdapter extends BaseAdapter {
         WindowManager.LayoutParams p = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT);
         layout.setLayoutParams(p);
         layout.setBackgroundResource(R.drawable.background_border);
+        layout.setGravity(Gravity.CENTER_HORIZONTAL);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(5,5,5,5);
+        lp.setMargins(10,20,10,0);
 
         ImageButton image = new ImageButton(layout.getContext());
         image.setBackgroundColor(Color.parseColor("#FF60E2FF"));
@@ -85,7 +86,11 @@ public class MyAdapter extends BaseAdapter {
         textView.setText(listeArtikel.get(position).getName());
         textView.setClickable(true);
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setLayoutParams(lp);
+
+        LinearLayout.LayoutParams lptv = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(10,0,10,20);
+
+        textView.setLayoutParams(lptv);
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
