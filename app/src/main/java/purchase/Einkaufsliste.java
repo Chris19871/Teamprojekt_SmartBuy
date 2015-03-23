@@ -25,6 +25,7 @@ public class Einkaufsliste
 
         this.items = items;
         this.name = name;
+        this.itemsBought = itemsBought;
     }
 
     public void addItem(EinkaufsArtikel pItem)

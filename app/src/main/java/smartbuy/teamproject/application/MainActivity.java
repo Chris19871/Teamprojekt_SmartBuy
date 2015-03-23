@@ -489,5 +489,6 @@ public class MainActivity extends ActionBarActivity
     public static void setAktListe(Einkaufsliste aktListe)
     {
         MainActivity.aktListe = aktListe;
+
     }
 }

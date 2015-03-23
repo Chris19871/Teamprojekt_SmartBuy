@@ -28,6 +28,7 @@ public class EinkaufmodusFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_einkaufmodus, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.einkaufmodusView);
         MyAdapter adapter = new MyAdapter(view.getContext());
+
         gridView.setAdapter(adapter);
 
         return view;

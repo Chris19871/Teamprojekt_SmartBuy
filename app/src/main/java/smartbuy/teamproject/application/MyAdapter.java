@@ -79,7 +79,9 @@ public class MyAdapter extends BaseAdapter {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                listeArtikelGekauft.add(listeArtikel.get(position));
+                listeArtikel.remove(position);
+                notifyDataSetChanged();
             }
         });
 
@@ -121,6 +123,7 @@ public class MyAdapter extends BaseAdapter {
 
         return layout;
     }
+
 
 }
 
