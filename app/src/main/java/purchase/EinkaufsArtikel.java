@@ -8,6 +8,7 @@ import android.widget.ImageView;
  */
 public class EinkaufsArtikel
 {
+
     private String name;
     private String desc;
     private ImageView pic;
@@ -39,4 +40,19 @@ public class EinkaufsArtikel
     {
         return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public void setPic(ImageView pic) {
+        this.pic = pic;
+    }
+
+
 }
+

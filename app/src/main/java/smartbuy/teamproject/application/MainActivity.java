@@ -151,6 +151,7 @@ public class MainActivity extends ActionBarActivity
         {
             case R.id.action_ContextMenu_Einkaufsmodus:
             {
+                aktListe = itemListsAdapter.getItem(info.position);
                 openEinkaufsmodus();
                 break;
             }
