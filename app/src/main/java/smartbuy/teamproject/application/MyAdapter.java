@@ -61,16 +61,17 @@ public class MyAdapter extends BaseAdapter {
         final LinearLayout layout = new LinearLayout(mContext);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        WindowManager.LayoutParams p = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT);
-        layout.setLayoutParams(p);
+        LinearLayout.LayoutParams lpl = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        layout.setLayoutParams(lpl);
         layout.setBackgroundResource(R.drawable.background_border);
         layout.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(10,20,10,0);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        lp.setMargins(0,10,0,0);
 
-        ImageButton image = new ImageButton(layout.getContext());
-        image.setBackgroundColor(Color.parseColor("#FF60E2FF"));
+        ImageView image = new ImageView(layout.getContext());
+        image.setBackgroundColor(Color.parseColor("#FF5CC1DE"));
         image.setImageResource(R.drawable.smartbuy_logo);
         image.setLayoutParams(lp);
 
@@ -89,8 +90,8 @@ public class MyAdapter extends BaseAdapter {
         textView.setClickable(true);
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        LinearLayout.LayoutParams lptv = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(10,0,10,20);
+        LinearLayout.LayoutParams lptv = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        lptv.setMargins(20,0,20,20);
 
         textView.setLayoutParams(lptv);
 
@@ -117,7 +118,6 @@ public class MyAdapter extends BaseAdapter {
         });
 
         layout.addView(textView);
-
 
         return layout;
     }
