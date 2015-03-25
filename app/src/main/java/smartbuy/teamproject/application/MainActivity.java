@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity
         registerForContextMenu(findViewById(R.id.ListView));
         ListView listView = (ListView) findViewById(R.id.ListView);
         itemListsAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, einkaufsliste);
+                R.layout.listview,R.id.listViewdesign, einkaufsliste);
         listView.setAdapter(itemListsAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()

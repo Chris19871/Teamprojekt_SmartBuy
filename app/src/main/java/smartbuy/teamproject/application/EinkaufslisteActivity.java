@@ -46,7 +46,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     private ArrayList<EinkaufsArtikel> geloschteArtikel;
     private ArrayList<Integer> geloschteArtikelPositionen;
-    private boolean nichtsGeloscht = false;
+    private boolean artikelGeloscht = false;
 
 
     @Override
@@ -69,7 +69,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         allItems = aktListe.getAllItems();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, allItems);
+                R.layout.listview,R.id.listViewdesign, allItems);
         listView.setAdapter(itemAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -152,6 +152,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     public void deleteMode()
     {
+
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_multiple_choice, items);
         listView.setAdapter(itemAdapter);
@@ -164,8 +165,9 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     public void normalMode()
     {
+
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, items);
+                R.layout.listview,R.id.listViewdesign, items);
         listView.setAdapter(itemAdapter);
 
         einkaufslisteActionBar.setDisplayHomeAsUpEnabled(false);
@@ -174,7 +176,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         deleteEnable = false;
         invalidateOptionsMenu();
 
-        if ( nichtsGeloscht == false)
+        if ( artikelGeloscht == true)
         {
             final Dialog loeschen_rueck = new Dialog(context);
             loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -198,7 +200,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
             });
             loeschen_rueck.show();
         }
-        nichtsGeloscht = false;
+        artikelGeloscht = false;
         itemAdapter.notifyDataSetChanged();
     }
 
@@ -232,6 +234,16 @@ public class EinkaufslisteActivity extends ActionBarActivity
         final EditText name = (EditText) newProducts.findViewById(R.id.productName);
         final TextView desc = (TextView) newProducts.findViewById(R.id.descnewProduct);
         final ImageView image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
+        image.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog newProducts = new Dialog(context);
+
+                newProducts.setContentView(R.layout.new_product_dialog);
+                newProducts.show();
+            }
+        });
+
 
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
         dialogButtonSave.setOnClickListener(new OnClickListener()
@@ -408,7 +420,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         }
         if(id == android.R.id.home)
         {
-            nichtsGeloscht = true;
+            artikelGeloscht = false;
             normalMode();
             return true;
         }
@@ -422,7 +434,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
         geloschteArtikelPositionen.clear();
         SparseBooleanArray checkedItemPositions = listView.getCheckedItemPositions();
         int itemCount = listView.getCount();
-
         for(int i=itemCount-1; i >= 0; i--)
         {
             if(checkedItemPositions.get(i))
@@ -430,9 +441,13 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 geloschteArtikel.add(items.get(i));
                 geloschteArtikelPositionen.add(i);
                 itemAdapter.remove(items.get(i));
+                artikelGeloscht = true;
+
             }
+
         }
         checkedItemPositions.clear();
+
         itemAdapter.notifyDataSetChanged();
         normalMode();
 

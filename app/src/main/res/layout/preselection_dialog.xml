@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/newProduct"
+    style="@style/preselection"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
@@ -74,7 +74,7 @@
 
         <Button
             android:id="@+id/dialogButtonCancel"
-            style="@style/newProductButton"
+            style="@style/preselectionCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -84,12 +84,11 @@
             android:layout_marginRight="20dp"
             android:layout_row="10"
             android:nestedScrollingEnabled="false"
-            android:text="@string/Cancel"
             android:layout_marginBottom="10dp" />
 
         <Button
             android:id="@+id/dialogButtonOK"
-            style="@style/newProductButton"
+            style="@style/preselectionAccept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -100,7 +99,6 @@
             android:layout_row="10"
             android:longClickable="false"
             android:onClick="showDialog"
-            android:text="@string/AddList"
             android:layout_marginBottom="10dp" />
     </LinearLayout>
 
