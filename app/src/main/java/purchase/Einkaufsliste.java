@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Einkaufsliste
 {
+    private ArrayList<EinkaufsArtikel> allItems = new ArrayList<>();
     private ArrayList<EinkaufsArtikel> items;
     private ArrayList<EinkaufsArtikel> itemsBought;
     private String name;
@@ -72,4 +73,21 @@ public class Einkaufsliste
         this.itemsBought = itemsBought;
     }
 
+    public ArrayList<EinkaufsArtikel> getAllItems()
+    {
+        for(int i = 0; i < items.size(); i++)
+        {
+            if(!allItems.contains(items.get(i))) {
+                allItems.add(items.get(i));
+            }
+        }
+
+        for(int i = 0; i < itemsBought.size(); i++) {
+            if(!allItems.contains(itemsBought.get(i))) {
+                allItems.add(itemsBought.get(i));
+            }
+        }
+
+        return allItems;
+    }
 }

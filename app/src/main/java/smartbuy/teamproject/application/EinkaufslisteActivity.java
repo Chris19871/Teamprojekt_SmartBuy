@@ -39,6 +39,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
     private EinkaufsArtikel aktArtikel;
     private ListView listView;
     private ArrayList<EinkaufsArtikel> items;
+    private ArrayList<EinkaufsArtikel> allItems;
     private ActionBar einkaufslisteActionBar;
     private boolean longClickEnabled;
     private boolean deleteEnable = false;
@@ -65,9 +66,10 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
         listView = (ListView) findViewById(R.id.listView);
         items = aktListe.getItems();
+        allItems = aktListe.getAllItems();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, items);
+                android.R.layout.simple_list_item_1, allItems);
         listView.setAdapter(itemAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -79,6 +81,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 {
                     aktArtikel = items.get(position);
                     changeArtikelDialog(position);
+                    allItems = aktListe.getAllItems();
                 }
             }
         });
@@ -242,6 +245,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 } else
                 {
                     addArtikel(name.getText().toString(), desc.getText().toString(), image);
+                    allItems = aktListe.getAllItems();
                     itemAdapter.notifyDataSetChanged();
                     newProducts.dismiss();
                 }
@@ -394,6 +398,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         if (id == R.id.action_Einkaufsmodus)
         {
             openEinkaufsmodus();
+            finish();
             return true;
         }
         if (id == R.id.action_delete_Einkaufliste)
