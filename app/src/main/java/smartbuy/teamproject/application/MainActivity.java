@@ -3,17 +3,21 @@ package smartbuy.teamproject.application;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,25 +28,29 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
-import purchase.VorauswahlArtikel;
+import purchase.VorauswahlListe;
+import swipe.SwipeDismissListViewTouchListener;
 
 public class MainActivity extends ActionBarActivity
 {
     final Context context = this;
     private GridLayout grid;
-    private ArrayAdapter<VorauswahlArtikel> items;
+    private ArrayAdapter<VorauswahlListe> vorauswahllistenitemListsAdapter;
     private ArrayAdapter<Einkaufsliste> itemListsAdapter;
     private CheckBox[] b;
     private int boxCounter = 0;
-    private EinkaufsArtikel[] addNewList;
-    ArrayList<Einkaufsliste> einkaufsliste;
+    private ArrayList<EinkaufsArtikel> addNewList;
+    private ArrayList<Einkaufsliste> einkaufsliste;
+    private ArrayList<VorauswahlListe> vorauswahllisten;
     private EditText listName;
     private static Einkaufsliste aktListe;
-
+    private Einkaufsliste zuletztGeleoscht;
+    private int zuletztGeleoschtPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,6 +64,8 @@ public class MainActivity extends ActionBarActivity
 
         ActionBar smartBuyActionBar = getSupportActionBar();
         smartBuyActionBar.setDisplayShowTitleEnabled(false);
+
+        vorauswahllisten = new ArrayList<>();
 
         einkaufsliste = new ArrayList<>();
         registerForContextMenu(findViewById(R.id.ListView));
@@ -73,17 +83,66 @@ public class MainActivity extends ActionBarActivity
                 wechsel();
             }
         });
+
+                SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        listView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks()
+                        {
+                            @Override
+                            public boolean canDismiss(int position)
+                            {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions)
+                            {
+                                for (int position : reverseSortedPositions)
+                                {
+                                    zuletztGeleoschtPosition = position;
+                                    zuletztGeleoscht=itemListsAdapter.getItem(position);
+                                    itemListsAdapter.remove(itemListsAdapter.getItem(position));
+                                }
+
+                                final Dialog loeschen_rueck = new Dialog(context);
+                                loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
+                                loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                                loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
+                                loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.loeschen_RuckButton);
+                                loeschen_Ruck.setOnClickListener(new OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View v)
+                                    {
+                                        itemListsAdapter.insert(zuletztGeleoscht,zuletztGeleoschtPosition);
+                                        itemListsAdapter.notifyDataSetChanged();
+                                        loeschen_rueck.dismiss();
+                                    }
+                                });
+
+                                loeschen_rueck.show();
+                            }
+                        });
+        listView.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        listView.setOnScrollListener(touchListener.makeScrollListener());
     }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
     {
-        if(v.getId() == R.id.ListView)
+        if (v.getId() == R.id.ListView)
         {
-            getMenuInflater().inflate(R.menu.mainactivitycontextmenu,menu);
+            getMenuInflater().inflate(R.menu.mainactivitycontextmenu, menu);
         }
         super.onCreateContextMenu(menu, v, menuInfo);
 
     }
+
     @Override
     public boolean onContextItemSelected(MenuItem item)
     {
@@ -92,18 +151,85 @@ public class MainActivity extends ActionBarActivity
         {
             case R.id.action_ContextMenu_Einkaufsmodus:
             {
+                aktListe = itemListsAdapter.getItem(info.position);
                 openEinkaufsmodus();
+                break;
+            }
+            case R.id.action_ContextMenu_Name_ändern:
+            {
+                final Dialog nameAndern = new Dialog(context);
+                nameAndern.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                nameAndern.setContentView(R.layout.add_auswahllisten_dialog);
+
+                final EditText name = (EditText) nameAndern.findViewById(R.id.addAuswahllisteTextView);
+                name.setText(itemListsAdapter.getItem(info.position).getName());
+
+                Button dialogButtonSave = (Button) nameAndern.findViewById(R.id.addAuswahllisteSave);
+                dialogButtonSave.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        if (name.getText().toString().equals(""))
+                        {
+                            name.setHintTextColor(Color.parseColor("#FF0000"));
+                            name.setHint("Feld muss ausgefüllt werden!");
+                        } else
+                        {
+
+                            itemListsAdapter.getItem(info.position).setName(name.getText().toString());
+                            itemListsAdapter.notifyDataSetChanged();
+                            nameAndern.dismiss();
+                        }
+                    }
+                });
+
+                Button dialogButtonCancel = (Button) nameAndern.findViewById(R.id.addAuswahllisteCancel);
+                dialogButtonCancel.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        nameAndern.dismiss();
+                    }
+                });
+                nameAndern.show();
+                break;
             }
             case R.id.action_ContextMenu_Löschen:
             {
+                zuletztGeleoschtPosition = info.position;
+                zuletztGeleoscht = itemListsAdapter.getItem(info.position);
+                itemListsAdapter.remove(itemListsAdapter.getItem(info.position));
+
+                final Dialog loeschen_rueck = new Dialog(context);
+                loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
+                loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
+                loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.loeschen_RuckButton);
+                loeschen_Ruck.setOnClickListener(new OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        itemListsAdapter.insert(zuletztGeleoscht,zuletztGeleoschtPosition);
+                        itemListsAdapter.notifyDataSetChanged();
+                        loeschen_rueck.dismiss();
+                    }
+                });
+
+                loeschen_rueck.show();
+                break;
 
             }
             case R.id.action_ContextMenu_Zurücksetzen:
             {
-
+                resetList(info.position);
             }
+            break;
         }
-        return  super.onContextItemSelected(item);
+        return super.onContextItemSelected(item);
     }
 
     public void newEinkaufsliste()
@@ -111,26 +237,44 @@ public class MainActivity extends ActionBarActivity
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.preselection_dialog);
+        final String empty = "";
 
         listName = (EditText) dialog.findViewById(R.id.dialogName);
         grid = (GridLayout) dialog.findViewById(R.id.gridLayout);
 
-        EinkaufsArtikel[] gebItems = {new EinkaufsArtikel("Partyhüte", null, null), new EinkaufsArtikel("Besteck", null, null)};
-        VorauswahlArtikel geburtstag = new VorauswahlArtikel("Geburtstag", gebItems);
-        EinkaufsArtikel[] partyItems = {new EinkaufsArtikel("Fleisch", null, null), new EinkaufsArtikel("Bier", null, null)};
-        VorauswahlArtikel party = new VorauswahlArtikel("Party", partyItems);
+        // SmartBuy Vorauswahllisten erstellen
+        String[] geburstagArtikel = {"Partyhüte", "Besteck"};
+        ArrayList<EinkaufsArtikel> gebItems = new ArrayList<>();
+        EinkaufsArtikel artikel;
+        for (int i = 0; i < geburstagArtikel.length; i++)
+        {
+            artikel = new EinkaufsArtikel(geburstagArtikel[i], "", null);
+            gebItems.add(artikel);
 
-        ArrayList<VorauswahlArtikel> list = new ArrayList<>();
-        list.add(geburtstag);
-        list.add(party);
+        }
 
-        items = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_dropdown_item_1line, list);
+        VorauswahlListe geburtstag = new VorauswahlListe("Geburtstag", gebItems);
+        vorauswahllisten.add(geburtstag);
+
+        String[] partyArtikel = {"Fleisch", "Bier"};
+        ArrayList<EinkaufsArtikel> partyItems = new ArrayList<>();
+        for (int i = 0; i < partyArtikel.length; i++)
+        {
+            artikel = new EinkaufsArtikel(partyArtikel[i], "", null);
+            partyItems.add(artikel);
+
+        }
+        VorauswahlListe party = new VorauswahlListe("Party", partyItems);
+        vorauswahllisten.add(party);
+
+
+        vorauswahllistenitemListsAdapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_dropdown_item_1line, vorauswahllisten);
 
 
         // set the preselection_dialog dialog components - text, spinner, layout and button
         Spinner spinner = (Spinner) dialog.findViewById(R.id.dialogSpinner);
-        spinner.setAdapter(items);
+        spinner.setAdapter(vorauswahllistenitemListsAdapter);
 
         Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
 
@@ -184,8 +328,8 @@ public class MainActivity extends ActionBarActivity
 
     public void addBox(int index)
     {
-        VorauswahlArtikel item = items.getItem(index);
-        EinkaufsArtikel[] pItems = item.getItems();
+        VorauswahlListe item = vorauswahllistenitemListsAdapter.getItem(index);
+        ArrayList<EinkaufsArtikel> pItems = item.getItems();
         addNewList = pItems;
         grid.removeAllViews();
         grid.setColumnCount(2);
@@ -193,11 +337,11 @@ public class MainActivity extends ActionBarActivity
         int columnIndex = 0;
         int rowIndex = 0;
 
-        b = new CheckBox[pItems.length];
-        for (int i = 0; i < pItems.length; i++)
+        b = new CheckBox[pItems.size()];
+        for (int i = 0; i < pItems.size(); i++)
         {
             b[i] = new CheckBox(this);
-            b[i].setText(pItems[i].getName());
+            b[i].setText(pItems.get(i).getName());
             b[i].setMinimumWidth(255);
         }
 
@@ -222,14 +366,15 @@ public class MainActivity extends ActionBarActivity
     public void generateItemList()
     {
         ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
+        ArrayList<EinkaufsArtikel> newListBought = new ArrayList<>();
         for (int i = 0; i < boxCounter; i++)
         {
             if (b[i].isChecked())
             {
-                newList.add(addNewList[i]);
+                newList.add(addNewList.get(i));
             }
         }
-        addList(new Einkaufsliste(listName.getText().toString(), newList));
+        addList(new Einkaufsliste(listName.getText().toString(), newList, newListBought));
     }
 
     public void addList(Einkaufsliste list)
@@ -252,11 +397,18 @@ public class MainActivity extends ActionBarActivity
         uberDialog.show();
     }
 
+    public void auswahlliste()
+    {
+        final Intent auswahl = new Intent(this, Auswahllisten.class);
+        startActivity(auswahl);
+    }
+
     public void wechsel()
     {
         final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
         startActivity(einkaufsliste);
     }
+
     public void openEinkaufsmodus()
     {
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
@@ -264,10 +416,29 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    public void resetList(int pos)
+    {
+        Einkaufsliste list = itemListsAdapter.getItem(pos);
+        ArrayList<EinkaufsArtikel> itemList = list.getItems();
+        ArrayList<EinkaufsArtikel> itemListBought = list.getItemsBought();
+
+        for(int i = 0; i < itemList.size(); i++)
+        {
+            itemListBought.add(itemList.get(i));
+        }
+
+        itemList.clear();
+        itemList = itemListBought;
+        itemListBought.clear();
+
+        list.setItems(itemList);
+        list.setItemsBought(itemListBought);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds vorauswahllistenitemListsAdapter to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -291,9 +462,19 @@ public class MainActivity extends ActionBarActivity
             uberOpen();
             return true;
         }
+        if (id == R.id.auswahlliste)
+        {
+            auswahlliste();
+            return true;
+        }
         if (id == R.id.action_add)
         {
             newEinkaufsliste();
+            return true;
+        }
+        if (id == R.id.action_delete)
+        {
+
             return true;
         }
 
@@ -305,4 +486,9 @@ public class MainActivity extends ActionBarActivity
         return aktListe;
     }
 
+    public static void setAktListe(Einkaufsliste aktListe)
+    {
+        MainActivity.aktListe = aktListe;
+
+    }
 }

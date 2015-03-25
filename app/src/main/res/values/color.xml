@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="startScreen">#FF60E2FF</color>
-    <color name="newProductButton">#040303</color>
+
+    <color name="newProductButton">#1D5C6A</color>
     <color name="newProductButtonText">#FF60E2FF</color>
+
+    <color name="actionBar">#1D5C6A</color>
+
+    <color name="testcolor">#FA293E</color>
+
+    <color name="loeschenRueckButton">#1D5C6A</color>
+    <color name="loeschenRueckButtonText">#FF60E2FF</color>
+
+    <color name="addAuswahllistenButton">#1D5C6A</color>
+    <color name="addAuswahllistenButtonText">#FF60E2FF</color>
 
 </resources>

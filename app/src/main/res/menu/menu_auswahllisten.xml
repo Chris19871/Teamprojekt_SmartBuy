@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="smartbuy.teamproject.application.Auswahllisten">
+    <item android:id="@+id/ueber"
+        android:title="@string/ueber"
+        app:showAsAction="never" />
+    <item android:id="@+id/settings"
+        android:title="@string/einstellungen"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_add_Auswahlliste"
+        android:icon="@drawable/ic_action_add_new"
+        android:title="Hinzufügen"
+        app:showAsAction="ifRoom" />
+</menu>

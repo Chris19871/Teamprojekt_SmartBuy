@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Anwendung</string>
     <string name="action_settings">Einstellungen</string>
     <string name="hello_world">Hallo Welt!</string>
     <string name="AddList">Liste hinzufügen</string>
     <string name="Cancel">Abbrechen</string>
+    <string name="einstellungen">Einstellungen</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="ueber">Über</string>
+    <string name="Description">Beschreibung</string>
 </resources>

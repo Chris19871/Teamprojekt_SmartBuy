@@ -4,6 +4,9 @@
         android:id="@+id/action_ContextMenu_Einkaufsmodus"
         android:title="Einkaufsmodus" />
     <item
+        android:id="@+id/action_ContextMenu_Name_ändern"
+        android:title="Name ändern" />
+    <item
         android:id="@+id/action_ContextMenu_Löschen"
         android:title="Löschen" />
     <item

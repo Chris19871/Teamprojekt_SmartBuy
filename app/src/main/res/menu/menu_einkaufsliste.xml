@@ -9,12 +9,24 @@
         android:title="@string/einstellungen"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item android:id="@+id/auswahlliste"
+        android:title="@string/auswahlliste"
+        android:orderInCategory="100"
+        android:visible="true"
+        app:showAsAction="never" />
     <item android:id="@+id/action_newProduct"
-        android:icon="@drawable/action_add"
+        android:icon="@drawable/ic_action_add_new"
         android:title="New"
+        android:visible="true"
         app:showAsAction="always" />
     <item android:id="@+id/action_Einkaufsmodus"
-        android:icon="@drawable/shoppingcar"
+        android:icon="@drawable/ic_action_shoppingcar"
         android:title="Einkaufsmodus"
+        android:visible="true"
         app:showAsAction="always" />
+    <item android:id="@+id/action_delete_Einkaufliste"
+        android:icon="@drawable/ic_action_delete"
+        android:title="Löschen"
+        android:visible="false"
+        app:showAsAction="never" />
 </menu>
