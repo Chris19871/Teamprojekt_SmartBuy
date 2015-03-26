@@ -13,7 +13,7 @@
             android:key="example_checkbox"
             android:title="@string/stoppUhrEinstellungen"
             android:summary="@string/stoppUhrBeschreibung"
-            android:defaultValue="true">
+            android:defaultValue="false">
 
          </SwitchPreference>
 

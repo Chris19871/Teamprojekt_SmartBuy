@@ -6,8 +6,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBar;
@@ -25,6 +28,8 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import badge.BadgeView;
 import purchase.EinkaufsArtikel;
@@ -38,6 +43,11 @@ public class EinkaufmodusActivity extends ActionBarActivity
     private FragmentTabHost einkaufmodusTabHost;
     private ActionBar einkaufsmodusActionBar;
     ArrayList<EinkaufsArtikel> liste;
+
+    public static final long SLEEPTIME = 10;
+    boolean running;
+    Thread refreshThread;
+    double time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,12 +63,23 @@ public class EinkaufmodusActivity extends ActionBarActivity
         einkaufsmodusActionBar.setTitle(MainActivity.getAktListe().getName());
         einkaufsmodusActionBar.setDisplayShowTitleEnabled(true);
 
-
         einkaufmodusTabHost = (FragmentTabHost) findViewById(R.id.tabHost);
         einkaufmodusTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("regal").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_regal_black)), EinkaufmodusFragment.class, null);
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkauf").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_shoppingcar_black)), EinkaufswagenFragment.class, null);
+
+        SharedPreferences einstellungen = PreferenceManager.getDefaultSharedPreferences(context);
+        running = einstellungen.getBoolean("example_checkbox",false);
+        if (running)
+        {
+            initThread();
+        }
+
+
+
+
+
 
 
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
@@ -69,6 +90,32 @@ public class EinkaufmodusActivity extends ActionBarActivity
         badge7.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
         badge7.toggle();
 
+    }
+    public void initThread() {
+        TabWidget tabs = einkaufmodusTabHost.getTabWidget();
+        final BadgeView badgetime = new BadgeView(this, tabs, 0);
+        badgetime.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+        badgetime.toggle();
+
+        refreshThread = new Thread(new Runnable() {
+            public void run() {
+                while (running) {
+                    time = time + 0.01;
+                    try {
+                        Thread.sleep(SLEEPTIME);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            badgetime.setText(getString(R.string.time_string, String.format("%.2f", time)));
+                        }
+                    });
+
+                }
+            }
+        });
+        refreshThread.start();
     }
 
     public void settingsOpen()
