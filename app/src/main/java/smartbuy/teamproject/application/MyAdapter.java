@@ -74,7 +74,12 @@ public class MyAdapter extends BaseAdapter {
 
         ImageView image = new ImageView(layout.getContext());
         image.setBackgroundColor(Color.parseColor("#FF5CC1DE"));
-        image.setImageResource(R.mipmap.ic_launcher_shoppingcar_black);
+
+
+        //Standard Bild
+        image.setImageResource(R.mipmap.smartbuy_logo);
+
+
         image.setClickable(true);
 
         image.setMinimumWidth(ViewGroup.LayoutParams.MATCH_PARENT);

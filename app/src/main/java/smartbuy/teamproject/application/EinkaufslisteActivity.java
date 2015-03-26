@@ -2,11 +2,13 @@ package smartbuy.teamproject.application;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.Menu;
@@ -19,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -152,7 +156,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     public void deleteMode()
     {
-
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_multiple_choice, items);
         listView.setAdapter(itemAdapter);
@@ -237,10 +240,26 @@ public class EinkaufslisteActivity extends ActionBarActivity
         image.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog newProducts = new Dialog(context);
 
-                newProducts.setContentView(R.layout.new_product_dialog);
-                newProducts.show();
+                final Dialog imageAuswahlDialog = new Dialog(context);
+                imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                imageAuswahlDialog.setContentView(R.layout.image_auswahl_dialog);
+
+
+                final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.imageauswahlView);
+                final ImageAuswahlAdapter Iadapter = new ImageAuswahlAdapter(context,imageAuswahlDialog);
+
+                gridView.setAdapter(Iadapter);
+
+
+
+                imageAuswahlDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        image.setImageResource(Iadapter.getImage());
+                    }
+                });
+                imageAuswahlDialog.show();
             }
         });
 
@@ -295,10 +314,36 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
         name = (EditText) newProducts.findViewById(R.id.productName);
         desc = (EditText) newProducts.findViewById(R.id.descnewProduct);
-        image = aktArtikel.getImage();
+        image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
+
 
         name.setText(aktArtikel.getName());
         desc.setText(aktArtikel.getDesc());
+
+
+        image.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog imageAuswahlDialog = new Dialog(context);
+                imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                imageAuswahlDialog.setContentView(R.layout.image_auswahl_dialog);
+
+
+                final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.imageauswahlView);
+                final ImageAuswahlAdapter Iadapter = new ImageAuswahlAdapter(context,imageAuswahlDialog);
+
+                gridView.setAdapter(Iadapter);
+
+                imageAuswahlDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        image.setImageResource(Iadapter.getImage());
+                    }
+                });
+                imageAuswahlDialog.show();
+
+            }
+        });
 
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
         dialogButtonSave.setOnClickListener(new OnClickListener()
