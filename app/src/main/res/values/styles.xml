@@ -44,6 +44,23 @@
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">italic</item>
     </style>
+    <!-- bestzeit Style -->
+    <style name="bestzeitListe" parent="android:Widget.TextView">
+        <item name="android:background">@color/startScreen</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+    <style name="bestzeitUberschrift" parent="android:Widget.TextView">
+        <item name="android:background">@color/startScreen</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="bestzeit" parent="android:Widget.TextView">
+        <item name="android:background">@color/startScreen</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
 
 

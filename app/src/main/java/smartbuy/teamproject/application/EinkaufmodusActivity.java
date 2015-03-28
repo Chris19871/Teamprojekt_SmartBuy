@@ -1,39 +1,27 @@
 package smartbuy.teamproject.application;
 
-
-
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TabHost;
+import android.widget.Chronometer;
 import android.widget.TabWidget;
-import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import badge.BadgeView;
 import purchase.EinkaufsArtikel;
-import purchase.Einkaufsliste;
+
 
 
 public class EinkaufmodusActivity extends ActionBarActivity
@@ -44,10 +32,16 @@ public class EinkaufmodusActivity extends ActionBarActivity
     private ActionBar einkaufsmodusActionBar;
     ArrayList<EinkaufsArtikel> liste;
 
-    public static final long SLEEPTIME = 10;
+    public static final long SLEEPTIME = 1000;
     boolean running;
     Thread refreshThread;
-    double time;
+    int time;
+    private String sekunden = "";
+    private int sekundenZähler = 0;
+    private String minuten = "";
+    private int minutenZähler = 0;
+    private String stunden = "";
+    private int stundenZähler = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -76,31 +70,25 @@ public class EinkaufmodusActivity extends ActionBarActivity
             initThread();
         }
 
-
-
-
-
-
-
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
 
         BadgeView badge7 = new BadgeView(this, tabs, 1);
         String anzahlGekauft = Integer.toString(liste.size());
         badge7.setText(anzahlGekauft);
-        badge7.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+        badge7.setBadgePosition(BadgeView.POSITION_CENTER);
         badge7.toggle();
 
     }
     public void initThread() {
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
         final BadgeView badgetime = new BadgeView(this, tabs, 0);
-        badgetime.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+        badgetime.setBadgePosition(BadgeView.POSITION_CENTER);
         badgetime.toggle();
 
         refreshThread = new Thread(new Runnable() {
             public void run() {
                 while (running) {
-                    time = time + 0.01;
+                    time++;
                     try {
                         Thread.sleep(SLEEPTIME);
                     } catch (InterruptedException ex) {
@@ -108,10 +96,30 @@ public class EinkaufmodusActivity extends ActionBarActivity
                     }
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            badgetime.setText(getString(R.string.time_string, String.format("%.2f", time)));
-                        }
-                    });
+                            sekundenZähler++;
+                            if(sekundenZähler<=59) {
+                                DecimalFormat df = new DecimalFormat("00");
+                                sekunden = df.format(sekundenZähler);
+                            } else {
+                                sekundenZähler = 0;
+                                minutenZähler++;
+                            }
 
+                            if(minutenZähler<=59) {
+                                DecimalFormat df = new DecimalFormat("00");
+                                minuten = df.format(minutenZähler);
+                            } else {
+                                minutenZähler = 0;
+                                stundenZähler++;
+                            }
+
+                            DecimalFormat df = new DecimalFormat("00");
+                            stunden = df.format(stundenZähler);
+
+                            badgetime.setText(stunden + ":" + minuten + ":" + sekunden);
+                        }
+
+                    });
                 }
             }
         });

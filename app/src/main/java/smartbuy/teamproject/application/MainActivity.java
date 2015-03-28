@@ -194,6 +194,30 @@ public class MainActivity extends ActionBarActivity
                 nameAndern.show();
                 break;
             }
+            case R.id.action_ContextMenu_Bestzeit:
+            {
+                final Dialog bestzeit = new Dialog(context);
+                bestzeit.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                bestzeit.setContentView(R.layout.bestzeit_dialog);
+
+                final EditText liste = (EditText) bestzeit.findViewById(R.id.bestzeitListe);
+                final EditText bestzeitText = (EditText) bestzeit.findViewById(R.id.bestzeit);
+                Button bestzeitButton = (Button) bestzeit.findViewById(R.id.bestzeitButton);
+
+                liste.setText(itemListsAdapter.getItem(info.position).getName());
+                bestzeitText.setText("01:00");
+
+                bestzeitButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bestzeitText.setText("00:00");
+
+                    }
+                });
+
+                bestzeit.show();
+            }
+            break;
             case R.id.action_ContextMenu_Löschen:
             {
                 zuletztGeleoschtPosition = info.position;

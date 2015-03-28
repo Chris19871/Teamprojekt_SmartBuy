@@ -47,4 +47,12 @@
         <item name="android:layout_gravity">bottom</item>
     </style>
 
+    <!-- bestzeit Style -->
+    <style name="bestzeitbutton" parent="android:Widget.Button">
+        <item name="android:background">@color/loeschenRueckButton</item>
+        <item name="android:drawableBottom">@drawable/ic_action_undo</item>
+        <item name="android:layout_gravity">bottom</item>
+
+    </style>
+
 </resources>
