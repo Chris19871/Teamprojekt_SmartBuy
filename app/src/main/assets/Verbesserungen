@@ -3,13 +3,11 @@
 -Textfarben und Styles Anpassen(allgemein)
 
 -eigene Vorauswahllisten
--Stoppuhr
 
--Text auf Englisch
+-Text auf Englisch; Strings Anpassen
 
 -Zahl über dem Einkaufswagen(BatchIcon)
     -Inkrement
     -Dekrement
 
-- Bilderauswahldialog
 - Datenbank
