@@ -247,7 +247,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.imageauswahlView);
-                final ImageAuswahlAdapter Iadapter = new ImageAuswahlAdapter(context,imageAuswahlDialog);
+                final MyImageAuswahlAdapter Iadapter = new MyImageAuswahlAdapter(context,imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 
@@ -331,7 +331,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.imageauswahlView);
-                final ImageAuswahlAdapter Iadapter = new ImageAuswahlAdapter(context,imageAuswahlDialog);
+                final MyImageAuswahlAdapter Iadapter = new MyImageAuswahlAdapter(context,imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 
