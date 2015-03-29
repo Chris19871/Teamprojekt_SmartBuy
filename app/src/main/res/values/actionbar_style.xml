@@ -22,4 +22,5 @@
     <style name="PopupMenu" parent="Widget.AppCompat.Light.ListView.DropDown">
         <item name="android:background">@color/startScreen</item>
     </style>
+
 </resources>

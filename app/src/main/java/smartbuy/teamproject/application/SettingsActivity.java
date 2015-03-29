@@ -1,7 +1,5 @@
 package smartbuy.teamproject.application;
 
-
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 

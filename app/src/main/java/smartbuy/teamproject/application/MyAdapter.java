@@ -74,7 +74,12 @@ public class MyAdapter extends BaseAdapter {
 
         ImageView image = new ImageView(layout.getContext());
         image.setBackgroundColor(Color.parseColor("#FF5CC1DE"));
-        image.setImageResource(R.mipmap.ic_launcher_shoppingcar_black);
+
+
+        //Standard Bild
+        image.setImageResource(R.mipmap.smartbuy_logo);
+
+
         image.setClickable(true);
 
         image.setMinimumWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -97,6 +102,7 @@ public class MyAdapter extends BaseAdapter {
                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
                 loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
                 loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
                 loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 

@@ -1,10 +1,7 @@
 package smartbuy.teamproject.application;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +36,7 @@ public class EinkaufswagenFragment extends Fragment {
         ArrayList<EinkaufsArtikel> itemsBought = MainActivity.getAktListe().getItemsBought();
 
         ArrayAdapter<EinkaufsArtikel> itemAdapter = new ArrayAdapter<>(view.getContext(),
-                android.R.layout.simple_list_item_1, itemsBought);
+                R.layout.listview,R.id.listViewdesign, itemsBought);
         list.setAdapter(itemAdapter);
 
         return view;

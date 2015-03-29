@@ -8,8 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:id="@+id/loeschen_RuckButton"
-        android:layout_gravity="center_horizontal|bottom"
-        android:drawableBottom="@drawable/ic_action_undo"
         style="@style/loeschenRueckButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

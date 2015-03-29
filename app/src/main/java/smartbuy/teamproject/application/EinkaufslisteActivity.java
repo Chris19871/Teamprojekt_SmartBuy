@@ -2,11 +2,13 @@ package smartbuy.teamproject.application;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.Menu;
@@ -19,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,7 +50,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     private ArrayList<EinkaufsArtikel> geloschteArtikel;
     private ArrayList<Integer> geloschteArtikelPositionen;
-    private boolean nichtsGeloscht = false;
+    private boolean artikelGeloscht = false;
 
 
     @Override
@@ -69,7 +73,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         allItems = aktListe.getAllItems();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, allItems);
+                R.layout.listview,R.id.listViewdesign, allItems);
         listView.setAdapter(itemAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -164,8 +168,9 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     public void normalMode()
     {
+
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, items);
+                R.layout.listview,R.id.listViewdesign, items);
         listView.setAdapter(itemAdapter);
 
         einkaufslisteActionBar.setDisplayHomeAsUpEnabled(false);
@@ -174,7 +179,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         deleteEnable = false;
         invalidateOptionsMenu();
 
-        if ( nichtsGeloscht == false)
+        if ( artikelGeloscht == true)
         {
             final Dialog loeschen_rueck = new Dialog(context);
             loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -198,7 +203,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
             });
             loeschen_rueck.show();
         }
-        nichtsGeloscht = false;
+        artikelGeloscht = false;
         itemAdapter.notifyDataSetChanged();
     }
 
@@ -232,6 +237,33 @@ public class EinkaufslisteActivity extends ActionBarActivity
         final EditText name = (EditText) newProducts.findViewById(R.id.productName);
         final TextView desc = (TextView) newProducts.findViewById(R.id.descnewProduct);
         final ImageView image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
+        image.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Dialog imageAuswahlDialog = new Dialog(context);
+                imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                imageAuswahlDialog.setContentView(R.layout.image_auswahl_dialog);
+
+
+                final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.imageauswahlView);
+                final ImageAuswahlAdapter Iadapter = new ImageAuswahlAdapter(context,imageAuswahlDialog);
+
+                gridView.setAdapter(Iadapter);
+
+
+
+                imageAuswahlDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        image.setImageResource(Iadapter.getImage());
+                        name.setText(Iadapter.getImageName());
+                    }
+                });
+                imageAuswahlDialog.show();
+            }
+        });
+
 
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
         dialogButtonSave.setOnClickListener(new OnClickListener()
@@ -283,10 +315,36 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
         name = (EditText) newProducts.findViewById(R.id.productName);
         desc = (EditText) newProducts.findViewById(R.id.descnewProduct);
-        image = aktArtikel.getImage();
+        image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
+
 
         name.setText(aktArtikel.getName());
         desc.setText(aktArtikel.getDesc());
+
+
+        image.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog imageAuswahlDialog = new Dialog(context);
+                imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                imageAuswahlDialog.setContentView(R.layout.image_auswahl_dialog);
+
+
+                final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.imageauswahlView);
+                final ImageAuswahlAdapter Iadapter = new ImageAuswahlAdapter(context,imageAuswahlDialog);
+
+                gridView.setAdapter(Iadapter);
+
+                imageAuswahlDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        image.setImageResource(Iadapter.getImage());
+                    }
+                });
+                imageAuswahlDialog.show();
+
+            }
+        });
 
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
         dialogButtonSave.setOnClickListener(new OnClickListener()
@@ -408,7 +466,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         }
         if(id == android.R.id.home)
         {
-            nichtsGeloscht = true;
+            artikelGeloscht = false;
             normalMode();
             return true;
         }
@@ -422,7 +480,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
         geloschteArtikelPositionen.clear();
         SparseBooleanArray checkedItemPositions = listView.getCheckedItemPositions();
         int itemCount = listView.getCount();
-
         for(int i=itemCount-1; i >= 0; i--)
         {
             if(checkedItemPositions.get(i))
@@ -430,9 +487,13 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 geloschteArtikel.add(items.get(i));
                 geloschteArtikelPositionen.add(i);
                 itemAdapter.remove(items.get(i));
+                artikelGeloscht = true;
+
             }
+
         }
         checkedItemPositions.clear();
+
         itemAdapter.notifyDataSetChanged();
         normalMode();
 

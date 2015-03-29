@@ -37,31 +37,26 @@
 
         <Button
             android:id="@+id/addAuswahllisteCancel"
-            style="@style/add_auswahllisteButton"
-            android:layout_width="100dp"
+            style="@style/add_auswahllisteButtonCancel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/newProductSave"
             android:layout_toStartOf="@+id/newProductSave"
-            android:text="Abbrechen"
             android:layout_marginBottom="10dp" />
 
         <Button
             android:id="@+id/addAuswahllisteSave"
-            style="@style/add_auswahllisteButton"
-            android:layout_width="100dp"
+            style="@style/add_auswahllisteButtonAccept"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/newProductLogo"
             android:layout_alignParentTop="true"
             android:layout_alignRight="@+id/newProductLogo"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:elegantTextHeight="false"
-            android:focusable="false"
-            android:longClickable="false"
-            android:text="Speichern"
             android:layout_marginBottom="10dp" />
     </LinearLayout>
 </LinearLayout>
