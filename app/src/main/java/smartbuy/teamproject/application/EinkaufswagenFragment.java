@@ -27,7 +27,7 @@ public class EinkaufswagenFragment extends Fragment {
         ArrayList<EinkaufsArtikel> itemsBought = StartbildschirmActivity.getAktListe().getItemsBought();
 
         ArrayAdapter<EinkaufsArtikel> itemAdapter = new ArrayAdapter<>(view.getContext(),
-                R.layout.listview_schema, R.id.listViewDesign, itemsBought);
+                R.layout.listview_design, R.id.listViewDesign, itemsBought);
         list.setAdapter(itemAdapter);
 
         return view;

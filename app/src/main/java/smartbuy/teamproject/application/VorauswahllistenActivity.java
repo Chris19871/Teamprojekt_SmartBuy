@@ -80,8 +80,8 @@ public class VorauswahllistenActivity extends ActionBarActivity {
     }
 
     public void change() {
-        final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
-        startActivity(einkaufsliste);
+        final Intent vorauswahlliste = new Intent(this, VorauswahllistenBearbeitenActivity.class);
+        startActivity(vorauswahlliste);
     }
 
     public void settingsOpen() {

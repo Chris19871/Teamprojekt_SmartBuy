@@ -31,8 +31,7 @@ import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
 import swipe.SwipeDismissListViewTouchListener;
 
-
-public class EinkaufslisteActivity extends ActionBarActivity {
+public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
     private String listenName;
     private Einkaufsliste aktListe;
     private final Context context = this;
@@ -51,7 +50,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.einkaufsliste);
+        setContentView(R.layout.vorauswahllistenbearbeiten);
         einkaufslisteActionBar = getSupportActionBar();
 
         geloschteArtikel = new ArrayList<>();
@@ -62,7 +61,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         einkaufslisteActionBar.setTitle(listenName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
 
-        listView = (ListView) findViewById(R.id.einkaufslisteListView);
+        listView = (ListView) findViewById(R.id.vorAuswahllistebearbietenListView);
         items = aktListe.getItems();
         allItems = aktListe.getAllItems();
 
@@ -139,7 +138,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_einkaufsliste, menu);
+        getMenuInflater().inflate(R.menu.menu_vorauswahllistenbearbeiten, menu);
 
         MenuItem delete = menu.findItem(R.id.action_delete_Einkaufliste);
         MenuItem add = menu.findItem(R.id.action_newProduct);

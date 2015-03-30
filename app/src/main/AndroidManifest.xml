@@ -26,6 +26,10 @@
             android:name=".VorauswahllistenActivity"
             android:label="@string/title_activity_vorauswahllisten" >
         </activity>
+        <activity
+            android:name=".VorauswahllistenBearbeitenActivity"
+            android:label="@string/title_activity_vorauswahllistenbearbeiten" >
+        </activity>
     </application>
 
 </manifest>

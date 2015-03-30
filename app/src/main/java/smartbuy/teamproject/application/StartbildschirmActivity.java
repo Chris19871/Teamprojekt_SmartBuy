@@ -66,7 +66,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
         registerForContextMenu(findViewById(R.id.startscreenListView));
         ListView listView = (ListView) findViewById(R.id.startscreenListView);
         itemListsAdapter = new ArrayAdapter<>(this,
-                R.layout.listview_schema, R.id.listViewDesign, einkaufsliste);
+                R.layout.listview_design, R.id.listViewDesign, einkaufsliste);
         listView.setAdapter(itemListsAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
