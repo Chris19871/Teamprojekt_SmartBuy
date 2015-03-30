@@ -56,6 +56,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         geloschteArtikel = new ArrayList<>();
         geloschteArtikelPositionen = new ArrayList<>();
 
+
         aktListe = StartbildschirmActivity.getAktListe();
         listenName = aktListe.getName();
         einkaufslisteActionBar.setTitle(listenName);
