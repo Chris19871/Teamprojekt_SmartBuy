@@ -25,7 +25,7 @@
 
     <!-- Strings für bestzeitdialog-->
     <string name="bestTimeDialogTitle">Best time</string>
-    <string name="bestTimeDialogTime" translatable="false">00:00:00</string>
+    <string name="bestTimeDialogTime" translatable="false">01:00:00</string>
 
     <!-- Strings für neue_einkaufsliste_dialog-->
     <string name="neue_einkaufsliste_dialog_hint">List Name                                                                 "</string>

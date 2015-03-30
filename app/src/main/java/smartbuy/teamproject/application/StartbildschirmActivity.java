@@ -215,12 +215,11 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 Button bestzeitButton = (Button) bestzeit.findViewById(R.id.bestTimeButton);
 
                 liste.setText(itemListsAdapter.getItem(info.position).getName());
-                bestzeitText.setText("01:00");
 
                 bestzeitButton.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        bestzeitText.setText("00:00");
+                        bestzeitText.setText("00:00:00");
 
                     }
                 });

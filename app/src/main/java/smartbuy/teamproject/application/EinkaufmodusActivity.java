@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -55,6 +56,8 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         einkaufmodusTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("regal").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_regal_black)), EinkaufmodusFragment.class, null);
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkaufwagen").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_shoppingcar_black)), EinkaufswagenFragment.class, null);
+
+
 
         SharedPreferences einstellungen = PreferenceManager.getDefaultSharedPreferences(context);
         running = einstellungen.getBoolean("example_checkbox", false);
