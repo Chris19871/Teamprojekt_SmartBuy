@@ -190,7 +190,6 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         }
         if (id == R.id.action_Einkaufsmodus) {
             einkaufsmodusOpen();
-            finish();
             return true;
         }
         if (id == R.id.action_delete_Einkaufliste) {

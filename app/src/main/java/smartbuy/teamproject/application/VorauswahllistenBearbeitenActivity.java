@@ -187,11 +187,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
             return true;
 
         }
-        if (id == R.id.action_Einkaufsmodus) {
-            einkaufsmodusOpen();
-            finish();
-            return true;
-        }
         if (id == R.id.action_delete_Einkaufliste) {
             deleteSelectedItems();
             return true;
@@ -283,12 +278,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
         newProducts.show();
     }
-
-    public void einkaufsmodusOpen() {
-        final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
-        startActivity(einkaufsmodus);
-    }
-
 
     public void deleteMode() {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
