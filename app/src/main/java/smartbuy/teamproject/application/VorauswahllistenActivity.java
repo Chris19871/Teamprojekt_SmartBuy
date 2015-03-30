@@ -20,7 +20,7 @@ import purchase.EinkaufsArtikel;
 import purchase.VorauswahlListe;
 
 
-public class Auswahllisten extends ActionBarActivity {
+public class VorauswahllistenActivity extends ActionBarActivity {
 
     final Context context = this;
     private ArrayAdapter<VorauswahlListe> newVorauswahllistenListsAdapter;
@@ -30,7 +30,7 @@ public class Auswahllisten extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auswahllisten);
+        setContentView(R.layout.vorauswahlliste);
 
         newVorauswahllisten = new ArrayList<>();
 
@@ -59,13 +59,13 @@ public class Auswahllisten extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_auswahllisten, menu);
+        getMenuInflater().inflate(R.menu.menu_vorauswahllisten, menu);
         return true;
     }
 
     public void settingsOpen()
     {
-        final Intent settings = new Intent(this, SettingsActivity.class);
+        final Intent settings = new Intent(this, EinstellungenActivity.class);
         startActivity(settings);
     }
 
@@ -81,7 +81,7 @@ public class Auswahllisten extends ActionBarActivity {
     {
         final Dialog auswahllistenDialog = new Dialog(context);
         auswahllistenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        auswahllistenDialog.setContentView(R.layout.add_auswahllisten_dialog);
+        auswahllistenDialog.setContentView(R.layout.neue_vorauswahllisten_dialog);
 
         final EditText name = (EditText) auswahllistenDialog.findViewById(R.id.addAuswahllisteTextView);
 

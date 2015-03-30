@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTabHost;
@@ -12,7 +13,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.Chronometer;
 import android.widget.TabWidget;
 
 import java.text.DecimalFormat;
@@ -50,11 +50,11 @@ public class EinkaufmodusActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufmodus);
 
-        liste = MainActivity.getAktListe().getItemsBought();
+        liste = StartbildschirmActivity.getAktListe().getItemsBought();
 
         einkaufsmodusActionBar = getSupportActionBar();
 
-        einkaufsmodusActionBar.setTitle(MainActivity.getAktListe().getName());
+        einkaufsmodusActionBar.setTitle(StartbildschirmActivity.getAktListe().getName());
         einkaufsmodusActionBar.setDisplayShowTitleEnabled(true);
 
         einkaufmodusTabHost = (FragmentTabHost) findViewById(R.id.tabHost);
@@ -65,17 +65,25 @@ public class EinkaufmodusActivity extends ActionBarActivity
 
         SharedPreferences einstellungen = PreferenceManager.getDefaultSharedPreferences(context);
         running = einstellungen.getBoolean("example_checkbox",false);
+
         if (running)
         {
             initThread();
         }
-
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
+        final BadgeView badgetime = new BadgeView(this, tabs, 0);
+        badgetime.setBadgePosition(BadgeView.POSITION_CENTER);
+        badgetime.setBadgeBackgroundColor(Color.DKGRAY);
+        badgetime.setTextColor(Color.GRAY);
+        badgetime.setText("00:00:00");
+        badgetime.toggle();
+
 
         BadgeView badge7 = new BadgeView(this, tabs, 1);
         String anzahlGekauft = Integer.toString(liste.size());
         badge7.setText(anzahlGekauft);
         badge7.setBadgePosition(BadgeView.POSITION_CENTER);
+        badgetime.setBadgeBackgroundColor(Color.RED);
         badge7.toggle();
 
     }
@@ -83,6 +91,8 @@ public class EinkaufmodusActivity extends ActionBarActivity
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
         final BadgeView badgetime = new BadgeView(this, tabs, 0);
         badgetime.setBadgePosition(BadgeView.POSITION_CENTER);
+        badgetime.setBadgeBackgroundColor(Color.RED);
+        badgetime.setText("00:00:00");
         badgetime.toggle();
 
         refreshThread = new Thread(new Runnable() {
@@ -92,7 +102,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
                     try {
                         Thread.sleep(SLEEPTIME);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(StartbildschirmActivity.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -128,7 +138,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
 
     public void settingsOpen()
     {
-        final Intent settings = new Intent(this, SettingsActivity.class);
+        final Intent settings = new Intent(this, EinstellungenActivity.class);
         startActivity(settings);
     }
 
@@ -142,7 +152,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
     }
     public void auswahlliste()
     {
-        final Intent auswahl = new Intent(this, Auswahllisten.class);
+        final Intent auswahl = new Intent(this, VorauswahllistenActivity.class);
         startActivity(auswahl);
     }
 

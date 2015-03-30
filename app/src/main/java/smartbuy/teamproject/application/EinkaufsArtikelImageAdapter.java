@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 
 
-public class MyImageAuswahlAdapter extends BaseAdapter {
+public class EinkaufsArtikelImageAdapter extends BaseAdapter {
     private Context mContext;
     private Dialog dialog;
     private int click = 0;
@@ -41,7 +41,7 @@ public class MyImageAuswahlAdapter extends BaseAdapter {
     };
 
 
-    public MyImageAuswahlAdapter(Context c, Dialog d) {
+    public EinkaufsArtikelImageAdapter(Context c, Dialog d) {
         mContext = c;
         dialog = d;
 

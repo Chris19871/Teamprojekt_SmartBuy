@@ -33,10 +33,10 @@ public class EinkaufswagenFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_einkaufswagen, container, false);
 
         ListView list = (ListView) view.findViewById(R.id.fragment_einkaufswagen_listView);
-        ArrayList<EinkaufsArtikel> itemsBought = MainActivity.getAktListe().getItemsBought();
+        ArrayList<EinkaufsArtikel> itemsBought = StartbildschirmActivity.getAktListe().getItemsBought();
 
         ArrayAdapter<EinkaufsArtikel> itemAdapter = new ArrayAdapter<>(view.getContext(),
-                R.layout.listview,R.id.listViewdesign, itemsBought);
+                R.layout.listview_schema,R.id.listViewdesign, itemsBought);
         list.setAdapter(itemAdapter);
 
         return view;

@@ -3,7 +3,7 @@ package smartbuy.teamproject.application;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class SettingsActivity extends PreferenceActivity
+public class EinstellungenActivity extends PreferenceActivity
 {
 
     @Override

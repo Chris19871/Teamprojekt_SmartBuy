@@ -2,9 +2,6 @@ package purchase;
 
 import java.util.ArrayList;
 
-/**
- * Created by Christian Meisberger on 09.03.2015.
- */
 public class Einkaufsliste
 {
     private ArrayList<EinkaufsArtikel> allItems = new ArrayList<>();

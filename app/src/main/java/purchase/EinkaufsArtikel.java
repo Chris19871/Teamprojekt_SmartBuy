@@ -3,9 +3,6 @@ package purchase;
 import android.graphics.Picture;
 import android.widget.ImageView;
 
-/**
- * Created by Christian Meisberger on 09.03.2015.
- */
 public class EinkaufsArtikel
 {
 

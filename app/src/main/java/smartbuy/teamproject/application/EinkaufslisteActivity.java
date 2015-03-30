@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.Menu;
@@ -22,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -63,7 +61,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         geloschteArtikel = new ArrayList<>();
         geloschteArtikelPositionen = new ArrayList<>();
 
-        aktListe = MainActivity.getAktListe();
+        aktListe = StartbildschirmActivity.getAktListe();
         listenName = aktListe.getName();
         einkaufslisteActionBar.setTitle(listenName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
@@ -73,7 +71,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         allItems = aktListe.getAllItems();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                R.layout.listview,R.id.listViewdesign, allItems);
+                R.layout.listview_schema,R.id.listViewdesign, allItems);
         listView.setAdapter(itemAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -170,7 +168,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
     {
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                R.layout.listview,R.id.listViewdesign, items);
+                R.layout.listview_schema,R.id.listViewdesign, items);
         listView.setAdapter(itemAdapter);
 
         einkaufslisteActionBar.setDisplayHomeAsUpEnabled(false);
@@ -209,7 +207,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     public void settingsOpen()
     {
-        final Intent settings = new Intent(this, SettingsActivity.class);
+        final Intent settings = new Intent(this, EinstellungenActivity.class);
         startActivity(settings);
     }
 
@@ -223,7 +221,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
     }
     public void auswahlliste()
     {
-        final Intent auswahl = new Intent(this, Auswahllisten.class);
+        final Intent auswahl = new Intent(this, VorauswahllistenActivity.class);
         startActivity(auswahl);
     }
 
@@ -232,7 +230,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
         final Dialog newProducts = new Dialog(context);
         newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        newProducts.setContentView(R.layout.new_product_dialog);
+        newProducts.setContentView(R.layout.neues_produkt_dialog);
 
         final EditText name = (EditText) newProducts.findViewById(R.id.productName);
         final TextView desc = (TextView) newProducts.findViewById(R.id.descnewProduct);
@@ -243,11 +241,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
                 final Dialog imageAuswahlDialog = new Dialog(context);
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                imageAuswahlDialog.setContentView(R.layout.image_auswahl_dialog);
+                imageAuswahlDialog.setContentView(R.layout.eiknkaufsartikel_auswahl_dialog);
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.imageauswahlView);
-                final MyImageAuswahlAdapter Iadapter = new MyImageAuswahlAdapter(context,imageAuswahlDialog);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context,imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 
@@ -311,7 +309,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
         final Dialog newProducts = new Dialog(context);
         newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        newProducts.setContentView(R.layout.new_product_dialog);
+        newProducts.setContentView(R.layout.neues_produkt_dialog);
 
         name = (EditText) newProducts.findViewById(R.id.productName);
         desc = (EditText) newProducts.findViewById(R.id.descnewProduct);
@@ -327,11 +325,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
             public void onClick(View v) {
                 final Dialog imageAuswahlDialog = new Dialog(context);
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                imageAuswahlDialog.setContentView(R.layout.image_auswahl_dialog);
+                imageAuswahlDialog.setContentView(R.layout.eiknkaufsartikel_auswahl_dialog);
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.imageauswahlView);
-                final MyImageAuswahlAdapter Iadapter = new MyImageAuswahlAdapter(context,imageAuswahlDialog);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context,imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 
@@ -382,7 +380,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
     {
         EinkaufsArtikel newArtikel = new EinkaufsArtikel(name,desc,image);
         aktListe.addItem(newArtikel);
-        MainActivity.setAktListe(aktListe);
+        StartbildschirmActivity.setAktListe(aktListe);
     }
 
     public void changeArtikel(String name, String desc, ImageView image, int pos)

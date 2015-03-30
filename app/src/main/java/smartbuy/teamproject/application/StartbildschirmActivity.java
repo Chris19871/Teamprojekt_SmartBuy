@@ -3,13 +3,11 @@ package smartbuy.teamproject.application;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
@@ -28,7 +26,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import purchase.EinkaufsArtikel;
@@ -36,7 +33,7 @@ import purchase.Einkaufsliste;
 import purchase.VorauswahlListe;
 import swipe.SwipeDismissListViewTouchListener;
 
-public class MainActivity extends ActionBarActivity
+public class StartbildschirmActivity extends ActionBarActivity
 {
     final Context context = this;
     private GridLayout grid;
@@ -56,7 +53,7 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.startbildschirm);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/BAUHS93.TTF");
         TextView startText = (TextView) findViewById(R.id.startScreenText);
@@ -71,7 +68,7 @@ public class MainActivity extends ActionBarActivity
         registerForContextMenu(findViewById(R.id.ListView));
         ListView listView = (ListView) findViewById(R.id.ListView);
         itemListsAdapter = new ArrayAdapter<>(this,
-                R.layout.listview,R.id.listViewdesign, einkaufsliste);
+                R.layout.listview_schema,R.id.listViewdesign, einkaufsliste);
         listView.setAdapter(itemListsAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -159,7 +156,7 @@ public class MainActivity extends ActionBarActivity
             {
                 final Dialog nameAndern = new Dialog(context);
                 nameAndern.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                nameAndern.setContentView(R.layout.add_auswahllisten_dialog);
+                nameAndern.setContentView(R.layout.neue_vorauswahllisten_dialog);
 
                 final EditText name = (EditText) nameAndern.findViewById(R.id.addAuswahllisteTextView);
                 name.setText(itemListsAdapter.getItem(info.position).getName());
@@ -260,7 +257,7 @@ public class MainActivity extends ActionBarActivity
     {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.preselection_dialog);
+        dialog.setContentView(R.layout.neue_einkaufsliste_dialog);
         final String empty = "";
 
         listName = (EditText) dialog.findViewById(R.id.dialogName);
@@ -296,7 +293,7 @@ public class MainActivity extends ActionBarActivity
                 android.R.layout.simple_dropdown_item_1line, vorauswahllisten);
 
 
-        // set the preselection_dialog dialog components - text, spinner, layout and button
+        // set the neue_einkaufsliste_dialog dialog components - text, spinner, layout and button
         Spinner spinner = (Spinner) dialog.findViewById(R.id.dialogSpinner);
         spinner.setAdapter(vorauswahllistenitemListsAdapter);
 
@@ -338,7 +335,7 @@ public class MainActivity extends ActionBarActivity
         });
 
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-        // if button is clicked, close the custom preselection_dialog
+        // if button is clicked, close the custom neue_einkaufsliste_dialog
         dialogButtonCancel.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
@@ -408,7 +405,7 @@ public class MainActivity extends ActionBarActivity
 
     public void settingsOpen()
     {
-        final Intent settings = new Intent(this, SettingsActivity.class);
+        final Intent settings = new Intent(this, EinstellungenActivity.class);
         startActivity(settings);
     }
 
@@ -423,7 +420,7 @@ public class MainActivity extends ActionBarActivity
 
     public void auswahlliste()
     {
-        final Intent auswahl = new Intent(this, Auswahllisten.class);
+        final Intent auswahl = new Intent(this, VorauswahllistenActivity.class);
         startActivity(auswahl);
     }
 
@@ -463,7 +460,7 @@ public class MainActivity extends ActionBarActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds vorauswahllistenitemListsAdapter to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_startbildschirm, menu);
         return true;
     }
 
@@ -512,7 +509,7 @@ public class MainActivity extends ActionBarActivity
 
     public static void setAktListe(Einkaufsliste aktListe)
     {
-        MainActivity.aktListe = aktListe;
+        StartbildschirmActivity.aktListe = aktListe;
 
     }
 }

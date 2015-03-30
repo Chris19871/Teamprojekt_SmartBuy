@@ -6,7 +6,7 @@
         android:icon="@drawable/smartbuy_logo"
         android:label="@string/app_name"
         android:theme="@style/CustomActionBarTheme" >
-        <activity android:name=".MainActivity" >
+        <activity android:name=".StartbildschirmActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -14,7 +14,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".EinstellungenActivity"
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".EinkaufslisteActivity"
@@ -23,7 +23,7 @@
             android:name=".EinkaufmodusActivity"
             android:label="@string/title_activity_einkaufmodus" />
         <activity
-            android:name=".Auswahllisten"
+            android:name=".VorauswahllistenActivity"
             android:label="@string/title_activity_auswahllisten" >
         </activity>
     </application>
