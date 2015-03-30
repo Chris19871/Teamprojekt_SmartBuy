@@ -23,7 +23,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ListView"
+        android:id="@+id/startscreenListView"
         android:choiceMode="singleChoice"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

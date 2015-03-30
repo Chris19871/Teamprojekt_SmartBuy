@@ -8,12 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 
-
 public class EinkaufsArtikelImageAdapter extends BaseAdapter {
     private Context mContext;
     private Dialog dialog;
     private int click = 0;
-    private String name;
+    private int name;
     private int[] imageId = {
             R.mipmap.image_battery,
             R.mipmap.image_butter,
@@ -27,25 +26,25 @@ public class EinkaufsArtikelImageAdapter extends BaseAdapter {
             R.mipmap.image_yogurt
 
     };
-    private String[] imageString = {
-            "Battery",
-            "Butter",
-            "Fisch",
-            "Fleisch",
-            "Gemüse",
-            "Käse",
-            "Limonade",
-            "Milch",
-            "Obst",
-            "Yogurt"
+    private int[] imageString = {
+            R.string.battery,
+            R.string.butter,
+            R.string.fish,
+            R.string.meat,
+            R.string.vegetable,
+            R.string.cheese,
+            R.string.lemonade,
+            R.string.milk,
+            R.string.fruit,
+            R.string.yogurt
     };
-
 
     public EinkaufsArtikelImageAdapter(Context c, Dialog d) {
         mContext = c;
         dialog = d;
 
     }
+
     @Override
     public int getCount() {
         return imageId.length;
@@ -65,7 +64,7 @@ public class EinkaufsArtikelImageAdapter extends BaseAdapter {
         return imageId[click];
     }
 
-    public String getImageName() {
+    public int getImageName() {
         return name;
     }
 
@@ -83,11 +82,8 @@ public class EinkaufsArtikelImageAdapter extends BaseAdapter {
                 dialog.dismiss();
             }
         });
-
         return image;
     }
-
-
 }
 
 

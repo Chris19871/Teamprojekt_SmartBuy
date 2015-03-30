@@ -19,7 +19,7 @@
         android:src="@mipmap/smartbuy_logo"/>
 
     <ScrollView
-        android:id="@+id/scrollView3"
+        android:id="@+id/scrollViewProductName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -39,7 +39,7 @@
             android:autoText="false"
             android:editable="true"
             android:gravity="center_horizontal"
-            android:hint="Produktname"
+            android:hint="@string/neues_produkt_dialog_hint"
             android:imeOptions="actionDone"
             android:maxLines="1"
             android:textStyle="bold"
@@ -49,36 +49,36 @@
     </ScrollView>
 
     <TextView
-        android:id="@+id/textBeschreibung"
-        style="@style/newProductBeschreibung"
+        android:id="@+id/textDesc"
+        style="@style/newProductDesc"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/scrollView3"
+        android:layout_below="@+id/scrollViewProductName"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:layout_weight="0.03"
-        android:text="Beschreibung"/>
+        android:text="@string/neues_produkt_dialog_desc"/>
 
     <ScrollView
-        android:id="@+id/scrollView4"
+        android:id="@+id/scrollViewdescnewProduct"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textBeschreibung"
+        android:layout_below="@+id/textDesc"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
         <EditText
-            android:id="@+id/descnewProduct"
+            android:id="@+id/descNewProduct"
             style="@style/newProduct"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textBeschreibung"
+            android:layout_below="@+id/textDesc"
             android:gravity="top"
             android:maxLines="6"
             android:minLines="4"/>
@@ -88,7 +88,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/scrollView4"
+        android:layout_below="@+id/scrollViewdescnewProduct"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:orientation="horizontal">

@@ -19,74 +19,113 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import badge.BadgeView;
 import purchase.EinkaufsArtikel;
 
-
-
-public class EinkaufmodusActivity extends ActionBarActivity
-{
-
-    final Context context = this;
+public class EinkaufmodusActivity extends ActionBarActivity {
+    private final Context context = this;
     private FragmentTabHost einkaufmodusTabHost;
     private ActionBar einkaufsmodusActionBar;
-    ArrayList<EinkaufsArtikel> liste;
-
-    public static final long SLEEPTIME = 1000;
-    boolean running;
-    Thread refreshThread;
-    int time;
-    private String sekunden = "";
-    private int sekundenZähler = 0;
-    private String minuten = "";
-    private int minutenZähler = 0;
-    private String stunden = "";
-    private int stundenZähler = 0;
+    private ArrayList<EinkaufsArtikel> liste;
+    private static final long SLEEPTIME = 1000;
+    private boolean running;
+    private Thread refreshThread;
+    private String seconds = "";
+    private int secondsCount = 0;
+    private String minutes = "";
+    private int minutesCount = 0;
+    private String hours = "";
+    private int hoursCount = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufmodus);
 
         liste = StartbildschirmActivity.getAktListe().getItemsBought();
 
         einkaufsmodusActionBar = getSupportActionBar();
-
         einkaufsmodusActionBar.setTitle(StartbildschirmActivity.getAktListe().getName());
         einkaufsmodusActionBar.setDisplayShowTitleEnabled(true);
 
         einkaufmodusTabHost = (FragmentTabHost) findViewById(R.id.tabHost);
         einkaufmodusTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
-
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("regal").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_regal_black)), EinkaufmodusFragment.class, null);
-        einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkauf").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_shoppingcar_black)), EinkaufswagenFragment.class, null);
+        einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkaufwagen").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_shoppingcar_black)), EinkaufswagenFragment.class, null);
 
         SharedPreferences einstellungen = PreferenceManager.getDefaultSharedPreferences(context);
-        running = einstellungen.getBoolean("example_checkbox",false);
+        running = einstellungen.getBoolean("example_checkbox", false);
 
-        if (running)
-        {
+        if (running) {
             initThread();
         }
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
-        final BadgeView badgetime = new BadgeView(this, tabs, 0);
-        badgetime.setBadgePosition(BadgeView.POSITION_CENTER);
-        badgetime.setBadgeBackgroundColor(Color.DKGRAY);
-        badgetime.setTextColor(Color.GRAY);
-        badgetime.setText("00:00:00");
-        badgetime.toggle();
+        final BadgeView badgeTime = new BadgeView(this, tabs, 0);
+        badgeTime.setBadgePosition(BadgeView.POSITION_CENTER);
+        badgeTime.setBadgeBackgroundColor(Color.DKGRAY);
+        badgeTime.setTextColor(Color.GRAY);
+        badgeTime.setText("00:00:00");
+        badgeTime.toggle();
 
 
-        BadgeView badge7 = new BadgeView(this, tabs, 1);
+        BadgeView badgeCount = new BadgeView(this, tabs, 1);
         String anzahlGekauft = Integer.toString(liste.size());
-        badge7.setText(anzahlGekauft);
-        badge7.setBadgePosition(BadgeView.POSITION_CENTER);
-        badgetime.setBadgeBackgroundColor(Color.RED);
-        badge7.toggle();
+        badgeCount.setText(anzahlGekauft);
+        badgeCount.setBadgePosition(BadgeView.POSITION_CENTER);
+        badgeTime.setBadgeBackgroundColor(Color.RED);
+        badgeCount.toggle();
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_einkaufmodus, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.settings) {
+            settingsOpen();
+            return true;
+        }
+        if (id == R.id.about) {
+            aboutOpen();
+            return true;
+        }
+        if (id == R.id.vorAuswahlliste) {
+            vorAuswahllisteOpen();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void settingsOpen() {
+        final Intent settings = new Intent(this, EinstellungenActivity.class);
+        startActivity(settings);
+    }
+
+    public void aboutOpen() {
+        final Dialog uberDialog = new Dialog(context);
+        uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        uberDialog.setContentView(R.layout.ueber_dialog);
+
+        uberDialog.show();
+    }
+
+    public void vorAuswahllisteOpen() {
+        final Intent auswahl = new Intent(this, VorauswahllistenActivity.class);
+        startActivity(auswahl);
+    }
+
     public void initThread() {
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
         final BadgeView badgetime = new BadgeView(this, tabs, 0);
@@ -98,7 +137,6 @@ public class EinkaufmodusActivity extends ActionBarActivity
         refreshThread = new Thread(new Runnable() {
             public void run() {
                 while (running) {
-                    time++;
                     try {
                         Thread.sleep(SLEEPTIME);
                     } catch (InterruptedException ex) {
@@ -106,27 +144,27 @@ public class EinkaufmodusActivity extends ActionBarActivity
                     }
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            sekundenZähler++;
-                            if(sekundenZähler<=59) {
+                            secondsCount++;
+                            if (secondsCount <= 59) {
                                 DecimalFormat df = new DecimalFormat("00");
-                                sekunden = df.format(sekundenZähler);
+                                seconds = df.format(secondsCount);
                             } else {
-                                sekundenZähler = 0;
-                                minutenZähler++;
+                                secondsCount = 0;
+                                minutesCount++;
                             }
 
-                            if(minutenZähler<=59) {
+                            if (minutesCount <= 59) {
                                 DecimalFormat df = new DecimalFormat("00");
-                                minuten = df.format(minutenZähler);
+                                minutes = df.format(minutesCount);
                             } else {
-                                minutenZähler = 0;
-                                stundenZähler++;
+                                minutesCount = 0;
+                                hoursCount++;
                             }
 
                             DecimalFormat df = new DecimalFormat("00");
-                            stunden = df.format(stundenZähler);
+                            hours = df.format(hoursCount);
 
-                            badgetime.setText(stunden + ":" + minuten + ":" + sekunden);
+                            badgetime.setText(hours + ":" + minutes + ":" + seconds);
                         }
 
                     });
@@ -134,60 +172,5 @@ public class EinkaufmodusActivity extends ActionBarActivity
             }
         });
         refreshThread.start();
-    }
-
-    public void settingsOpen()
-    {
-        final Intent settings = new Intent(this, EinstellungenActivity.class);
-        startActivity(settings);
-    }
-
-    public void uberOpen()
-    {
-        final Dialog uberDialog = new Dialog(context);
-        uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        uberDialog.setContentView(R.layout.ueber_dialog);
-
-        uberDialog.show();
-    }
-    public void auswahlliste()
-    {
-        final Intent auswahl = new Intent(this, VorauswahllistenActivity.class);
-        startActivity(auswahl);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_einkaufmodus, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.settings)
-        {
-            settingsOpen();
-            return true;
-        }
-        if (id == R.id.ueber)
-        {
-            uberOpen();
-            return true;
-        }
-        if (id == R.id.auswahlliste)
-        {
-            auswahlliste();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

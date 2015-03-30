@@ -9,15 +9,6 @@ public class Einkaufsliste
     private ArrayList<EinkaufsArtikel> itemsBought;
     private String name;
 
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Einkaufsliste(String name, ArrayList<EinkaufsArtikel> items, ArrayList<EinkaufsArtikel> itemsBought)
     {
 
@@ -59,7 +50,6 @@ public class Einkaufsliste
         this.items = items;
     }
 
-
     public ArrayList<EinkaufsArtikel> getItemsBought()
     {
         return itemsBought;
@@ -87,4 +77,12 @@ public class Einkaufsliste
 
         return allItems;
     }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

@@ -1,7 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory>
         <EditTextPreference
-            android:title="@string/allgemein"
+            android:title="@string/generally"
             android:editable="false"
             android:clickable="false"
             android:enabled="false"
@@ -11,8 +11,8 @@
 
         <SwitchPreference
             android:key="example_checkbox"
-            android:title="@string/stoppUhrEinstellungen"
-            android:summary="@string/stoppUhrBeschreibung"
+            android:title="@string/stopwatchSettings"
+            android:summary="@string/stopwathdesc"
             android:defaultValue="false">
 
          </SwitchPreference>

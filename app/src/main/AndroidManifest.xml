@@ -18,13 +18,13 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".EinkaufslisteActivity"
-            android:label="@string/title_activity_einkaufsliste" />
+            android:label="@string/title_einkauflisten_activitiy" />
         <activity
             android:name=".EinkaufmodusActivity"
             android:label="@string/title_activity_einkaufmodus" />
         <activity
             android:name=".VorauswahllistenActivity"
-            android:label="@string/title_activity_auswahllisten" >
+            android:label="@string/title_activity_vorauswahllisten" >
         </activity>
     </application>
 
