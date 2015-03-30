@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.TabWidget;
 
@@ -37,6 +38,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
     private int minutesCount = 0;
     private String hours = "";
     private int hoursCount = 0;
+    private static BadgeView badgeCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,8 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         badgeTime.toggle();
 
 
-        BadgeView badgeCount = new BadgeView(this, tabs, 1);
+
+        badgeCount = new BadgeView(this, tabs, 1);
         String anzahlGekauft = Integer.toString(liste.size());
         badgeCount.setText(anzahlGekauft);
         badgeCount.setBadgePosition(BadgeView.POSITION_CENTER);
@@ -172,5 +175,15 @@ public class EinkaufmodusActivity extends ActionBarActivity {
             }
         });
         refreshThread.start();
+    }
+    public static void increment()
+    {
+       badgeCount.increment(1);
+
+    }
+    public static void decrement()
+    {
+        badgeCount.decrement(1);
+
     }
 }

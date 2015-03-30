@@ -75,6 +75,7 @@ public class EinkaufmodusAdapter extends BaseAdapter {
                 liste.setItems(listeArtikel);
                 liste.setItemsBought(listeArtikelGekauft);
                 StartbildschirmActivity.setAktListe(liste);
+                EinkaufmodusActivity.increment();
 
                 final Dialog loeschen_rueck = new Dialog(mContext);
                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -95,7 +96,7 @@ public class EinkaufmodusAdapter extends BaseAdapter {
                         liste.setItems(listeArtikel);
                         liste.setItemsBought(listeArtikelGekauft);
                         StartbildschirmActivity.setAktListe(liste);
-
+                        EinkaufmodusActivity.decrement();
                         loeschen_rueck.dismiss();
                     }
                 });
