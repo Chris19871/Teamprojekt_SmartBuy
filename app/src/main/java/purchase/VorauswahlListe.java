@@ -1,11 +1,7 @@
 package purchase;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by Christian Meisberger on 11.03.2015.
- */
 public class VorauswahlListe
 {
     private String name;
@@ -17,6 +13,12 @@ public class VorauswahlListe
         this.items = items;
     }
 
+    @Override
+    public String toString()
+    {
+        return name;
+    }
+
     public ArrayList<EinkaufsArtikel> getItems() {
         return items;
     }
@@ -25,9 +27,4 @@ public class VorauswahlListe
         this.items = items;
     }
 
-    @Override
-    public String toString()
-    {
-        return name;
-    }
 }

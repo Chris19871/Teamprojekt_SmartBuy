@@ -27,7 +27,7 @@
     </style>
 
     <!-- löschen_rück Style -->
-    <style name="loeschenRueckButton" parent="android:Widget.Button">
+    <style name="deleteUndoButton" parent="android:Widget.Button">
         <item name="android:background">@color/loeschenRueckButton</item>
         <item name="android:drawableBottom">@drawable/ic_action_undo</item>
         <item name="android:layout_gravity">bottom</item>
@@ -36,19 +36,19 @@
 
     <!-- add_auswahlliste Style -->
 
-    <style name="add_auswahllisteButtonCancel" parent="android:Widget.Button">
+    <style name="addVorauswahllisteButtonCancel" parent="android:Widget.Button">
         <item name="android:background">@color/addAuswahllistenButton</item>
         <item name="android:drawableBottom">@drawable/ic_action_cancel</item>
         <item name="android:layout_gravity">bottom</item>
     </style>
-    <style name="add_auswahllisteButtonAccept" parent="android:Widget.Button">
+    <style name="addVorauswahllisteButtonAccept" parent="android:Widget.Button">
         <item name="android:background">@color/addAuswahllistenButton</item>
         <item name="android:drawableBottom">@drawable/ic_action_accept</item>
         <item name="android:layout_gravity">bottom</item>
     </style>
 
     <!-- bestzeit Style -->
-    <style name="bestzeitbutton" parent="android:Widget.Button">
+    <style name="bestTimeButton" parent="android:Widget.Button">
         <item name="android:background">@color/loeschenRueckButton</item>
         <item name="android:drawableBottom">@drawable/ic_action_undo</item>
         <item name="android:layout_gravity">bottom</item>

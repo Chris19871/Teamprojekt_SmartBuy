@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_settings">Einstellungen</string>
-    <string name="hello_world">Hallo Welt!</string>
-    <string name="AddList">Liste hinzufügen</string>
-    <string name="Cancel">Abbrechen</string>
+    <string name="app_name">SmartBuy</string>
+    <string name="Best_Time">Bestzeit</string>
+    <string name="Change_Name">Name ändern</string>
+    <string name="Delete">Löschen</string>
+    <string name="Return">Zurücksetzen</string>
+    <string name="Shopping_mode">Einkaufmodus</string>
+    <string name="bestTimeDialogTime" translatable="false">00:00:00</string>
+    <string name="bestTimeDialogTitle">Bestzeit</string>
     <string name="einstellungen">Einstellungen</string>
+    <string name="generally">Allgemein</string>
+    <string name="neue_einkaufsliste_dialog_hint">Listenname</string>
+    <string name="neues_produkt_dialog_desc">Beschreibung</string>
+    <string name="neues_produkt_dialog_hint">Produktname</string>
+    <string name="preselection">Vorauswahlliste</string>
+    <string name="stopwatchSettings">Stoppuhr</string>
+    <string name="stopwathdesc">Aktiviert oder deaktiviert das Stoppen der Zeit während eines Einkaufs</string>
+    <string name="title_activity_einkaufmodus">Einkaufmodus</string>
     <string name="title_activity_settings">Einstellungen</string>
+    <string name="title_activity_vorauswahllisten">Vorauswahlliste</string>
+    <string name="title_einkauflisten_activitiy">Einkaufsliste</string>
     <string name="ueber">Über</string>
-    <string name="Description">Beschreibung</string>
+    <string name="ueber_dialog"> Team-Projekt der Hochschule Trier</string>
+    <string name="add">Hinzufügen</string>
+    <string name="battery">Battery</string>
+    <string name="butter">Butter</string>
+    <string name="cheese">Käse</string>
+    <string name="fish">Fisch</string>
+    <string name="fruit">Obst</string>
+    <string name="lemonade">Limonade</string>
+    <string name="meat">Fleisch</string>
+    <string name="milk">Milch</string>
+    <string name="vegetable">Gemüse</string>
+    <string name="yogurt">Yogurt</string>
 </resources>

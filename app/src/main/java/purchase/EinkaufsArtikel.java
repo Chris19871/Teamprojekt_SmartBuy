@@ -1,11 +1,7 @@
 package purchase;
 
-import android.graphics.Picture;
 import android.widget.ImageView;
 
-/**
- * Created by Christian Meisberger on 09.03.2015.
- */
 public class EinkaufsArtikel
 {
 
@@ -18,6 +14,11 @@ public class EinkaufsArtikel
         this.name = name;
         this.desc = desc;
         this.pic = pic;
+    }
+    @Override
+    public String toString()
+    {
+        return name;
     }
 
     public String getName()
@@ -33,12 +34,6 @@ public class EinkaufsArtikel
     public ImageView getImage()
     {
         return pic;
-    }
-
-    @Override
-    public String toString()
-    {
-        return name;
     }
 
     public void setName(String name) {

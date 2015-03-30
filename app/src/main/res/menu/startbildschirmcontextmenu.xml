@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_ContextMenu_Einkaufsmodus"
+        android:title="@string/Shopping_mode" />
+    <item
+        android:id="@+id/action_ContextMenu_Change_Name"
+        android:title="@string/Change_Name" />
+    <item
+        android:id="@+id/action_ContextMenu_Best_Time"
+        android:title="@string/Best_Time" />
+    <item
+        android:id="@+id/action_ContextMenu_delete"
+        android:title="@string/Delete" />
+    <item
+        android:id="@+id/action_ContextMenu_return"
+        android:title="@string/Return" />
+
+</menu>

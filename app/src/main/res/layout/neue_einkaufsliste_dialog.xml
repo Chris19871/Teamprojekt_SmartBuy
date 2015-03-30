@@ -8,7 +8,7 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
+        android:id="@+id/scrollViewName"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
@@ -20,7 +20,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:maxLines="3"
-            android:hint="Listenname                                                                 " />
+            android:hint="@string/neue_einkaufsliste_dialog_hint" />
     </ScrollView>
 
     <Spinner
@@ -30,7 +30,7 @@
         android:focusable="false"
         android:minHeight="50dp"
         android:spinnerMode="dropdown"
-        android:layout_below="@+id/scrollView"
+        android:layout_below="@+id/scrollViewName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:popupBackground="@color/actionBar"
@@ -41,7 +41,7 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView2"
+        android:id="@+id/scrollViewGrid"
         android:layout_below="@+id/dialogSpinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:layout_below="@+id/scrollView2"
+        android:layout_below="@+id/scrollViewGrid"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp">

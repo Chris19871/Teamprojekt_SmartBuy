@@ -2,24 +2,12 @@ package purchase;
 
 import java.util.ArrayList;
 
-/**
- * Created by Christian Meisberger on 09.03.2015.
- */
 public class Einkaufsliste
 {
     private ArrayList<EinkaufsArtikel> allItems = new ArrayList<>();
     private ArrayList<EinkaufsArtikel> items;
     private ArrayList<EinkaufsArtikel> itemsBought;
     private String name;
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Einkaufsliste(String name, ArrayList<EinkaufsArtikel> items, ArrayList<EinkaufsArtikel> itemsBought)
     {
@@ -62,7 +50,6 @@ public class Einkaufsliste
         this.items = items;
     }
 
-
     public ArrayList<EinkaufsArtikel> getItemsBought()
     {
         return itemsBought;
@@ -90,4 +77,12 @@ public class Einkaufsliste
 
         return allItems;
     }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

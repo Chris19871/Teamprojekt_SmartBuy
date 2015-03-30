@@ -2,15 +2,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="smartbuy.teamproject.application.EinkaufmodusActivity">
-    <item android:id="@+id/ueber"
+    <item android:id="@+id/about"
         android:title="@string/ueber"
         app:showAsAction="never" />
     <item android:id="@+id/settings"
         android:title="@string/einstellungen"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item android:id="@+id/auswahlliste"
-        android:title="@string/auswahlliste"
+    <item android:id="@+id/vorAuswahlliste"
+        android:title="@string/preselection"
         android:orderInCategory="100"
         app:showAsAction="never" />
 </menu>
