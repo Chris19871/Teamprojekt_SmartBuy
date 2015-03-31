@@ -253,7 +253,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 break;
 
             }
-            case R.id.action_ContextMenu_return: {
+            case R.id.action_ContextMenu_reset: {
                 resetList(info.position);
             }
             break;
