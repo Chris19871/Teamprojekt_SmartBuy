@@ -70,7 +70,6 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         allItems = dbAdapter.getAllEntriesArtikel(aktListenName);
         dbAdapter.close();
 
-
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
                 R.layout.listview_design, R.id.listViewDesign, allItems);
         listView.setAdapter(itemAdapter);

@@ -22,14 +22,15 @@ import purchase.Einkaufsliste;
 
 public class EinkaufmodusAdapter extends BaseAdapter {
     private Context mContext;
-    private Einkaufsliste liste = StartbildschirmActivity.getAktListe();
+    private Einkaufsliste liste = null;
+    //StartbildschirmActivity.getAktListe();
     private ArrayList<EinkaufsArtikel> listeArtikel;
     private ArrayList<EinkaufsArtikel> listeArtikelGekauft;
     private EinkaufsArtikel zuletztGekauft;
 
     public EinkaufmodusAdapter(Context c) {
         mContext = c;
-        liste = StartbildschirmActivity.getAktListe();
+        //liste = StartbildschirmActivity.getAktListe();
         listeArtikel = liste.getItems();
         listeArtikelGekauft = liste.getItemsBought();
     }
@@ -74,7 +75,7 @@ public class EinkaufmodusAdapter extends BaseAdapter {
                 notifyDataSetChanged();
                 liste.setItems(listeArtikel);
                 liste.setItemsBought(listeArtikelGekauft);
-                StartbildschirmActivity.setAktListe(liste);
+                //StartbildschirmActivity.setAktListe(liste);
                 EinkaufmodusActivity.increment();
 
                 final Dialog loeschen_rueck = new Dialog(mContext);
@@ -95,7 +96,7 @@ public class EinkaufmodusAdapter extends BaseAdapter {
 
                         liste.setItems(listeArtikel);
                         liste.setItemsBought(listeArtikelGekauft);
-                        StartbildschirmActivity.setAktListe(liste);
+                       // StartbildschirmActivity.setAktListe(liste);
                         EinkaufmodusActivity.decrement();
                         loeschen_rueck.dismiss();
                     }

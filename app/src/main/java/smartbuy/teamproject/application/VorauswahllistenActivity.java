@@ -35,7 +35,7 @@ public class VorauswahllistenActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.vorauswahllisten);
 
-        dbAdapter = new DbAdapter(this);
+        dbAdapter = StartbildschirmActivity.getDbAdapter();
         dbAdapter.openRead();
         newVorauswahllisten = dbAdapter.getAllEntriesVorauswahlListe();
         dbAdapter.close();

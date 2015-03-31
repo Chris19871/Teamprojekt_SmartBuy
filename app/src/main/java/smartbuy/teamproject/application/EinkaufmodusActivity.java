@@ -46,10 +46,10 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufmodus);
 
-        liste = StartbildschirmActivity.getAktListe().getItemsBought();
+        //liste = StartbildschirmActivity.getAktListe().getItemsBought();
 
         einkaufsmodusActionBar = getSupportActionBar();
-        einkaufsmodusActionBar.setTitle(StartbildschirmActivity.getAktListe().getName());
+        einkaufsmodusActionBar.setTitle(StartbildschirmActivity.getAktListe());
         einkaufsmodusActionBar.setDisplayShowTitleEnabled(true);
 
         einkaufmodusTabHost = (FragmentTabHost) findViewById(R.id.tabHost);

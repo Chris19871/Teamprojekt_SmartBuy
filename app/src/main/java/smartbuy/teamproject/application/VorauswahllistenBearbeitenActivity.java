@@ -57,7 +57,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         geloschteArtikelPositionen = new ArrayList<>();
 
 
-        aktListe = StartbildschirmActivity.getAktListe();
+        //aktListe = StartbildschirmActivity.getAktListe();
         listenName = aktListe.getName();
         einkaufslisteActionBar.setTitle(listenName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
@@ -400,7 +400,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
     public void addArticle(String name, String desc, ImageView image) {
         EinkaufsArtikel newArtikel = new EinkaufsArtikel(name, desc, image);
         aktListe.addItem(newArtikel);
-        StartbildschirmActivity.setAktListe(aktListe);
+        //StartbildschirmActivity.setAktListe(aktListe);
     }
 
     public void deleteSelectedItems() {

@@ -28,6 +28,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import database.DbAdapter;
+import database.Vorauswahl;
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
 import purchase.VorauswahlListe;
@@ -36,22 +38,25 @@ import swipe.SwipeDismissListViewTouchListener;
 public class StartbildschirmActivity extends ActionBarActivity {
     private final Context context = this;
     private GridLayout grid;
-    private ArrayAdapter<VorauswahlListe> vorauswahllistenitemListsAdapter;
+    private ArrayAdapter<Vorauswahl> vorauswahllistenitemListsAdapter;
     private ArrayAdapter<Einkaufsliste> itemListsAdapter;
     private CheckBox[] boxes;
     private int boxCounter = 0;
-    private ArrayList<EinkaufsArtikel> addNewList;
+    private ArrayList<database.EinkaufsArtikel> addNewList;
     private ArrayList<Einkaufsliste> einkaufsliste;
-    private ArrayList<VorauswahlListe> vorauswahllisten;
+    private ArrayList<Vorauswahl> vorauswahllisten;
     private EditText listName;
-    private static Einkaufsliste aktListe;
+    private static String aktListe;
     private Einkaufsliste zuletztGeleoscht;
     private int zuletztGeleoschtPosition;
+    private static DbAdapter dbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.startbildschirm);
+
+        dbAdapter = new DbAdapter(this);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/BAUHS93.TTF");
         TextView startText = (TextView) findViewById(R.id.startScreenText);
@@ -72,7 +77,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                aktListe = einkaufsliste.get(position);
+                aktListe = einkaufsliste.get(position).getName();
                 wechsel();
             }
         });
@@ -169,7 +174,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.action_ContextMenu_Einkaufsmodus: {
-                aktListe = itemListsAdapter.getItem(info.position);
+                aktListe = itemListsAdapter.getItem(info.position).getName();
                 openEinkaufsmodus();
                 break;
             }
@@ -270,7 +275,9 @@ public class StartbildschirmActivity extends ActionBarActivity {
         listName = (EditText) dialog.findViewById(R.id.dialogName);
         grid = (GridLayout) dialog.findViewById(R.id.gridLayout);
 
+        /*
         // SmartBuy Vorauswahllisten erstellen
+
         String[] geburstagArtikel = {"Partyhüte", "Besteck"};
         ArrayList<EinkaufsArtikel> gebItems = new ArrayList<>();
         EinkaufsArtikel artikel;
@@ -292,7 +299,10 @@ public class StartbildschirmActivity extends ActionBarActivity {
         }
         VorauswahlListe party = new VorauswahlListe("Party", partyItems);
         vorauswahllisten.add(party);
-
+        */
+        dbAdapter.openRead();
+        vorauswahllisten = dbAdapter.getAllEntriesVorauswahlListe();
+        dbAdapter.close();
 
         vorauswahllistenitemListsAdapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_dropdown_item_1line, vorauswahllisten);
@@ -344,8 +354,12 @@ public class StartbildschirmActivity extends ActionBarActivity {
     }
 
     public void addBox(int index) {
-        VorauswahlListe item = vorauswahllistenitemListsAdapter.getItem(index);
-        ArrayList<EinkaufsArtikel> pItems = item.getItems();
+        String item = vorauswahllistenitemListsAdapter.getItem(index).getName();
+
+        dbAdapter.openRead();
+        ArrayList<database.EinkaufsArtikel> pItems = dbAdapter.getAllEntriesArtikel(item);
+        dbAdapter.close();
+
         addNewList = pItems;
         grid.removeAllViews();
         grid.setColumnCount(2);
@@ -381,9 +395,10 @@ public class StartbildschirmActivity extends ActionBarActivity {
         ArrayList<EinkaufsArtikel> newListBought = new ArrayList<>();
         for (int i = 0; i < boxCounter; i++) {
             if (boxes[i].isChecked()) {
-                newList.add(addNewList.get(i));
+
             }
         }
+
         addList(new Einkaufsliste(listName.getText().toString(), newList, newListBought));
     }
 
@@ -438,12 +453,12 @@ public class StartbildschirmActivity extends ActionBarActivity {
     }
 
 
-    public static Einkaufsliste getAktListe() {
+    public static String getAktListe() {
         return aktListe;
     }
 
-    public static void setAktListe(Einkaufsliste aktListe) {
-        StartbildschirmActivity.aktListe = aktListe;
-
+    public static DbAdapter getDbAdapter()
+    {
+        return dbAdapter;
     }
 }
