@@ -11,6 +11,7 @@ import smartbuy.teamproject.application.R;
  */
 public class DbHelper extends SQLiteOpenHelper
 {
+    private Context context;
     private static final String DATABASE_NAME = "smartbuy.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -108,6 +109,7 @@ public class DbHelper extends SQLiteOpenHelper
     public DbHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -136,6 +138,7 @@ public class DbHelper extends SQLiteOpenHelper
         db.execSQL(CREATE_EINKAUFSARTIKEL_TABLE);
         db.execSQL(CREATE_EINKAUFSLISTEN_TABLE);
 
+        dbAdapter = new DbAdapter(context);
         createVorauswahllisten();
 
 
