@@ -29,7 +29,7 @@ public class DbAdapter
 
     public DbAdapter(Context context)
     {
-        dbHelper = new DbHelper(context);
+        dbHelper = new DbHelper(context, this);
     }
 
     public void openWrite() throws SQLException
