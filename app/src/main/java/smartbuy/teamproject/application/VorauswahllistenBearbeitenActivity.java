@@ -233,7 +233,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
                 final Dialog imageAuswahlDialog = new Dialog(context);
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                imageAuswahlDialog.setContentView(R.layout.eiknkaufsartikel_image_dialog);
+                imageAuswahlDialog.setContentView(R.layout.einkaufsartikel_image_dialog);
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
@@ -349,7 +349,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
             public void onClick(View v) {
                 final Dialog imageAuswahlDialog = new Dialog(context);
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                imageAuswahlDialog.setContentView(R.layout.eiknkaufsartikel_image_dialog);
+                imageAuswahlDialog.setContentView(R.layout.einkaufsartikel_image_dialog);
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);

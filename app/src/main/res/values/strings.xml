@@ -13,7 +13,7 @@
     <string name="einstellungen">Preferences</string>
     <string name="add">Add</string>
 
-    <!-- Strings für startbildschirmcontextmenu-->
+    <!-- Strings für startbildschirm_contextmenu-->
     <string name="Shopping_mode">Shopping mode</string>
     <string name="Change_Name">Change Name</string>
     <string name="Best_Time">Best time</string>
