@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ import swipe.SwipeDismissListViewTouchListener;
 
 public class StartbildschirmActivity extends ActionBarActivity {
     private final Context context = this;
-    private GridLayout grid;
+    private GridView grid;
     private ArrayAdapter<Vorauswahl> vorauswahllistenitemListsAdapter;
     private ArrayAdapter<Einkaufsliste> itemListsAdapter;
     private CheckBox[] boxes;
@@ -279,7 +280,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
         final String empty = "";
 
         listName = (EditText) dialog.findViewById(R.id.dialogName);
-        grid = (GridLayout) dialog.findViewById(R.id.gridLayout);
+        grid = (GridView) dialog.findViewById(R.id.gridViewCheckbox);
 
         /*
         // SmartBuy Vorauswahllisten erstellen
@@ -367,8 +368,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
         dbAdapter.close();
 
         addNewList = pItems;
-        grid.removeAllViews();
-        grid.setColumnCount(2);
+
 
         int columnIndex = 0;
         int rowIndex = 0;
@@ -382,17 +382,10 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
         boxCounter = boxes.length;
 
-        for (int i = 0; i < boxes.length; i++) {
-            if (i > 1 && i % 2 == 0) {
-                rowIndex++;
-            }
+        ArrayAdapter<CheckBox> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, boxes);
 
-            GridLayout.Spec row = GridLayout.spec(rowIndex, 1);
-            GridLayout.Spec colspan = GridLayout.spec(columnIndex, 1);
-            GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(row, colspan);
-            grid.addView(boxes[i], gridLayoutParam);
-            columnIndex++;
-        }
+        grid.setAdapter(adapter);
 
     }
 

@@ -48,18 +48,11 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
-        <GridLayout
-            android:id="@+id/gridLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="200dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="false"
-            android:layout_below="@+id/dialogSpinner"
-            android:minHeight="100dp">
-
-
-        </GridLayout>
+        <GridView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gridViewCheckbox"
+            android:numColumns="2"/>
     </ScrollView>
 
     <LinearLayout
