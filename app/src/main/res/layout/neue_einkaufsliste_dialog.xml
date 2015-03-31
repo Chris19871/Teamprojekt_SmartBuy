@@ -38,32 +38,27 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp" />
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollViewGrid"
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:id="@+id/gridViewCheckbox"
+        android:minHeight="200dp"
+        android:numColumns="2"
         android:layout_below="@+id/dialogSpinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-
-        <GridView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/gridViewCheckbox"
-            android:numColumns="2"/>
-    </ScrollView>
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:layout_below="@+id/scrollViewGrid"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp">
+        android:layout_alignParentTop="false"
+        android:layout_alignEnd="@+id/gridViewCheckbox"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/gridViewCheckbox">
 
         <Button
             android:id="@+id/dialogButtonCancel"

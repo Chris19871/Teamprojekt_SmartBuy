@@ -237,7 +237,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
-                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context);
 
                 gridView.setAdapter(Iadapter);
 
@@ -353,7 +353,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
-                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context);
 
                 gridView.setAdapter(Iadapter);
 

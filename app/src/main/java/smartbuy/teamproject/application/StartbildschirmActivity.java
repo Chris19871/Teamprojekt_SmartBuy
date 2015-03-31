@@ -38,10 +38,9 @@ import swipe.SwipeDismissListViewTouchListener;
 
 public class StartbildschirmActivity extends ActionBarActivity {
     private final Context context = this;
-    private GridView grid;
     private ArrayAdapter<Vorauswahl> vorauswahllistenitemListsAdapter;
     private ArrayAdapter<Einkaufsliste> itemListsAdapter;
-    private CheckBox[] boxes;
+
     private int boxCounter = 0;
     private ArrayList<database.EinkaufsArtikel> addNewList;
     private ArrayList<Einkaufsliste> einkaufsliste;
@@ -280,7 +279,9 @@ public class StartbildschirmActivity extends ActionBarActivity {
         final String empty = "";
 
         listName = (EditText) dialog.findViewById(R.id.dialogName);
-        grid = (GridView) dialog.findViewById(R.id.gridViewCheckbox);
+
+        final GridView grid = (GridView) dialog.findViewById(R.id.gridViewCheckbox);
+
 
         /*
         // SmartBuy Vorauswahllisten erstellen
@@ -326,7 +327,17 @@ public class StartbildschirmActivity extends ActionBarActivity {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                addBox(arg2);
+                String item = vorauswahllistenitemListsAdapter.getItem(arg2).getName();
+
+                dbAdapter.openRead();
+                ArrayList<database.EinkaufsArtikel> pItems = dbAdapter.getAllEntriesArtikel(item);
+                dbAdapter.close();
+
+
+                addNewList = pItems;
+                NeueEinkaufslisteAdapter adapter = new NeueEinkaufslisteAdapter(context, dbAdapter,item);
+                grid.setAdapter(adapter);
+
             }
 
             @Override
@@ -360,42 +371,10 @@ public class StartbildschirmActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    public void addBox(int index) {
-        String item = vorauswahllistenitemListsAdapter.getItem(index).getName();
-
-        dbAdapter.openRead();
-        ArrayList<database.EinkaufsArtikel> pItems = dbAdapter.getAllEntriesArtikel(item);
-        dbAdapter.close();
-
-        addNewList = pItems;
-
-
-        int columnIndex = 0;
-        int rowIndex = 0;
-
-        boxes = new CheckBox[pItems.size()];
-        for (int i = 0; i < pItems.size(); i++) {
-            boxes[i] = new CheckBox(this);
-            boxes[i].setText(pItems.get(i).getName());
-            boxes[i].setMinimumWidth(255);
-        }
-
-        boxCounter = boxes.length;
-
-        ArrayAdapter<CheckBox> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, boxes);
-
-        grid.setAdapter(adapter);
-
-    }
-
     public void generateItemList() {
         ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
         ArrayList<EinkaufsArtikel> newListBought = new ArrayList<>();
         for (int i = 0; i < boxCounter; i++) {
-            if (boxes[i].isChecked()) {
-
-            }
         }
 
         addList(new Einkaufsliste(listName.getText().toString(), newList, newListBought));
