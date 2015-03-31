@@ -13,7 +13,7 @@
         android:id="@+id/action_ContextMenu_delete"
         android:title="@string/Delete" />
     <item
-        android:id="@+id/action_ContextMenu_return"
+        android:id="@+id/action_ContextMenu_reset"
         android:title="@string/Return" />
 
 </menu>

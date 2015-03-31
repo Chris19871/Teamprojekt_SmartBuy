@@ -33,4 +33,5 @@
     <string name="milk">Milch</string>
     <string name="vegetable">Gemüse</string>
     <string name="yogurt">Yogurt</string>
+    <string name="title_activity_vorauswahllistenbearbeiten">Vorauswahliste bearbeiten</string>
 </resources>

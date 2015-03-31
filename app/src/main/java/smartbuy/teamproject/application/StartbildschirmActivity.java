@@ -158,7 +158,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.startscreenListView) {
-            getMenuInflater().inflate(R.menu.startbildschirmcontextmenu, menu);
+            getMenuInflater().inflate(R.menu.startbildschirm_contextmenu, menu);
         }
         super.onCreateContextMenu(menu, v, menuInfo);
 
@@ -253,7 +253,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 break;
 
             }
-            case R.id.action_ContextMenu_return: {
+            case R.id.action_ContextMenu_reset: {
                 resetList(info.position);
             }
             break;
