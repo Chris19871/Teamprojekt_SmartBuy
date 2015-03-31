@@ -57,6 +57,12 @@ public class StartbildschirmActivity extends ActionBarActivity {
         setContentView(R.layout.startbildschirm);
 
         dbAdapter = new DbAdapter(this);
+        dbAdapter.openWrite();
+        if (dbAdapter.getAllEntriesVorauswahlListe().size() == 0)
+        {
+            dbAdapter.createVorauswahllisten();
+        }
+        dbAdapter.close();
 
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/BAUHS93.TTF");
         TextView startText = (TextView) findViewById(R.id.startScreenText);

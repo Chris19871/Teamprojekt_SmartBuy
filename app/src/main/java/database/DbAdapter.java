@@ -5,13 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
 import java.util.ArrayList;
+import smartbuy.teamproject.application.R;
 
-
-/**
- * Created by Christian Meisberger on 25.03.2015.
- */
 public class DbAdapter
 {
     private DbHelper dbHelper;
@@ -26,10 +22,91 @@ public class DbAdapter
     private String[] vorauswahllistenAllColums = { "id" , "name"};
 
     private int bought = 0;
+    private String desc = "";
+    private String[] vorauswahllisten = {"Party","Geburtstag"};
+    private String[] partyArtikel = {
+            "Fleisch",
+            "Bier",
+            "Limo",
+            "Cola",
+            "Holzkohle",
+            "Grillanzünder",
+            "Grillbesteck",
+            "Feuerzeug",
+            "Sprudel",
+            "Würstchen",
+            "Tomaten",
+            "Mayo",
+            "Salat",
+            "Getränkeuntersetzer",
+            "Servietten",
+            "Gläser",
+            "Baguette",
+    };
+    private int[] partArtikelImage = {
+            R.mipmap.image_fleisch,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_limonade,
+            R.mipmap.image_limonade,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_limonade,
+            R.mipmap.image_fleisch,
+            R.mipmap.image_gemuse,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_gemuse,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo
+    };
+    private String[] geburstagArtikel = {
+            "Partyhüte",
+            "Plastikbesteck",
+            "Limo",
+            "Cola",
+            "Sprudel",
+            "Bier",
+            "Pizza",
+            "Fleisch",
+            "Tomaten",
+            "Nudeln",
+            "Mayo",
+            "Salat",
+            "Paprika",
+            "Gurken",
+            "Käsehappchen",
+            "Süßigkeiten",
+            "Partydeko",
+
+    };
+    private int[] geburstagArtikelImage = {
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_limonade,
+            R.mipmap.image_limonade,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_fleisch,
+            R.mipmap.image_gemuse,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_gemuse,
+            R.mipmap.image_gemuse,
+            R.mipmap.image_gemuse,
+            R.mipmap.image_kase,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo
+    };
+
 
     public DbAdapter(Context context)
     {
-        dbHelper = new DbHelper(context, this);
+        dbHelper = new DbHelper(context);
+
     }
 
     public void openWrite() throws SQLException
@@ -191,6 +268,22 @@ public class DbAdapter
         cursor.moveToFirst();
 
         return cursorToEntryArtikel(cursor);
+    }
+    public void createVorauswahllisten()
+    {
+        for(int i=0; i < vorauswahllisten.length; i++)
+        {
+            addListe(vorauswahllisten[i]);
+            createEntryVorauswahlliste(vorauswahllisten[i]);
+        }
+        for(int i=0; i < partyArtikel.length; i++)
+        {
+            createEntryEinkaufArtikeltoTable(vorauswahllisten[0],partyArtikel[i],desc,partArtikelImage[i]);
+        }
+        for(int i=0; i < geburstagArtikel.length; i++)
+        {
+            createEntryEinkaufArtikeltoTable(vorauswahllisten[1],geburstagArtikel[i],desc,geburstagArtikelImage[i]);
+        }
     }
 
 
