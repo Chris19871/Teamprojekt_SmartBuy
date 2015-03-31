@@ -66,7 +66,7 @@ public class EinkaufmodusAdapter extends BaseAdapter {
         ImageView image = new ImageView(layout.getContext());
         image.setBackgroundColor(Color.parseColor("#FF5CC1DE"));
         //Standard Bild
-        image.setImageResource(R.mipmap.smartbuy_logo);
+        //image.setImageResource(R.mipmap.smartbuy_logo);
         image.setClickable(true);
         image.setMinimumWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         image.setMinimumHeight(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -107,12 +107,10 @@ public class EinkaufmodusAdapter extends BaseAdapter {
                         loeschen_rueck.dismiss();
                     }
                 });
-
                 loeschen_rueck.show();
             }
 
         });
-
         layout.addView(image);
 
         TextView textView = new TextView(layout.getContext());

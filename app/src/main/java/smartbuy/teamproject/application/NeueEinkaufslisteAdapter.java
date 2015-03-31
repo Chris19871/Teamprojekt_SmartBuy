@@ -13,6 +13,7 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
     private Context context;
     private DbAdapter dbAdapter;
     ArrayList<database.EinkaufsArtikel> pItems;
+    ArrayList<CheckBox> checkBoxes;
 
     public NeueEinkaufslisteAdapter(Context context, DbAdapter dbAdapter, String item)
     {
@@ -21,6 +22,7 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
         dbAdapter.openRead();
         this.pItems = dbAdapter.getAllEntriesArtikel(item);
         dbAdapter.close();
+        checkBoxes = new ArrayList<>();
     }
     @Override
     public int getCount() {
@@ -36,12 +38,26 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    public ArrayList<database.EinkaufsArtikel> getCheckedItems()
+    {
+        ArrayList<database.EinkaufsArtikel> checkItems = new ArrayList<>();
+        for (int i = 0; i < checkBoxes.size(); i++)
+        {
+            if (checkBoxes.get(i).isChecked() == true)
+            {
+                checkItems.add(pItems.get(i));
+            }
+        }
+
+        return checkItems;
+    }
 
     @Override
     public CheckBox getView(int position, View convertView, ViewGroup parent) {
         CheckBox box = new CheckBox(context);
         box.setText(pItems.get(position).getName());
         box.setTextSize(10);
+        checkBoxes.add(box);
 
         return box;
     }

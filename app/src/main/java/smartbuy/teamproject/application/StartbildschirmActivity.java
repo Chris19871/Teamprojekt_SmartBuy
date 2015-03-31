@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
@@ -311,6 +312,8 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 addNewList = pItems;
                 NeueEinkaufslisteAdapter adapter = new NeueEinkaufslisteAdapter(context, dbAdapter,item);
                 grid.setAdapter(adapter);
+                adapter.getCheckedItems();
+
 
             }
 
@@ -327,8 +330,9 @@ public class StartbildschirmActivity extends ActionBarActivity {
                     listName.setHintTextColor(Color.parseColor("#FF0000"));
                     listName.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    generateItemList();
-                    itemListsAdapter.notifyDataSetChanged();
+                    NeueEinkaufslisteAdapter adapter = (NeueEinkaufslisteAdapter)grid.getAdapter();
+                    ArrayList<database.EinkaufsArtikel> checkArticle = adapter.getCheckedItems();
+                    dbAdapter.createEinkaufsliste(listName.getText().toString(),checkArticle);
                     dialog.dismiss();
                 }
             }
@@ -343,15 +347,6 @@ public class StartbildschirmActivity extends ActionBarActivity {
         });
 
         dialog.show();
-    }
-
-    public void generateItemList() {
-        ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
-        ArrayList<EinkaufsArtikel> newListBought = new ArrayList<>();
-        for (int i = 0; i < boxCounter; i++) {
-        }
-
-        addList(new Einkaufsliste(listName.getText().toString(), newList, newListBought));
     }
 
     public void addList(Einkaufsliste list) {
