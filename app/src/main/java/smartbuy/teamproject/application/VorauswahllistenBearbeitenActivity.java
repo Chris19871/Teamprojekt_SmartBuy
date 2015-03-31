@@ -56,6 +56,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         geloschteArtikel = new ArrayList<>();
         geloschteArtikelPositionen = new ArrayList<>();
 
+
         aktListe = StartbildschirmActivity.getAktListe();
         listenName = aktListe.getName();
         einkaufslisteActionBar.setTitle(listenName);
@@ -187,11 +188,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
             return true;
 
         }
-        if (id == R.id.action_Einkaufsmodus) {
-            einkaufsmodusOpen();
-            finish();
-            return true;
-        }
         if (id == R.id.action_delete_Einkaufliste) {
             deleteSelectedItems();
             return true;
@@ -237,7 +233,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
                 final Dialog imageAuswahlDialog = new Dialog(context);
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                imageAuswahlDialog.setContentView(R.layout.eiknkaufsartikel_image_dialog);
+                imageAuswahlDialog.setContentView(R.layout.einkaufsartikel_image_dialog);
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
@@ -283,12 +279,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
         newProducts.show();
     }
-
-    public void einkaufsmodusOpen() {
-        final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
-        startActivity(einkaufsmodus);
-    }
-
 
     public void deleteMode() {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -359,7 +349,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
             public void onClick(View v) {
                 final Dialog imageAuswahlDialog = new Dialog(context);
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                imageAuswahlDialog.setContentView(R.layout.eiknkaufsartikel_image_dialog);
+                imageAuswahlDialog.setContentView(R.layout.einkaufsartikel_image_dialog);
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);

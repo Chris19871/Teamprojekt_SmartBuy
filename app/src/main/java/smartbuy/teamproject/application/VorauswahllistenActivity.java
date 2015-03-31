@@ -18,21 +18,27 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import database.DbAdapter;
+import database.Vorauswahl;
 import purchase.EinkaufsArtikel;
 import purchase.VorauswahlListe;
 
 public class VorauswahllistenActivity extends ActionBarActivity {
 
     private final Context context = this;
-    private ArrayAdapter<VorauswahlListe> newVorauswahllistenListsAdapter;
-    private ArrayList<VorauswahlListe> newVorauswahllisten;
+    private ArrayAdapter<Vorauswahl> newVorauswahllistenListsAdapter;
+    private ArrayList<Vorauswahl> newVorauswahllisten;
+    private DbAdapter dbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vorauswahlliste);
+        setContentView(R.layout.vorauswahllisten);
 
-        newVorauswahllisten = new ArrayList<>();
+        dbAdapter = new DbAdapter(this);
+        dbAdapter.openRead();
+        newVorauswahllisten = dbAdapter.getAllEntriesVorauswahlListe();
+        dbAdapter.close();
 
         registerForContextMenu(findViewById(R.id.vorauswahllistenlistView));
         ListView listView = (ListView) findViewById(R.id.vorauswahllistenlistView);
@@ -111,9 +117,21 @@ public class VorauswahllistenActivity extends ActionBarActivity {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
-                    VorauswahlListe liste = new VorauswahlListe(name.getText().toString(), newList);
-                    newVorauswahllisten.add(liste);
+                   // ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
+                   // VorauswahlListe liste = new VorauswahlListe(name.getText().toString(), newList);
+                   // newVorauswahllisten.add(liste);
+
+                    dbAdapter.openWrite();
+                    dbAdapter.createEntryVorauswahlliste(name.getText().toString());
+                    dbAdapter.addListe(name.getText().toString());
+                    dbAdapter.close();
+
+
+                    newVorauswahllisten.clear();
+
+                    dbAdapter.openRead();
+                    newVorauswahllisten.addAll(dbAdapter.getAllEntriesVorauswahlListe());
+                    dbAdapter.close();
 
                     newVorauswahllistenListsAdapter.notifyDataSetChanged();
                     auswahllistenDialog.dismiss();

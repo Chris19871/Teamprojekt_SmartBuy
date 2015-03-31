@@ -13,7 +13,7 @@
     <string name="einstellungen">Preferences</string>
     <string name="add">Add</string>
 
-    <!-- Strings für startbildschirmcontextmenu-->
+    <!-- Strings für startbildschirm_contextmenu-->
     <string name="Shopping_mode">Shopping mode</string>
     <string name="Change_Name">Change Name</string>
     <string name="Best_Time">Best time</string>
@@ -25,7 +25,7 @@
 
     <!-- Strings für bestzeitdialog-->
     <string name="bestTimeDialogTitle">Best time</string>
-    <string name="bestTimeDialogTime" translatable="false">00:00:00</string>
+    <string name="bestTimeDialogTime" translatable="false">01:00:00</string>
 
     <!-- Strings für neue_einkaufsliste_dialog-->
     <string name="neue_einkaufsliste_dialog_hint">List Name                                                                 "</string>

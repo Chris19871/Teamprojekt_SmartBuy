@@ -7,11 +7,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.TabWidget;
 
@@ -37,6 +39,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
     private int minutesCount = 0;
     private String hours = "";
     private int hoursCount = 0;
+    private static BadgeView badgeCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,8 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("regal").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_regal_black)), EinkaufmodusFragment.class, null);
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkaufwagen").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_shoppingcar_black)), EinkaufswagenFragment.class, null);
 
+
+
         SharedPreferences einstellungen = PreferenceManager.getDefaultSharedPreferences(context);
         running = einstellungen.getBoolean("example_checkbox", false);
 
@@ -69,7 +74,8 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         badgeTime.toggle();
 
 
-        BadgeView badgeCount = new BadgeView(this, tabs, 1);
+
+        badgeCount = new BadgeView(this, tabs, 1);
         String anzahlGekauft = Integer.toString(liste.size());
         badgeCount.setText(anzahlGekauft);
         badgeCount.setBadgePosition(BadgeView.POSITION_CENTER);
@@ -172,5 +178,15 @@ public class EinkaufmodusActivity extends ActionBarActivity {
             }
         });
         refreshThread.start();
+    }
+    public static void increment()
+    {
+       badgeCount.increment(1);
+
+    }
+    public static void decrement()
+    {
+        badgeCount.decrement(1);
+
     }
 }
