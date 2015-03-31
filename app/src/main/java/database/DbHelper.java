@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import purchase.AuswahllistenDb;
 
 /**
  * Created by Christian Meisberger on 21.03.2015.

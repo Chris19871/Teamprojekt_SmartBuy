@@ -27,24 +27,26 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import database.DbAdapter;
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
 import swipe.SwipeDismissListViewTouchListener;
 
 
 public class EinkaufslisteActivity extends ActionBarActivity {
-    private String listenName;
-    private Einkaufsliste aktListe;
+    private String aktListenName;
+    private DbAdapter dbAdapter;
+    //private Einkaufsliste aktListe;
     private final Context context = this;
-    private ArrayAdapter<EinkaufsArtikel> itemAdapter;
+    private ArrayAdapter<database.EinkaufsArtikel> itemAdapter;
     private EinkaufsArtikel aktArtikel;
     private ListView listView;
-    private ArrayList<EinkaufsArtikel> items;
-    private ArrayList<EinkaufsArtikel> allItems;
+    private ArrayList<database.EinkaufsArtikel> items;
+    private ArrayList<database.EinkaufsArtikel> allItems;
     private ActionBar einkaufslisteActionBar;
     private boolean longClickEnabled;
     private boolean deleteEnable = false;
-    private ArrayList<EinkaufsArtikel> geloschteArtikel;
+    private ArrayList<database.EinkaufsArtikel> geloschteArtikel;
     private ArrayList<Integer> geloschteArtikelPositionen;
     private boolean articleDelete = false;
 
@@ -57,14 +59,17 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         geloschteArtikel = new ArrayList<>();
         geloschteArtikelPositionen = new ArrayList<>();
 
-        aktListe = StartbildschirmActivity.getAktListe();
-        listenName = aktListe.getName();
-        einkaufslisteActionBar.setTitle(listenName);
+        //aktListe = StartbildschirmActivity.getAktListe();
+        //aktListenName = aktListe.getName();
+        einkaufslisteActionBar.setTitle(aktListenName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
 
         listView = (ListView) findViewById(R.id.einkaufslisteListView);
-        items = aktListe.getItems();
-        allItems = aktListe.getAllItems();
+        //items = aktListe.getItems();
+        dbAdapter.openRead();
+        allItems = dbAdapter.getAllEntriesArtikel(aktListenName);
+        dbAdapter.close();
+
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
                 R.layout.listview_design, R.id.listViewDesign, allItems);
@@ -74,9 +79,9 @@ public class EinkaufslisteActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!longClickEnabled) {
-                    aktArtikel = items.get(position);
+                    //aktArtikel = items.get(position);
                     changeArticlelDialog(position);
-                    allItems = aktListe.getAllItems();
+                    //allItems = aktListe.getAllItems();
                 }
             }
         });
@@ -85,7 +90,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 longClickEnabled = true;
-                aktArtikel = items.get(position);
+                //aktArtikel = items.get(position);
                 deleteMode();
                 return true;
             }
@@ -266,7 +271,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
                     addArticle(name.getText().toString(), desc.getText().toString(), image);
-                    allItems = aktListe.getAllItems();
+                    //allItems = aktListe.getAllItems();
                     itemAdapter.notifyDataSetChanged();
                     newProducts.dismiss();
                 }
@@ -403,14 +408,14 @@ public class EinkaufslisteActivity extends ActionBarActivity {
 
     public void changeArticle(String name, String desc, ImageView image, int pos) {
         EinkaufsArtikel newArtikel = new EinkaufsArtikel(name, desc, image);
-        aktListe.delItem(pos);
-        aktListe.addItemPos(newArtikel, pos);
+        //aktListe.delItem(pos);
+        //aktListe.addItemPos(newArtikel, pos);
     }
 
     public void addArticle(String name, String desc, ImageView image) {
         EinkaufsArtikel newArtikel = new EinkaufsArtikel(name, desc, image);
-        aktListe.addItem(newArtikel);
-        StartbildschirmActivity.setAktListe(aktListe);
+        //aktListe.addItem(newArtikel);
+        //StartbildschirmActivity.setAktListe(aktListe);
     }
 
     public void deleteSelectedItems() {
@@ -430,21 +435,5 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         checkedItemPositions.clear();
         itemAdapter.notifyDataSetChanged();
         normalMode();
-    }
-
-    public String getListenName() {
-        return listenName;
-    }
-
-    public void setListenName(String listenName) {
-        this.listenName = listenName;
-    }
-
-    public Einkaufsliste getAktListe() {
-        return aktListe;
-    }
-
-    public void setAktListe(Einkaufsliste aktListe) {
-        this.aktListe = aktListe;
     }
 }
