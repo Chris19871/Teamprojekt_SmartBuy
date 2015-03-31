@@ -310,9 +310,6 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 addNewList = pItems;
                 NeueEinkaufslisteAdapter adapter = new NeueEinkaufslisteAdapter(context, dbAdapter,item);
                 grid.setAdapter(adapter);
-                adapter.getCheckedItems();
-
-
             }
 
             @Override

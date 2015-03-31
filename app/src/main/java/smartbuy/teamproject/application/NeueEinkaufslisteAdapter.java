@@ -12,8 +12,8 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
 
     private Context context;
     private DbAdapter dbAdapter;
-    ArrayList<database.EinkaufsArtikel> pItems;
-    ArrayList<CheckBox> checkBoxes;
+    private ArrayList<database.EinkaufsArtikel> pItems;
+    private ArrayList<CheckBox> checkBoxes;
 
     public NeueEinkaufslisteAdapter(Context context, DbAdapter dbAdapter, String item)
     {

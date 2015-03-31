@@ -59,7 +59,9 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         geloschteArtikel = new ArrayList<>();
         geloschteArtikelPositionen = new ArrayList<>();
 
+        dbAdapter = StartbildschirmActivity.getDbAdapter();
         aktListenName = StartbildschirmActivity.getAktListe();
+
         einkaufslisteActionBar.setTitle(aktListenName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
 
