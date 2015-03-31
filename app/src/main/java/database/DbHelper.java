@@ -3,6 +3,7 @@ package database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import smartbuy.teamproject.application.R;
 
 
 /**
@@ -21,6 +22,87 @@ public class DbHelper extends SQLiteOpenHelper
     private final static String VORAUSWAHL_ID = "id";
     private final static String EINKAUFSARTIKEL_ID = "id";
     private final static String EINKAUFSLISTEN_ID = "id";
+
+    private DbAdapter dbAdapter;
+    private String desc = "";
+    private String[] vorauswahllisten = {"Party","Geburtstag"};
+    private String[] partyArtikel = {
+            "Fleisch",
+            "Bier",
+            "Limo",
+            "Cola",
+            "Holzkohle",
+            "Grillanzünder",
+            "Grillbesteck",
+            "Feuerzeug",
+            "Sprudel",
+            "Würstchen",
+            "Tomaten",
+            "Mayo",
+            "Salat",
+            "Getränkeuntersetzer",
+            "Servietten",
+            "Gläser",
+            "Baguette",
+    };
+    private int[] partArtikelImage = {
+            R.mipmap.image_fleisch,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_limonade,
+            R.mipmap.image_limonade,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_limonade,
+            R.mipmap.image_fleisch,
+            R.mipmap.image_gemuse,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_gemuse,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo
+    };
+    private String[] geburstagArtikel = {
+            "Partyhüte",
+            "Plastikbesteck",
+            "Limo",
+            "Cola",
+            "Sprudel",
+            "Bier",
+            "Pizza",
+            "Fleisch",
+            "Tomaten",
+            "Nudeln",
+            "Mayo",
+            "Salat",
+            "Paprika",
+            "Gurken",
+            "Käsehappchen",
+            "Süßigkeiten",
+            "Partydeko",
+
+    };
+    private int[] geburstagArtikelImage = {
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_limonade,
+            R.mipmap.image_limonade,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_fleisch,
+            R.mipmap.image_gemuse,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.image_gemuse,
+            R.mipmap.image_gemuse,
+            R.mipmap.image_gemuse,
+            R.mipmap.image_kase,
+            R.mipmap.smartbuy_logo,
+            R.mipmap.smartbuy_logo
+    };
 
 
     public DbHelper(Context context)
@@ -54,6 +136,8 @@ public class DbHelper extends SQLiteOpenHelper
         db.execSQL(CREATE_EINKAUFSARTIKEL_TABLE);
         db.execSQL(CREATE_EINKAUFSLISTEN_TABLE);
 
+        createVorauswahllisten();
+
 
     }
 
@@ -61,6 +145,23 @@ public class DbHelper extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+
+    }
+    public void createVorauswahllisten()
+    {
+        for(int i=0; i < vorauswahllisten.length; i++)
+        {
+            dbAdapter.addListe(vorauswahllisten[i]);
+
+        }
+        for(int i=0; i < partyArtikel.length; i++)
+        {
+            dbAdapter.createEntryEinkaufArtikeltoTable(vorauswahllisten[0],partyArtikel[i],desc,partArtikelImage[i]);
+        }
+        for(int i=0; i < geburstagArtikel.length; i++)
+        {
+            dbAdapter.createEntryEinkaufArtikeltoTable(vorauswahllisten[1],geburstagArtikel[i],desc,geburstagArtikelImage[i]);
+        }
 
     }
 }
