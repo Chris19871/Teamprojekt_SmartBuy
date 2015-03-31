@@ -282,32 +282,6 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
         final GridView grid = (GridView) dialog.findViewById(R.id.gridViewCheckbox);
 
-
-        /*
-        // SmartBuy Vorauswahllisten erstellen
-
-        String[] geburstagArtikel = {"Partyhüte", "Besteck"};
-        ArrayList<EinkaufsArtikel> gebItems = new ArrayList<>();
-        EinkaufsArtikel artikel;
-        for (int i = 0; i < geburstagArtikel.length; i++) {
-            artikel = new EinkaufsArtikel(geburstagArtikel[i], "", null);
-            gebItems.add(artikel);
-
-        }
-
-        VorauswahlListe geburtstag = new VorauswahlListe("Geburtstag", gebItems);
-        vorauswahllisten.add(geburtstag);
-
-        String[] partyArtikel = {"Fleisch", "Bier"};
-        ArrayList<EinkaufsArtikel> partyItems = new ArrayList<>();
-        for (int i = 0; i < partyArtikel.length; i++) {
-            artikel = new EinkaufsArtikel(partyArtikel[i], "", null);
-            partyItems.add(artikel);
-
-        }
-        VorauswahlListe party = new VorauswahlListe("Party", partyItems);
-        vorauswahllisten.add(party);
-        */
         dbAdapter.openRead();
         vorauswahllisten = dbAdapter.getAllEntriesVorauswahlListe();
         dbAdapter.close();

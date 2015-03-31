@@ -5,14 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-
 import java.util.ArrayList;
-
 import database.DbAdapter;
 
-/**
- * Created by Eisbear_19 on 31.03.2015.
- */
 public class NeueEinkaufslisteAdapter extends BaseAdapter {
 
     private Context context;

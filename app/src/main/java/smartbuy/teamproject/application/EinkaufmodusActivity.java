@@ -76,8 +76,8 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
 
         badgeCount = new BadgeView(this, tabs, 1);
-        String anzahlGekauft = Integer.toString(liste.size());
-        badgeCount.setText(anzahlGekauft);
+        //String anzahlGekauft = Integer.toString(liste.size());
+        badgeCount.setText("0");
         badgeCount.setBadgePosition(BadgeView.POSITION_CENTER);
         badgeTime.setBadgeBackgroundColor(Color.RED);
         badgeCount.toggle();

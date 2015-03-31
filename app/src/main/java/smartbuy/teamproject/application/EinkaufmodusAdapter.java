@@ -17,22 +17,26 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import database.DbAdapter;
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
 
 public class EinkaufmodusAdapter extends BaseAdapter {
     private Context mContext;
-    private Einkaufsliste liste = null;
-    //StartbildschirmActivity.getAktListe();
-    private ArrayList<EinkaufsArtikel> listeArtikel;
+    private String aktListe;
+    private DbAdapter dbAdapter;
+    private ArrayList<database.EinkaufsArtikel> listeArtikel;
     private ArrayList<EinkaufsArtikel> listeArtikelGekauft;
-    private EinkaufsArtikel zuletztGekauft;
+    private database.EinkaufsArtikel zuletztGekauft;
 
     public EinkaufmodusAdapter(Context c) {
         mContext = c;
-        //liste = StartbildschirmActivity.getAktListe();
-        listeArtikel = liste.getItems();
-        listeArtikelGekauft = liste.getItemsBought();
+        aktListe = StartbildschirmActivity.getAktListe();
+        dbAdapter = StartbildschirmActivity.getDbAdapter();
+        dbAdapter.openRead();
+        listeArtikel = dbAdapter.getAllEntriesArtikel(aktListe);
+        //listeArtikelGekauft = liste.getItemsBought();
+        dbAdapter.close();
     }
 
     @Override
@@ -69,13 +73,15 @@ public class EinkaufmodusAdapter extends BaseAdapter {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listeArtikelGekauft.add(listeArtikel.get(position));
+                //listeArtikelGekauft.add(listeArtikel.get(position));
                 zuletztGekauft = listeArtikel.get(position);
                 listeArtikel.remove(position);
                 notifyDataSetChanged();
-                liste.setItems(listeArtikel);
-                liste.setItemsBought(listeArtikelGekauft);
+
+                //liste.setItems(listeArtikel);
+                //liste.setItemsBought(listeArtikelGekauft);
                 //StartbildschirmActivity.setAktListe(liste);
+
                 EinkaufmodusActivity.increment();
 
                 final Dialog loeschen_rueck = new Dialog(mContext);
@@ -90,12 +96,12 @@ public class EinkaufmodusAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         listeArtikel.add(position, zuletztGekauft);
-                        listeArtikelGekauft.remove(zuletztGekauft);
+                        //listeArtikelGekauft.remove(zuletztGekauft);
 
                         notifyDataSetChanged();
 
-                        liste.setItems(listeArtikel);
-                        liste.setItemsBought(listeArtikelGekauft);
+                       // liste.setItems(listeArtikel);
+                       // liste.setItemsBought(listeArtikelGekauft);
                        // StartbildschirmActivity.setAktListe(liste);
                         EinkaufmodusActivity.decrement();
                         loeschen_rueck.dismiss();
