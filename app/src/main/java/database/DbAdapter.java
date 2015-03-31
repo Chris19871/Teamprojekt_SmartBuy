@@ -296,10 +296,10 @@ public class DbAdapter
         {
             createEntryEinkaufArtikeltoTable(vorauswahllisten[0],partyArtikel[i],desc,partArtikelImage[i]);
         }
-        for(int i=0; i < geburstagArtikel.length; i++)
+       /* for(int i=0; i < geburstagArtikel.length; i++)
         {
             createEntryEinkaufArtikeltoTable(vorauswahllisten[1],geburstagArtikel[i],desc,geburstagArtikelImage[i]);
-        }
+        }*/
     }
 
     public void createEinkaufsliste(String tableName, ArrayList<EinkaufsArtikel> artikel)

@@ -1,6 +1,7 @@
 package smartbuy.teamproject.application;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,7 +13,7 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
 
     private Context context;
     private DbAdapter dbAdapter;
-    private ArrayList<database.EinkaufsArtikel> pItems;
+    private final ArrayList<database.EinkaufsArtikel> pItems;
     private ArrayList<CheckBox> checkBoxes;
 
     public NeueEinkaufslisteAdapter(Context context, DbAdapter dbAdapter, String item)
@@ -41,7 +42,7 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
     public ArrayList<database.EinkaufsArtikel> getCheckedItems()
     {
         ArrayList<database.EinkaufsArtikel> checkItems = new ArrayList<>();
-        for (int i = 0; i < checkBoxes.size(); i++)
+        for (int i = 0; i < pItems.size(); i++)
         {
             if (checkBoxes.get(i).isChecked() == true)
             {
@@ -53,12 +54,25 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
     }
 
     @Override
-    public CheckBox getView(int position, View convertView, ViewGroup parent) {
-        CheckBox box = new CheckBox(context);
-        box.setText(pItems.get(position).getName());
-        box.setTextSize(10);
-        checkBoxes.add(box);
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        return box;
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View gridView;
+        if (convertView == null) {
+            gridView = new View(context);
+            gridView = inflater.inflate( R.layout.checkbox , null);
+
+            CheckBox box = (CheckBox) gridView.findViewById(R.id.newProductcheckBox);
+            box.setText(pItems.get(position).getName());
+            box.setTextSize(10);
+            checkBoxes.add(box);
+
+        } else {
+
+            gridView = (View) convertView;
+        }
+
+        return gridView;
     }
 }
