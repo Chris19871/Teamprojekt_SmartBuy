@@ -41,8 +41,8 @@ public class DbHelper extends SQLiteOpenHelper
         String CREATE_EINKAUFSLISTEN_TABLE = "CREATE TABLE " + EINKAUFSLISTEN_TABLE + " (" +
                 EINKAUFSLISTEN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "name TEXT, "+
-                        "best_time INTEGER, "+
-                        "start_time INTEGER);";
+                        "best_time TEXT, "+
+                        "start_time TEXT);";
 
 
 

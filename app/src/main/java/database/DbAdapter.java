@@ -139,7 +139,7 @@ public class DbAdapter
         return cursorToEntryArtikel(cursor);
     }
 
-    public Einkaufsliste createEntryEinkaufsliste(String name, int bestTime, int startTime)
+    public Einkaufsliste createEntryEinkaufsliste(String name, String bestTime, String startTime)
     {
         ContentValues values = new ContentValues();
         values.put("name", name);
@@ -284,6 +284,7 @@ public class DbAdapter
 
         return cursorToEntryArtikel(cursor);
     }
+
     public void createVorauswahllisten()
     {
         for(int i=0; i < vorauswahllisten.length; i++)
@@ -301,5 +302,28 @@ public class DbAdapter
         }
     }
 
+    public void createEinkaufsliste(String tableName, ArrayList<EinkaufsArtikel> artikel)
+    {
+        createEntryEinkaufsliste(tableName,"00:00:00", "00:00:00");
+        addListe(tableName);
+        for(int i = 0; i < artikel.size(); i++)
+        {
+            String name = artikel.get(i).getName();
+            String desc = artikel.get(i).getDesc();
+            int image = artikel.get(i).getPic();
+
+            createEntryEinkaufArtikeltoTable(tableName,name,desc,image);
+        }
+    }
+
+    public void buyArtikel(String table, String artikel)
+    {
+        database.execSQL("UPDATE " + table +" set bought = 1 where name = " + artikel +";");
+    }
+
+    public void undoBuyArtikel(String table, String artikel)
+    {
+        database.execSQL("UPDATE " + table +" set bought = 0 where name = " + artikel +";");
+    }
 
 }
