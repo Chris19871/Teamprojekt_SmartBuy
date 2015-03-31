@@ -59,8 +59,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         geloschteArtikel = new ArrayList<>();
         geloschteArtikelPositionen = new ArrayList<>();
 
-        //aktListe = StartbildschirmActivity.getAktListe();
-        //aktListenName = aktListe.getName();
+        aktListenName = StartbildschirmActivity.getAktListe();
         einkaufslisteActionBar.setTitle(aktListenName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
 
@@ -78,9 +77,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!longClickEnabled) {
-                    //aktArtikel = items.get(position);
                     changeArticlelDialog(position);
-                    //allItems = aktListe.getAllItems();
                 }
             }
         });
@@ -347,6 +344,8 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         final EditText desc;
         final ImageView image;
 
+        database.EinkaufsArtikel tmpArtikel = dbAdapter.getArtikel(aktListenName, allItems.get(pos).getName());
+
         final Dialog newProducts = new Dialog(context);
         newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
         newProducts.setContentView(R.layout.neues_produkt_dialog);
@@ -355,8 +354,9 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         desc = (EditText) newProducts.findViewById(R.id.descNewProduct);
         image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
 
-        name.setText(aktArtikel.getName());
-        desc.setText(aktArtikel.getDesc());
+        name.setText(tmpArtikel.getName());
+        desc.setText(tmpArtikel.getDesc());
+        image.setImageResource(tmpArtikel.getPic());
 
         image.setOnClickListener(new OnClickListener() {
             @Override

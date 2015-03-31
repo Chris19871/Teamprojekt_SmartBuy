@@ -222,6 +222,21 @@ public class DbAdapter
         return EntriesList;
     }
 
+    public EinkaufsArtikel getArtikel(String table, String name)
+    {
+
+        EinkaufsArtikel artikel = null;
+        ArrayList<EinkaufsArtikel> artikelList = getAllEntriesArtikel(table);
+        for(int i = 0; i < artikelList.size(); i++)
+        {
+            if(artikelList.get(i).getName() == name)
+            {
+                return artikelList.get(i);
+            }
+        }
+
+        return artikel;
+    }
 
     private EinkaufsArtikel cursorToEntryArtikel(Cursor cursor) {
         EinkaufsArtikel artikel = new EinkaufsArtikel();
