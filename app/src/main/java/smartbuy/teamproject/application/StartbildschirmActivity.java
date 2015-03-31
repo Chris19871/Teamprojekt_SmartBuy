@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
@@ -20,9 +19,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -34,17 +31,16 @@ import database.DbAdapter;
 import database.Vorauswahl;
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
-import purchase.VorauswahlListe;
 import swipe.SwipeDismissListViewTouchListener;
 
 public class StartbildschirmActivity extends ActionBarActivity {
     private final Context context = this;
     private ArrayAdapter<Vorauswahl> vorauswahllistenitemListsAdapter;
-    private ArrayAdapter<Einkaufsliste> itemListsAdapter;
+    private ArrayAdapter<database.Einkaufsliste> itemListsAdapter;
 
     private int boxCounter = 0;
     private ArrayList<database.EinkaufsArtikel> addNewList;
-    private ArrayList<Einkaufsliste> einkaufsliste;
+    private ArrayList<database.Einkaufsliste> einkaufsliste;
     private ArrayList<Vorauswahl> vorauswahllisten;
     private EditText listName;
     private static String aktListe;
@@ -74,7 +70,9 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
         vorauswahllisten = new ArrayList<>();
 
-        einkaufsliste = new ArrayList<>();
+        dbAdapter.openRead();
+        einkaufsliste = dbAdapter.getAllEntriesEinkaufsliste();
+        dbAdapter.close();
         registerForContextMenu(findViewById(R.id.startscreenListView));
         ListView listView = (ListView) findViewById(R.id.startscreenListView);
         itemListsAdapter = new ArrayAdapter<>(this,
@@ -102,7 +100,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
                                     zuletztGeleoschtPosition = position;
-                                    zuletztGeleoscht = itemListsAdapter.getItem(position);
+                                    //zuletztGeleoscht = itemListsAdapter.getItem(position);
                                     itemListsAdapter.remove(itemListsAdapter.getItem(position));
                                 }
 
@@ -117,7 +115,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                                 loeschen_Ruck.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
+                                        //itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                                         itemListsAdapter.notifyDataSetChanged();
                                         loeschen_rueck.dismiss();
                                     }
@@ -241,7 +239,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
             break;
             case R.id.action_ContextMenu_delete: {
                 zuletztGeleoschtPosition = info.position;
-                zuletztGeleoscht = itemListsAdapter.getItem(info.position);
+               // zuletztGeleoscht = itemListsAdapter.getItem(info.position);
                 itemListsAdapter.remove(itemListsAdapter.getItem(info.position));
 
                 final Dialog loeschen_rueck = new Dialog(context);
@@ -255,7 +253,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 loeschen_Ruck.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
+                       // itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                         itemListsAdapter.notifyDataSetChanged();
                         loeschen_rueck.dismiss();
                     }
@@ -332,7 +330,14 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 } else {
                     NeueEinkaufslisteAdapter adapter = (NeueEinkaufslisteAdapter)grid.getAdapter();
                     ArrayList<database.EinkaufsArtikel> checkArticle = adapter.getCheckedItems();
-                    dbAdapter.createEinkaufsliste(listName.getText().toString(),checkArticle);
+                    dbAdapter.openWrite();
+                    dbAdapter.createEinkaufsliste(listName.getText().toString(), checkArticle);
+                    dbAdapter.close();
+
+                    einkaufsliste.clear();
+                    dbAdapter.openRead();
+                    einkaufsliste.addAll(dbAdapter.getAllEntriesEinkaufsliste());
+                    itemListsAdapter.notifyDataSetChanged();
                     dialog.dismiss();
                 }
             }
@@ -349,7 +354,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    public void addList(Einkaufsliste list) {
+    public void addList(database.Einkaufsliste list) {
         einkaufsliste.add(list);
     }
 
@@ -383,7 +388,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
     }
 
     public void resetList(int pos) {
-        Einkaufsliste list = itemListsAdapter.getItem(pos);
+       /* Einkaufsliste list = itemListsAdapter.getItem(pos);
         ArrayList<EinkaufsArtikel> itemList = list.getItems();
         ArrayList<EinkaufsArtikel> itemListBought = list.getItemsBought();
 
@@ -396,7 +401,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
         itemListBought.clear();
 
         list.setItems(itemList);
-        list.setItemsBought(itemListBought);
+        list.setItemsBought(itemListBought);*/
     }
 
 
