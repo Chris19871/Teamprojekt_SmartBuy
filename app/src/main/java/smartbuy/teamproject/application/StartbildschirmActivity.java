@@ -308,7 +308,12 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
 
                 addNewList = pItems;
-                NeueEinkaufslisteAdapter adapter = new NeueEinkaufslisteAdapter(context, dbAdapter,item);
+                database.EinkaufsArtikel artikel[] = new database.EinkaufsArtikel[pItems.size()];
+                for(int i = 0; i < artikel.length; i++)
+                {
+                    artikel[i] = pItems.get(i);
+                }
+                NeueEinkaufslisteAdapter adapter = new NeueEinkaufslisteAdapter(context, artikel);
                 grid.setAdapter(adapter);
             }
 
@@ -335,6 +340,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                     dbAdapter.openRead();
                     einkaufsliste.addAll(dbAdapter.getAllEntriesEinkaufsliste());
                     itemListsAdapter.notifyDataSetChanged();
+
                     dialog.dismiss();
                 }
             }

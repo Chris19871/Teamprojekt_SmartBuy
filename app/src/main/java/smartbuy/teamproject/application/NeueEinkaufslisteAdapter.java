@@ -6,33 +6,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+
 import java.util.ArrayList;
 import database.DbAdapter;
+import database.EinkaufsArtikel;
 
 public class NeueEinkaufslisteAdapter extends BaseAdapter {
 
     private Context context;
-    private DbAdapter dbAdapter;
-    private final ArrayList<database.EinkaufsArtikel> pItems;
-    private ArrayList<CheckBox> checkBoxes;
+    private EinkaufsArtikel artikel[];
+    private  ArrayList<database.EinkaufsArtikel> checkItems;
 
-    public NeueEinkaufslisteAdapter(Context context, DbAdapter dbAdapter, String item)
+    public NeueEinkaufslisteAdapter(Context context, EinkaufsArtikel artikel[])
     {
         this.context = context;
-        this.dbAdapter = dbAdapter;
-        dbAdapter.openRead();
-        this.pItems = dbAdapter.getAllEntriesArtikel(item);
-        dbAdapter.close();
-        checkBoxes = new ArrayList<>();
+        this.artikel = artikel;
+        this.checkItems = new ArrayList<>();
     }
     @Override
     public int getCount() {
-        return pItems.size();
+        return artikel.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return pItems.get(position);
+        return artikel[position];
     }
 
     @Override
@@ -41,38 +40,46 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
     }
     public ArrayList<database.EinkaufsArtikel> getCheckedItems()
     {
-        ArrayList<database.EinkaufsArtikel> checkItems = new ArrayList<>();
-        for (int i = 0; i < pItems.size(); i++)
-        {
-            if (checkBoxes.get(i).isChecked() == true)
-            {
-                checkItems.add(pItems.get(i));
-            }
-        }
 
         return checkItems;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
+        Holder holder;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View gridView;
         if (convertView == null) {
-            gridView = new View(context);
-            gridView = inflater.inflate( R.layout.checkbox , null);
+            holder = new Holder();
+            convertView = inflater.inflate( R.layout.checkbox , null);
 
-            CheckBox box = (CheckBox) gridView.findViewById(R.id.newProductcheckBox);
-            box.setText(pItems.get(position).getName());
-            box.setTextSize(10);
-            checkBoxes.add(box);
+            holder.checkBox = (CheckBox) convertView.findViewById(R.id.newProductcheckBox);
 
-        } else {
-
-            gridView = (View) convertView;
+            convertView.setTag(holder);
         }
+        else {
+            holder = (Holder) convertView.getTag();
+        }
+        holder.checkBox.setText(artikel[position].getName());
+        holder.checkBox.setTextSize(10);
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked == true)
+                {
+                    checkItems.add(artikel[position]);
+                }
+                else
+                {
+                    checkItems.remove(position);
+                }
 
-        return gridView;
+            }
+        });
+
+
+
+        return convertView;
     }
 }

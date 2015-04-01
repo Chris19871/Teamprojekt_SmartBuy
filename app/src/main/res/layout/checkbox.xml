@@ -6,5 +6,10 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/newProductcheckBox" />
+        android:id="@+id/newProductcheckBox"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="visible"/>
 </LinearLayout>
