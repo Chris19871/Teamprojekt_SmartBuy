@@ -34,14 +34,8 @@ public class DbAdapter
             "Grillbesteck",
             "Feuerzeug",
             "Sprudel",
-            "Würstchen",
-            "Tomaten",
-            "Mayo",
-            "Salat",
-            "Getränkeuntersetzer",
-            "Servietten",
-            "Gläser",
-            "Baguette",
+            "Würstchen"
+
     };
     private int[] partArtikelImage = {
             R.mipmap.image_fleisch,
@@ -53,14 +47,8 @@ public class DbAdapter
             R.mipmap.smartbuy_logo,
             R.mipmap.smartbuy_logo,
             R.mipmap.image_limonade,
-            R.mipmap.image_fleisch,
-            R.mipmap.image_gemuse,
-            R.mipmap.smartbuy_logo,
-            R.mipmap.image_gemuse,
-            R.mipmap.smartbuy_logo,
-            R.mipmap.smartbuy_logo,
-            R.mipmap.smartbuy_logo,
-            R.mipmap.smartbuy_logo
+            R.mipmap.image_fleisch
+
     };
     private String[] geburstagArtikel = {
             "Partyhüte",
@@ -72,14 +60,8 @@ public class DbAdapter
             "Pizza",
             "Fleisch",
             "Tomaten",
-            "Nudeln",
-            "Mayo",
-            "Salat",
-            "Paprika",
-            "Gurken",
-            "Käsehappchen",
-            "Süßigkeiten",
-            "Partydeko",
+            "Nudeln"
+
 
     };
     private int[] geburstagArtikelImage = {
@@ -92,14 +74,8 @@ public class DbAdapter
             R.mipmap.smartbuy_logo,
             R.mipmap.image_fleisch,
             R.mipmap.image_gemuse,
-            R.mipmap.smartbuy_logo,
-            R.mipmap.smartbuy_logo,
-            R.mipmap.image_gemuse,
-            R.mipmap.image_gemuse,
-            R.mipmap.image_gemuse,
-            R.mipmap.image_kase,
-            R.mipmap.smartbuy_logo,
             R.mipmap.smartbuy_logo
+
     };
 
 

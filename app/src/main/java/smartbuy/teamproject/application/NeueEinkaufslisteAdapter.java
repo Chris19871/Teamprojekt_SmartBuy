@@ -40,7 +40,6 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
     }
     public ArrayList<database.EinkaufsArtikel> getCheckedItems()
     {
-
         return checkItems;
     }
 
@@ -72,7 +71,8 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
                 }
                 else
                 {
-                    checkItems.remove(position);
+                    database.EinkaufsArtikel temArtikel = artikel[position];
+                    checkItems.remove(temArtikel);
                 }
 
             }
