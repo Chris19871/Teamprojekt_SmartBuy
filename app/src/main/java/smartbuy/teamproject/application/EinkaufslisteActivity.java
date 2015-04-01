@@ -49,6 +49,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
     private ArrayList<database.EinkaufsArtikel> geloschteArtikel;
     private ArrayList<Integer> geloschteArtikelPositionen;
     private boolean articleDelete = false;
+    private boolean isDeleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                 new SwipeDismissListViewTouchListener(
                         listView,
                         new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            int pos;
                             @Override
                             public boolean canDismiss(int position) {
                                 return true;
@@ -106,11 +108,14 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
+                                    pos = position;
                                     geloschteArtikel.clear();
                                     geloschteArtikelPositionen.clear();
                                     geloschteArtikelPositionen.add(position);
                                     geloschteArtikel.add(itemAdapter.getItem(position));
                                     itemAdapter.remove(itemAdapter.getItem(position));
+                                    isDeleted = true;
+
                                 }
                                 final Dialog loeschen_rueck = new Dialog(context);
                                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -123,15 +128,26 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                                 loeschen_Ruck.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-
+                                        isDeleted = false;
                                         itemAdapter.insert(geloschteArtikel.get(0), geloschteArtikelPositionen.get(0));
                                         itemAdapter.notifyDataSetChanged();
                                         loeschen_rueck.dismiss();
+
                                     }
                                 });
 
                                 loeschen_rueck.show();
+                                if(isDeleted)
+                                {
+                                    dbAdapter.openWrite();
+                                    dbAdapter.deleteArtikel(aktListenName , geloschteArtikel.get(0).getName());
+                                    allItems.clear();
+                                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+                                    dbAdapter.close();
+                                    itemAdapter.notifyDataSetChanged();
+                                }
                             }
+
                         });
         listView.setOnTouchListener(touchListener);
         // Setting this scroll listener is required to ensure that during ListView scrolling,
@@ -268,9 +284,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    addArticle(name.getText().toString(), desc.getText().toString(), image);
-                    //allItems = aktListe.getAllItems();
-                    itemAdapter.notifyDataSetChanged();
+                    addArticle(name.getText().toString(), desc.toString(), image.getId());
                     newProducts.dismiss();
                 }
             }
@@ -346,7 +360,11 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         final EditText desc;
         final ImageView image;
 
+        dbAdapter.openRead();
         database.EinkaufsArtikel tmpArtikel = dbAdapter.getArtikel(aktListenName, allItems.get(pos).getName());
+        dbAdapter.close();
+
+
 
         final Dialog newProducts = new Dialog(context);
         newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -355,6 +373,10 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         name = (EditText) newProducts.findViewById(R.id.productName);
         desc = (EditText) newProducts.findViewById(R.id.descNewProduct);
         image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
+
+        dbAdapter.openRead();
+        final long id = dbAdapter.getArtikel(aktListenName, tmpArtikel.getName()).getId();
+        dbAdapter.close();
 
         name.setText(tmpArtikel.getName());
         desc.setText(tmpArtikel.getDesc());
@@ -391,7 +413,12 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    changeArticle(name.getText().toString(), desc.getText().toString(), image, pos);
+                    changeArticle(name.getText().toString(), desc.getText().toString(), image.getId(), id);
+
+                    allItems.clear();
+                    dbAdapter.openWrite();
+                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+                    dbAdapter.close();
                     itemAdapter.notifyDataSetChanged();
                     newProducts.dismiss();
                 }
@@ -407,16 +434,20 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         newProducts.show();
     }
 
-    public void changeArticle(String name, String desc, ImageView image, int pos) {
-        EinkaufsArtikel newArtikel = new EinkaufsArtikel(name, desc, image);
-        //aktListe.delItem(pos);
-        //aktListe.addItemPos(newArtikel, pos);
+    public void changeArticle(String name, String desc, int image, long id) {
+        dbAdapter.openWrite();
+
+        dbAdapter.changeArtikel(aktListenName, name , desc, image, id);
+        dbAdapter.close();
     }
 
-    public void addArticle(String name, String desc, ImageView image) {
-        EinkaufsArtikel newArtikel = new EinkaufsArtikel(name, desc, image);
-        //aktListe.addItem(newArtikel);
-        //StartbildschirmActivity.setAktListe(aktListe);
+    public void addArticle(String name, String desc, int image) {
+        dbAdapter.openWrite();
+        dbAdapter.createEntryEinkaufArtikeltoTable(aktListenName, name, desc, image);
+        allItems.clear();
+        allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+        dbAdapter.close();
+        itemAdapter.notifyDataSetChanged();
     }
 
     public void deleteSelectedItems() {

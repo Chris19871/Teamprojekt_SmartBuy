@@ -229,9 +229,9 @@ public class DbAdapter
         ArrayList<EinkaufsArtikel> artikelList = getAllEntriesArtikel(table);
         for(int i = 0; i < artikelList.size(); i++)
         {
-            if(artikelList.get(i).getName() == name)
+            if(artikelList.get(i).getName().equals(name))
             {
-                return artikelList.get(i);
+                artikel = artikelList.get(i);
             }
         }
 
@@ -318,12 +318,26 @@ public class DbAdapter
 
     public void buyArtikel(String table, String artikel)
     {
-        database.execSQL("UPDATE " + table +" set bought = 1 where name = " + artikel +";");
+        database.execSQL("UPDATE " + table +" set bought = 1 WHERE name = " + artikel +";");
     }
 
     public void undoBuyArtikel(String table, String artikel)
     {
-        database.execSQL("UPDATE " + table +" set bought = 0 where name = " + artikel +";");
+        database.execSQL("UPDATE " + table +" set bought = 0 WHERE name = " + artikel +";");
     }
 
+    public void deleteArtikel(String table, String artikel)
+    {
+        database.execSQL("DELETE FROM " + table + " WHERE name = " + artikel + ";");
+    }
+
+    public void changeArtikel(String table, String artikel, String desc, int image, long id)
+    {
+        if(desc.equals(""))
+        {
+            desc = null;
+        }
+        database.execSQL("UPDATE " + table + " set name = '" + artikel +"', desc = '" + desc +
+                "', image = " + image + " WHERE id = " + id + ";");
+    }
 }
