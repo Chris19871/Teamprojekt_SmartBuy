@@ -14,6 +14,6 @@
         android:title="@string/Delete" />
     <item
         android:id="@+id/action_ContextMenu_reset"
-        android:title="@string/Return" />
+        android:title="@string/Reset" />
 
 </menu>

@@ -115,13 +115,10 @@ public class StartbildschirmActivity extends ActionBarActivity {
                                         if (delet == false)
                                         {
                                             dbAdapter.openWrite();
-                                            dbAdapter.deleteTable(itemListsAdapter.getItem(zuletztGeleoschtPosition).getName());
+                                            dbAdapter.deleteTableEinkaufliste(itemListsAdapter.getItem(zuletztGeleoschtPosition).getName());
                                             dbAdapter.close();
                                             delet =false;
                                         }
-
-
-
                                     }
                                 });
                                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -220,6 +217,10 @@ public class StartbildschirmActivity extends ActionBarActivity {
                             name.setHintTextColor(Color.parseColor("#FF0000"));
                             name.setHint("Feld muss ausgefüllt werden!");
                         } else {
+                            dbAdapter.openWrite();
+                            dbAdapter.changeListName(itemListsAdapter.getItem(info.position).getName(),name.getText().toString());
+                            dbAdapter.close();
+
 
                             itemListsAdapter.getItem(info.position).setName(name.getText().toString());
                             itemListsAdapter.notifyDataSetChanged();
@@ -261,10 +262,22 @@ public class StartbildschirmActivity extends ActionBarActivity {
             break;
             case R.id.action_ContextMenu_delete: {
                 zuletztGeleoschtPosition = info.position;
-               // zuletztGeleoscht = itemListsAdapter.getItem(info.position);
+                zuletztGeleoscht = itemListsAdapter.getItem(info.position);
                 itemListsAdapter.remove(itemListsAdapter.getItem(info.position));
 
+                itemListsAdapter.notifyDataSetChanged();
+
                 final Dialog loeschen_rueck = new Dialog(context);
+
+                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        dbAdapter.openWrite();
+                        dbAdapter.deleteTableEinkaufliste(itemListsAdapter.getItem(zuletztGeleoschtPosition).getName());
+                        dbAdapter.close();
+                        delet =false;
+                    }
+                });
                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
                 loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -275,8 +288,10 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 loeschen_Ruck.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       // itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
+                        delet = true;
+                        itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                         itemListsAdapter.notifyDataSetChanged();
+
                         loeschen_rueck.dismiss();
                     }
                 });

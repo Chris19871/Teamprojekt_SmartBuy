@@ -18,7 +18,7 @@
     <string name="Change_Name">Change Name</string>
     <string name="Best_Time">Best time</string>
     <string name="Delete">Delete</string>
-    <string name="Return">Return</string>
+    <string name="Reset">Reset</string>
 
     <!-- Strings für einkaufmodus-->
     <string name="title_activity_einkaufmodus">Shopping mode</string>
