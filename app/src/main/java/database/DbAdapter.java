@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import smartbuy.teamproject.application.R;
 
@@ -342,8 +344,9 @@ public class DbAdapter
         return  artikelNotBought;
     }
 
-    public void deleteTable(String table)
+    public void deleteTableEinkaufliste(String table)
     {
         database.execSQL("DROP TABLE IF EXISTS " + table);
+        database.delete("einkaufslisten", "name = " + table, null);
     }
 }
