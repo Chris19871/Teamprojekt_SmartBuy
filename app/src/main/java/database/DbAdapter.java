@@ -345,4 +345,9 @@ public class DbAdapter
         }
         return  artikelNotBought;
     }
+
+    public void deleteTable(String table)
+    {
+        database.execSQL("DROP TABLE IF EXISTS " + table);
+    }
 }
