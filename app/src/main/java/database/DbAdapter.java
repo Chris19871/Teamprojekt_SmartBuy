@@ -376,8 +376,8 @@ public class DbAdapter
 
     public void changeListNameVorauswahlliste(String oldName, String newName)
     {
-        Einkaufsliste tmp = null;
-        ArrayList<Einkaufsliste> liste = getAllEntriesEinkaufsliste();
+        Vorauswahl tmp = null;
+        ArrayList<Vorauswahl> liste = getAllEntriesVorauswahlListe();
         for (int i = 0; i < liste.size(); i++)
         {
             if (liste.get(i).getName().equals(oldName))
