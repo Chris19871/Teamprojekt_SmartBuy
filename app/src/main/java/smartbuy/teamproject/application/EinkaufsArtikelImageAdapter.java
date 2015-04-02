@@ -39,8 +39,9 @@ public class EinkaufsArtikelImageAdapter extends BaseAdapter {
             R.string.yogurt
     };
 
-    public EinkaufsArtikelImageAdapter(Context c) {
+    public EinkaufsArtikelImageAdapter(Context c, Dialog d) {
         mContext = c;
+        dialog = d;
      }
 
     @Override

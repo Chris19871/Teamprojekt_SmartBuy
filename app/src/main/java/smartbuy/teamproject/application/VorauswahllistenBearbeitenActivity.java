@@ -27,25 +27,27 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import database.DbAdapter;
 import purchase.EinkaufsArtikel;
 import purchase.Einkaufsliste;
 import swipe.SwipeDismissListViewTouchListener;
 
 public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
-    private String listenName;
-    private Einkaufsliste aktListe;
+    private String aktListenName;
+    private DbAdapter dbAdapter;
     private final Context context = this;
-    private ArrayAdapter<EinkaufsArtikel> itemAdapter;
+    private ArrayAdapter<database.EinkaufsArtikel> itemAdapter;
     private EinkaufsArtikel aktArtikel;
     private ListView listView;
-    private ArrayList<EinkaufsArtikel> items;
-    private ArrayList<EinkaufsArtikel> allItems;
+    private ArrayList<database.EinkaufsArtikel> items;
+    private ArrayList<database.EinkaufsArtikel> allItems;
     private ActionBar einkaufslisteActionBar;
     private boolean longClickEnabled;
     private boolean deleteEnable = false;
-    private ArrayList<EinkaufsArtikel> geloschteArtikel;
+    private ArrayList<database.EinkaufsArtikel> geloschteArtikel;
     private ArrayList<Integer> geloschteArtikelPositionen;
     private boolean articleDelete = false;
+    private boolean isDeleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +58,17 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         geloschteArtikel = new ArrayList<>();
         geloschteArtikelPositionen = new ArrayList<>();
 
+        dbAdapter = StartbildschirmActivity.getDbAdapter();
+        aktListenName = VorauswahllistenActivity.getAktVorauswahlListe();
 
-        //aktListe = StartbildschirmActivity.getAktListe();
-        listenName = aktListe.getName();
-        einkaufslisteActionBar.setTitle(listenName);
+        einkaufslisteActionBar.setTitle(aktListenName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
 
         listView = (ListView) findViewById(R.id.vorAuswahllistebearbietenListView);
-        items = aktListe.getItems();
-        allItems = aktListe.getAllItems();
+
+        dbAdapter.openRead();
+        allItems = dbAdapter.getAllEntriesArtikel(aktListenName);
+        dbAdapter.close();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
                 R.layout.listview_design, R.id.listViewDesign, allItems);
@@ -74,9 +78,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!longClickEnabled) {
-                    aktArtikel = items.get(position);
                     changeArticlelDialog(position);
-                    allItems = aktListe.getAllItems();
                 }
             }
         });
@@ -85,7 +87,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 longClickEnabled = true;
-                aktArtikel = items.get(position);
                 deleteMode();
                 return true;
             }
@@ -95,6 +96,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                 new SwipeDismissListViewTouchListener(
                         listView,
                         new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            int pos;
                             @Override
                             public boolean canDismiss(int position) {
                                 return true;
@@ -103,11 +105,13 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
+                                    pos = position;
                                     geloschteArtikel.clear();
                                     geloschteArtikelPositionen.clear();
                                     geloschteArtikelPositionen.add(position);
                                     geloschteArtikel.add(itemAdapter.getItem(position));
                                     itemAdapter.remove(itemAdapter.getItem(position));
+                                    isDeleted = true;
                                 }
                                 final Dialog loeschen_rueck = new Dialog(context);
                                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -120,7 +124,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                                 loeschen_Ruck.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-
+                                        isDeleted = false;
                                         itemAdapter.insert(geloschteArtikel.get(0), geloschteArtikelPositionen.get(0));
                                         itemAdapter.notifyDataSetChanged();
                                         loeschen_rueck.dismiss();
@@ -128,6 +132,15 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                                 });
 
                                 loeschen_rueck.show();
+                                if(isDeleted)
+                                {
+                                    dbAdapter.openWrite();
+                                    dbAdapter.deleteArtikel(aktListenName , geloschteArtikel.get(0).getName());
+                                    allItems.clear();
+                                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+                                    dbAdapter.close();
+                                    itemAdapter.notifyDataSetChanged();
+                                }
                             }
                         });
         listView.setOnTouchListener(touchListener);
@@ -237,7 +250,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
-                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 
@@ -261,9 +274,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    addArticle(name.getText().toString(), desc.getText().toString(), image);
-                    allItems = aktListe.getAllItems();
-                    itemAdapter.notifyDataSetChanged();
+                    addArticle(name.getText().toString(), desc.toString(), image.getId());
                     newProducts.dismiss();
                 }
             }
@@ -333,6 +344,11 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         final EditText desc;
         final ImageView image;
 
+        dbAdapter.openRead();
+        database.EinkaufsArtikel tmpArtikel = dbAdapter.getArtikel(aktListenName, allItems.get(pos).getName());
+        dbAdapter.close();
+
+
         final Dialog newProducts = new Dialog(context);
         newProducts.requestWindowFeature(Window.FEATURE_NO_TITLE);
         newProducts.setContentView(R.layout.neues_produkt_dialog);
@@ -341,8 +357,13 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         desc = (EditText) newProducts.findViewById(R.id.descNewProduct);
         image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
 
+        dbAdapter.openRead();
+        final long id = dbAdapter.getArtikel(aktListenName, tmpArtikel.getName()).getId();
+        dbAdapter.close();
+
         name.setText(aktArtikel.getName());
         desc.setText(aktArtikel.getDesc());
+        image.setImageResource(tmpArtikel.getPic());
 
         image.setOnClickListener(new OnClickListener() {
             @Override
@@ -353,7 +374,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
-                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 
@@ -375,7 +396,12 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    changeArticle(name.getText().toString(), desc.getText().toString(), image, pos);
+                    changeArticle(name.getText().toString(), desc.getText().toString(), image.getId(), id);
+
+                    allItems.clear();
+                    dbAdapter.openWrite();
+                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+                    dbAdapter.close();
                     itemAdapter.notifyDataSetChanged();
                     newProducts.dismiss();
                 }
@@ -391,16 +417,20 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         newProducts.show();
     }
 
-    public void changeArticle(String name, String desc, ImageView image, int pos) {
-        EinkaufsArtikel newArtikel = new EinkaufsArtikel(name, desc, image);
-        aktListe.delItem(pos);
-        aktListe.addItemPos(newArtikel, pos);
+    public void changeArticle(String name, String desc, int image, long id) {
+        dbAdapter.openWrite();
+
+        dbAdapter.changeArtikel(aktListenName, name , desc, image, id);
+        dbAdapter.close();
     }
 
-    public void addArticle(String name, String desc, ImageView image) {
-        EinkaufsArtikel newArtikel = new EinkaufsArtikel(name, desc, image);
-        aktListe.addItem(newArtikel);
-        //StartbildschirmActivity.setAktListe(aktListe);
+    public void addArticle(String name, String desc, int image) {
+        dbAdapter.openWrite();
+        dbAdapter.createEntryEinkaufArtikeltoTable(aktListenName, name, desc, image);
+        allItems.clear();
+        allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+        dbAdapter.close();
+        itemAdapter.notifyDataSetChanged();
     }
 
     public void deleteSelectedItems() {
@@ -422,19 +452,4 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         normalMode();
     }
 
-    public String getListenName() {
-        return listenName;
-    }
-
-    public void setListenName(String listenName) {
-        this.listenName = listenName;
-    }
-
-    public Einkaufsliste getAktListe() {
-        return aktListe;
-    }
-
-    public void setAktListe(Einkaufsliste aktListe) {
-        this.aktListe = aktListe;
-    }
 }

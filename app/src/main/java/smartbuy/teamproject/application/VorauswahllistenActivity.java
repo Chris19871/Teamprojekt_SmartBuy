@@ -28,6 +28,7 @@ public class VorauswahllistenActivity extends ActionBarActivity {
     private final Context context = this;
     private ArrayAdapter<Vorauswahl> newVorauswahllistenListsAdapter;
     private ArrayList<Vorauswahl> newVorauswahllisten;
+    private static String aktVorauswahlListe;
     private DbAdapter dbAdapter;
 
     @Override
@@ -50,6 +51,7 @@ public class VorauswahllistenActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                aktVorauswahlListe = newVorauswahllisten.get(position).getName();
                 change();
             }
         });
@@ -147,6 +149,9 @@ public class VorauswahllistenActivity extends ActionBarActivity {
         });
         auswahllistenDialog.show();
 
+    }
+    public static String getAktVorauswahlListe() {
+        return aktVorauswahlListe;
     }
 
 

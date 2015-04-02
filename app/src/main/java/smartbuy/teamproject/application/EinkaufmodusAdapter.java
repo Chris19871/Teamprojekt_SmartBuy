@@ -90,12 +90,14 @@ public class EinkaufmodusAdapter extends BaseAdapter
                 //listeArtikel.remove(position);
 
 
+
                 dbAdapter.openRead();
                 listeArtikel.clear();
                 listeArtikel.addAll(dbAdapter.getAllItemsNotBought(aktListe));
                 listeArtikelGekauft.clear();
                 listeArtikelGekauft.addAll(dbAdapter.getAllItemsBought(aktListe));
                 dbAdapter.close();
+
                 notifyDataSetChanged();
 
 

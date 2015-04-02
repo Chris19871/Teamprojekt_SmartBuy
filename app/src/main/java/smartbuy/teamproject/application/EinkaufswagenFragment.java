@@ -39,6 +39,8 @@ public class EinkaufswagenFragment extends Fragment {
                 R.layout.listview_design, R.id.listViewDesign, itemsBought);
         list.setAdapter(itemAdapter);
 
+        itemAdapter.notifyDataSetChanged();
+
 
         return view;
     }

@@ -36,7 +36,6 @@ import swipe.SwipeDismissListViewTouchListener;
 public class EinkaufslisteActivity extends ActionBarActivity {
     private String aktListenName;
     private DbAdapter dbAdapter;
-    //private Einkaufsliste aktListe;
     private final Context context = this;
     private ArrayAdapter<database.EinkaufsArtikel> itemAdapter;
     private EinkaufsArtikel aktArtikel;
@@ -67,7 +66,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
 
         listView = (ListView) findViewById(R.id.einkaufslisteListView);
-        //items = aktListe.getItems();
+
         dbAdapter.openRead();
         allItems = dbAdapter.getAllEntriesArtikel(aktListenName);
         dbAdapter.close();
@@ -89,7 +88,6 @@ public class EinkaufslisteActivity extends ActionBarActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 longClickEnabled = true;
-                //aktArtikel = items.get(position);
                 deleteMode();
                 return true;
             }
@@ -132,7 +130,6 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                                         itemAdapter.insert(geloschteArtikel.get(0), geloschteArtikelPositionen.get(0));
                                         itemAdapter.notifyDataSetChanged();
                                         loeschen_rueck.dismiss();
-
                                     }
                                 });
 
@@ -260,7 +257,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
-                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 
@@ -391,7 +388,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
 
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
-                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 
