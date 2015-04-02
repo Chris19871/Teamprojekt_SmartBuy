@@ -91,7 +91,7 @@ public class VorauswahllistenActivity extends ActionBarActivity {
                                     if (delet == false)
                                     {
                                         dbAdapter.openWrite();
-                                        dbAdapter.deleteTableVorauswahl(newVorauswahllistenListsAdapter.getItem(zuletztGeleoschtPosition).getName());
+                                        dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName());
                                         dbAdapter.close();
                                         delet =false;
                                     }
@@ -216,7 +216,7 @@ public class VorauswahllistenActivity extends ActionBarActivity {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         dbAdapter.openWrite();
-                        dbAdapter.deleteTableVorauswahl(newVorauswahllistenListsAdapter.getItem(zuletztGeleoschtPosition).getName());
+                        dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName());
                         dbAdapter.close();
                         delet =false;
                     }

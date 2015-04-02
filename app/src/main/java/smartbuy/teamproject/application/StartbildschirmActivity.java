@@ -117,7 +117,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                                         if (delet == false)
                                         {
                                             dbAdapter.openWrite();
-                                            dbAdapter.deleteTableEinkaufliste(itemListsAdapter.getItem(zuletztGeleoschtPosition).getName());
+                                            dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName());
                                             dbAdapter.close();
                                             delet = false;
                                         }
@@ -277,7 +277,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                         if (delet == false)
                         {
                             dbAdapter.openWrite();
-                            dbAdapter.deleteTableEinkaufliste(itemListsAdapter.getItem(zuletztGeleoschtPosition).getName());
+                            dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName());
                             dbAdapter.close();
                             delet = false;
                         }
