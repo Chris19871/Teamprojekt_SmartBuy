@@ -37,7 +37,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
     private DbAdapter dbAdapter;
     private final Context context = this;
     private ArrayAdapter<database.EinkaufsArtikel> itemAdapter;
-    private EinkaufsArtikel aktArtikel;
     private ListView listView;
     private ArrayList<database.EinkaufsArtikel> items;
     private ArrayList<database.EinkaufsArtikel> allItems;
@@ -361,8 +360,8 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         final long id = dbAdapter.getArtikel(aktListenName, tmpArtikel.getName()).getId();
         dbAdapter.close();
 
-        name.setText(aktArtikel.getName());
-        desc.setText(aktArtikel.getDesc());
+        name.setText(tmpArtikel.getName());
+        desc.setText(tmpArtikel.getDesc());
         image.setImageResource(tmpArtikel.getPic());
 
         image.setOnClickListener(new OnClickListener() {
