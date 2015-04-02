@@ -358,10 +358,11 @@ public class DbAdapter
 
     public void changeListName(String oldName, String newName)
     {
-        database.execSQL("ALTER TABLE " + oldName + " RENAME TO " + newName +";");
         ArrayList<Einkaufsliste> liste = getAllEntriesEinkaufsliste();
         Einkaufsliste tmp = liste.get(liste.indexOf(oldName));
         long id = tmp.getId();
+
+        database.execSQL("ALTER TABLE " + oldName + " RENAME TO " + newName +";");
         database.execSQL("UPDATE vorauswahllisten set name = '" + newName +"' WHERE id = " + id + ";");
     }
 }
