@@ -356,13 +356,39 @@ public class DbAdapter
         database.delete("vorauswahllisten", "name = " + table, null);
     }
 
-    public void changeListName(String oldName, String newName)
+    public void changeListNameEinkaufsliste(String oldName, String newName)
     {
+        Einkaufsliste tmp = null;
         ArrayList<Einkaufsliste> liste = getAllEntriesEinkaufsliste();
-        Einkaufsliste tmp = liste.get(liste.indexOf(oldName));
+        for (int i = 0; i < liste.size(); i++)
+        {
+            if (liste.get(i).getName().equals(oldName))
+            {
+                tmp = liste.get(i);
+            }
+        }
+
         long id = tmp.getId();
 
         database.execSQL("ALTER TABLE " + oldName + " RENAME TO " + newName +";");
-        database.execSQL("UPDATE vorauswahllisten set name = '" + newName +"' WHERE id = " + id + ";");
+        database.execSQL("UPDATE einkaufslisten set name = '" + newName +"' WHERE name = '" + oldName + "';");
+    }
+
+    public void changeListNameVorauswahlliste(String oldName, String newName)
+    {
+        Einkaufsliste tmp = null;
+        ArrayList<Einkaufsliste> liste = getAllEntriesEinkaufsliste();
+        for (int i = 0; i < liste.size(); i++)
+        {
+            if (liste.get(i).getName().equals(oldName))
+            {
+                tmp = liste.get(i);
+            }
+        }
+
+        long id = tmp.getId();
+
+        database.execSQL("ALTER TABLE " + oldName + " RENAME TO " + newName +";");
+        database.execSQL("UPDATE vorauswahllisten set name = '" + newName +"' WHERE name = '" + oldName + "';");
     }
 }

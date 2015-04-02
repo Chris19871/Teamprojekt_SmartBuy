@@ -109,15 +109,17 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
                                 final Dialog loeschen_rueck = new Dialog(context);
 
-                                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
+                                {
                                     @Override
-                                    public void onDismiss(DialogInterface dialog) {
+                                    public void onDismiss(DialogInterface dialog)
+                                    {
                                         if (delet == false)
                                         {
                                             dbAdapter.openWrite();
                                             dbAdapter.deleteTableEinkaufliste(itemListsAdapter.getItem(zuletztGeleoschtPosition).getName());
                                             dbAdapter.close();
-                                            delet =false;
+                                            delet = false;
                                         }
                                     }
                                 });
@@ -218,7 +220,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                             name.setHint("Feld muss ausgefüllt werden!");
                         } else {
                             dbAdapter.openWrite();
-                            dbAdapter.changeListName(itemListsAdapter.getItem(info.position).getName(),name.getText().toString());
+                            dbAdapter.changeListNameEinkaufsliste(itemListsAdapter.getItem(info.position).getName(),name.getText().toString());
                             dbAdapter.close();
 
 
