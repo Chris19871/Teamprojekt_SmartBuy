@@ -391,20 +391,9 @@ public class StartbildschirmActivity extends ActionBarActivity {
     }
 
     public void resetList(int pos) {
-       /* Einkaufsliste list = itemListsAdapter.getItem(pos);
-        ArrayList<EinkaufsArtikel> itemList = list.getItems();
-        ArrayList<EinkaufsArtikel> itemListBought = list.getItemsBought();
-
-        for (int i = 0; i < itemList.size(); i++) {
-            itemListBought.add(itemList.get(i));
-        }
-
-        itemList.clear();
-        itemList = itemListBought;
-        itemListBought.clear();
-
-        list.setItems(itemList);
-        list.setItemsBought(itemListBought);*/
+        dbAdapter.openWrite();
+        dbAdapter.resetList(itemListsAdapter.getItem(pos).getName());
+        dbAdapter.close();
     }
 
 

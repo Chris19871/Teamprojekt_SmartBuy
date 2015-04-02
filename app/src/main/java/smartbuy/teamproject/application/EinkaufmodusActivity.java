@@ -23,13 +23,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import badge.BadgeView;
+import database.DbAdapter;
 import purchase.EinkaufsArtikel;
 
 public class EinkaufmodusActivity extends ActionBarActivity {
     private final Context context = this;
     private FragmentTabHost einkaufmodusTabHost;
     private ActionBar einkaufsmodusActionBar;
-    private ArrayList<EinkaufsArtikel> liste;
     private static final long SLEEPTIME = 1000;
     private boolean running;
     private Thread refreshThread;
@@ -40,16 +40,19 @@ public class EinkaufmodusActivity extends ActionBarActivity {
     private String hours = "";
     private int hoursCount = 0;
     private static BadgeView badgeCount;
+    private DbAdapter dbAdapter;
+    private String aktListe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufmodus);
+        dbAdapter = StartbildschirmActivity.getDbAdapter();
 
-        //liste = StartbildschirmActivity.getAktListe().getItemsBought();
+        aktListe = StartbildschirmActivity.getAktListe();
 
         einkaufsmodusActionBar = getSupportActionBar();
-        einkaufsmodusActionBar.setTitle(StartbildschirmActivity.getAktListe());
+        einkaufsmodusActionBar.setTitle(aktListe);
         einkaufsmodusActionBar.setDisplayShowTitleEnabled(true);
 
         einkaufmodusTabHost = (FragmentTabHost) findViewById(R.id.tabHost);
@@ -76,8 +79,10 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
 
         badgeCount = new BadgeView(this, tabs, 1);
-        //String anzahlGekauft = Integer.toString(liste.size());
-        badgeCount.setText("0");
+        dbAdapter.openRead();
+        String anzahlGekauft = Integer.toString(dbAdapter.getAllItemsBought(aktListe).size());
+        dbAdapter.close();
+        badgeCount.setText(anzahlGekauft);
         badgeCount.setBadgePosition(BadgeView.POSITION_CENTER);
         badgeTime.setBadgeBackgroundColor(Color.RED);
         badgeCount.toggle();

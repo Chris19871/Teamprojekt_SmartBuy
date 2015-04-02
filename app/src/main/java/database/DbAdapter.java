@@ -292,14 +292,14 @@ public class DbAdapter
         }
     }
 
-    public void buyArtikel(String table, String artikel)
+    public void buyArtikel(String table, long id)
     {
-        database.execSQL("UPDATE " + table +" set bought = 1 WHERE name = " + artikel +";");
+        database.execSQL("UPDATE " + table +" set bought = 1 WHERE id = " + id +";");
     }
 
-    public void undoBuyArtikel(String table, String artikel)
+    public void undoBuyArtikel(String table, long id)
     {
-        database.execSQL("UPDATE " + table +" set bought = 0 WHERE name = " + artikel +";");
+        database.execSQL("UPDATE " + table +" set bought = 0 WHERE id = " + id +";");
     }
 
     public void deleteArtikel(String table, String artikel)
@@ -315,5 +315,34 @@ public class DbAdapter
         }
         database.execSQL("UPDATE " + table + " set name = '" + artikel +"', desc = '" + desc +
                 "', image = " + image + " WHERE id = " + id + ";");
+    }
+
+    public void resetList(String table)
+    {
+        database.execSQL("UPDATE " + table + " set bought = 0 WHERE bought = 1;");
+    }
+
+    public ArrayList<EinkaufsArtikel> getAllItemsBought(String table)
+    {
+        ArrayList<EinkaufsArtikel> artikel = getAllEntriesArtikel(table);
+        ArrayList<EinkaufsArtikel> artikelBought = new ArrayList<>();
+        for(int i = 0; i < artikel.size(); i++)
+        {
+            if(artikel.get(i).getBought() == 1)
+                artikelBought.add(artikel.get(i));
+        }
+        return  artikelBought;
+    }
+
+    public ArrayList<EinkaufsArtikel> getAllItemsNotBought(String table)
+    {
+        ArrayList<EinkaufsArtikel> artikel = getAllEntriesArtikel(table);
+        ArrayList<EinkaufsArtikel> artikelNotBought = new ArrayList<>();
+        for(int i = 0; i < artikel.size(); i++)
+        {
+            if(artikel.get(i).getBought() == 0)
+                artikelNotBought.add(artikel.get(i));
+        }
+        return  artikelNotBought;
     }
 }
