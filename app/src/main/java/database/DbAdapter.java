@@ -347,13 +347,13 @@ public class DbAdapter
     public void deleteTableEinkaufliste(String table)
     {
         database.execSQL("DROP TABLE IF EXISTS " + table);
-        database.delete("einkaufslisten", "name = " + table, null);
+        database.execSQL("DELETE FROM einkaufslisten WHERE name = '" + table +"';");
     }
 
     public void deleteTableVorauswahl(String table)
     {
         database.execSQL("DROP TABLE IF EXISTS " + table);
-        database.delete("vorauswahllisten", "name = " + table, null);
+        database.execSQL("DELETE FROM vorauswahllisten WHERE name = '" + table +"';");
     }
 
     public void changeListNameEinkaufsliste(String oldName, String newName)
