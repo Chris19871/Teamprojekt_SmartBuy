@@ -274,10 +274,13 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        dbAdapter.openWrite();
-                        dbAdapter.deleteTableEinkaufliste(itemListsAdapter.getItem(zuletztGeleoschtPosition).getName());
-                        dbAdapter.close();
-                        delet =false;
+                        if (delet == false)
+                        {
+                            dbAdapter.openWrite();
+                            dbAdapter.deleteTableEinkaufliste(itemListsAdapter.getItem(zuletztGeleoschtPosition).getName());
+                            dbAdapter.close();
+                            delet = false;
+                        }
                     }
                 });
                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
