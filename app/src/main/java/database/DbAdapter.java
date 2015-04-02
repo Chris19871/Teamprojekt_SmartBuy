@@ -349,4 +349,15 @@ public class DbAdapter
         database.execSQL("DROP TABLE IF EXISTS " + table);
         database.delete("einkaufslisten", "name = " + table, null);
     }
+
+    public void deleteTableVorauswahl(String table)
+    {
+        database.execSQL("DROP TABLE IF EXISTS " + table);
+        database.delete("vorauswahllisten", "name = " + table, null);
+    }
+
+    public void changeListName(String oldName, String newName)
+    {
+        database.execSQL("ALTER TABLE " + oldName + " RENAME TO " + newName +";");
+    }
 }
