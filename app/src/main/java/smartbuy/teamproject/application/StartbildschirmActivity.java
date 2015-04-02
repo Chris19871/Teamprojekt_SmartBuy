@@ -2,6 +2,7 @@ package smartbuy.teamproject.application;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -38,13 +39,13 @@ public class StartbildschirmActivity extends ActionBarActivity {
     private ArrayAdapter<Vorauswahl> vorauswahllistenitemListsAdapter;
     private ArrayAdapter<database.Einkaufsliste> itemListsAdapter;
 
-    private int boxCounter = 0;
+    private boolean delet = false;
     private ArrayList<database.EinkaufsArtikel> addNewList;
     private ArrayList<database.Einkaufsliste> einkaufsliste;
     private ArrayList<Vorauswahl> vorauswahllisten;
     private EditText listName;
     private static String aktListe;
-    private Einkaufsliste zuletztGeleoscht;
+    private database.Einkaufsliste zuletztGeleoscht;
     private int zuletztGeleoschtPosition;
     private static DbAdapter dbAdapter;
 
@@ -100,23 +101,44 @@ public class StartbildschirmActivity extends ActionBarActivity {
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
                                     zuletztGeleoschtPosition = position;
-                                    //zuletztGeleoscht = itemListsAdapter.getItem(position);
+                                    zuletztGeleoscht = itemListsAdapter.getItem(position);
                                     itemListsAdapter.remove(itemListsAdapter.getItem(position));
+
+                                    itemListsAdapter.notifyDataSetChanged();
                                 }
 
                                 final Dialog loeschen_rueck = new Dialog(context);
+
+                                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        if (delet == false)
+                                        {
+                                            dbAdapter.openWrite();
+                                            dbAdapter.deleteTable(itemListsAdapter.getItem(zuletztGeleoschtPosition).getName());
+                                            dbAdapter.close();
+                                            delet =false;
+                                        }
+
+
+
+                                    }
+                                });
                                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
                                 loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                                 loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
                                 loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-                                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
+
+                                final Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
                                 loeschen_Ruck.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        //itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
+                                        delet = true;
+                                        itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                                         itemListsAdapter.notifyDataSetChanged();
+
                                         loeschen_rueck.dismiss();
                                     }
                                 });

@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:clickable="true"
-        android:src="@mipmap/smartbuy_logo"/>
+        />
 
     <ScrollView
         android:id="@+id/scrollViewProductName"

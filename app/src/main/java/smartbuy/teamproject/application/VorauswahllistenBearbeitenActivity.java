@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -26,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import database.DbAdapter;
 import purchase.EinkaufsArtikel;
@@ -239,6 +241,9 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         final EditText name = (EditText) newProducts.findViewById(R.id.productName);
         final TextView desc = (TextView) newProducts.findViewById(R.id.descNewProduct);
         final ImageView image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
+        image.setImageResource(R.mipmap.smartbuy_logo);
+        image.setTag(R.mipmap.smartbuy_logo);
+
         image.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,6 +263,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         image.setImageResource(Iadapter.getImage());
+                        image.setTag(Iadapter.getImage());
                         name.setText(Iadapter.getImageName());
                     }
                 });
@@ -273,7 +279,9 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    addArticle(name.getText().toString(), desc.toString(), image.getId());
+
+                    int resId = (Integer) image.getTag();
+                    addArticle(name.getText().toString(), desc.getText().toString(), resId);
                     newProducts.dismiss();
                 }
             }
@@ -363,6 +371,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         name.setText(tmpArtikel.getName());
         desc.setText(tmpArtikel.getDesc());
         image.setImageResource(tmpArtikel.getPic());
+        image.setTag(tmpArtikel.getPic());
 
         image.setOnClickListener(new OnClickListener() {
             @Override
@@ -381,6 +390,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         image.setImageResource(Iadapter.getImage());
+                        image.setTag(Iadapter.getImage());
                     }
                 });
                 imageAuswahlDialog.show();
@@ -395,7 +405,9 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    changeArticle(name.getText().toString(), desc.getText().toString(), image.getId(), id);
+
+                    int resId = (Integer) image.getTag();
+                    changeArticle(name.getText().toString(), desc.getText().toString(), resId, id);
 
                     allItems.clear();
                     dbAdapter.openWrite();
@@ -419,7 +431,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
     public void changeArticle(String name, String desc, int image, long id) {
         dbAdapter.openWrite();
 
-        dbAdapter.changeArtikel(aktListenName, name , desc, image, id);
+        dbAdapter.changeArtikel(aktListenName, name, desc, image, id);
         dbAdapter.close();
     }
 

@@ -309,10 +309,6 @@ public class DbAdapter
 
     public void changeArtikel(String table, String artikel, String desc, int image, long id)
     {
-        if(desc.equals(""))
-        {
-            desc = null;
-        }
         database.execSQL("UPDATE " + table + " set name = '" + artikel +"', desc = '" + desc +
                 "', image = " + image + " WHERE id = " + id + ";");
     }

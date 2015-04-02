@@ -247,6 +247,9 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         final EditText name = (EditText) newProducts.findViewById(R.id.productName);
         final TextView desc = (TextView) newProducts.findViewById(R.id.descNewProduct);
         final ImageView image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
+        image.setImageResource(R.mipmap.smartbuy_logo);
+        image.setTag(R.mipmap.smartbuy_logo);
+
         image.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -266,6 +269,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         image.setImageResource(Iadapter.getImage());
+                        image.setTag(Iadapter.getImage());
                         name.setText(Iadapter.getImageName());
                     }
                 });
@@ -281,7 +285,8 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    addArticle(name.getText().toString(), desc.toString(), image.getId());
+                    int resId = (Integer) image.getTag();
+                    addArticle(name.getText().toString(), desc.getText().toString(), resId);
                     newProducts.dismiss();
                 }
             }
@@ -378,6 +383,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
         name.setText(tmpArtikel.getName());
         desc.setText(tmpArtikel.getDesc());
         image.setImageResource(tmpArtikel.getPic());
+        image.setTag(tmpArtikel.getPic());
 
         image.setOnClickListener(new OnClickListener() {
             @Override
@@ -396,6 +402,7 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         image.setImageResource(Iadapter.getImage());
+                        image.setTag(Iadapter.getImage());
                     }
                 });
                 imageAuswahlDialog.show();
@@ -410,7 +417,8 @@ public class EinkaufslisteActivity extends ActionBarActivity {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
                 } else {
-                    changeArticle(name.getText().toString(), desc.getText().toString(), image.getId(), id);
+                    int resId = (Integer) image.getTag();
+                    changeArticle(name.getText().toString(), desc.getText().toString(), resId, id);
 
                     allItems.clear();
                     dbAdapter.openWrite();
