@@ -28,6 +28,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
     private ActionBar einkaufsmodusActionBar;
     private static final long SLEEPTIME = 1000;
     private boolean running;
+    static boolean stopWatch = false;
     private boolean stopWatchState;
     private Thread refreshThread;
     private String seconds = "";
@@ -219,13 +220,11 @@ public class EinkaufmodusActivity extends ActionBarActivity {
                             hours = df.format(hoursCount);
 
                             badgetime.setText(hours + ":" + minutes + ":" + seconds);
-                            dbAdapter.openRead();
-                            if(dbAdapter.getAllItemsNotBought(aktListe).size() == 0)
+
+                            if(stopWatch == true)
                             {
-                                dbAdapter.close();
                                 running = false;
                             }
-                            dbAdapter.close();
 
                         }
 
@@ -249,4 +248,8 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         badgeCount.decrement(1);
 
     }
+    public static void setStopWatch(boolean stopWatch) {
+        EinkaufmodusActivity.stopWatch = stopWatch;
+    }
+
 }
