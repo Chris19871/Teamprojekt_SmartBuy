@@ -40,7 +40,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
     private final Context context = this;
     private ArrayAdapter<database.EinkaufsArtikel> itemAdapter;
     private ListView listView;
-    private ArrayList<database.EinkaufsArtikel> items;
     private ArrayList<database.EinkaufsArtikel> allItems;
     private ActionBar einkaufslisteActionBar;
     private boolean longClickEnabled;
@@ -49,6 +48,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
     private ArrayList<Integer> geloschteArtikelPositionen;
     private boolean articleDelete = false;
     private boolean isDeleted = false;
+    private boolean delet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +136,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
                                 if(isDeleted)
                                 {
                                     dbAdapter.openWrite();
-                                    dbAdapter.deleteArtikel(aktListenName , geloschteArtikel.get(0).getName());
+                                    dbAdapter.deleteArtikel(aktListenName , geloschteArtikel.get(0).getId());
                                     allItems.clear();
                                     allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
                                     dbAdapter.close();
@@ -157,14 +157,12 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
         MenuItem delete = menu.findItem(R.id.action_delete_Einkaufliste);
         MenuItem add = menu.findItem(R.id.action_newProduct);
-        MenuItem cart = menu.findItem(R.id.action_Einkaufsmodus);
 
 
         if (deleteEnable) {
             delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             delete.setVisible(true);
             add.setVisible(false);
-            cart.setVisible(false);
 
 
         } else {
@@ -300,7 +298,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
     public void deleteMode() {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_multiple_choice, items);
+                android.R.layout.simple_list_item_multiple_choice, allItems);
         listView.setAdapter(itemAdapter);
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -312,7 +310,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
     public void normalMode() {
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                R.layout.listview_design, R.id.listViewDesign, items);
+                R.layout.listview_design, R.id.listViewDesign, allItems);
         listView.setAdapter(itemAdapter);
 
         einkaufslisteActionBar.setDisplayHomeAsUpEnabled(false);
@@ -323,6 +321,22 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
 
         if (articleDelete == true) {
             final Dialog loeschen_rueck = new Dialog(context);
+
+
+            loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    if (delet == false)
+                    {
+                        dbAdapter.openWrite();
+                        for (int i = geloschteArtikel.size() - 1; i >= 0; i--) {
+                            dbAdapter.deleteArtikel(aktListenName,geloschteArtikel.get(i).getId());
+                        }
+                        dbAdapter.close();
+                    }
+                }
+            });
+
             loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
             loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
             loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -333,6 +347,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
             loeschen_Ruck.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    delet = true;
                     for (int i = (geloschteArtikel.size() - 1); i >= 0; i--) {
                         itemAdapter.insert(geloschteArtikel.get(i), geloschteArtikelPositionen.get(i));
                     }
@@ -451,9 +466,9 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {
         int itemCount = listView.getCount();
         for (int i = itemCount - 1; i >= 0; i--) {
             if (checkedItemPositions.get(i)) {
-                geloschteArtikel.add(items.get(i));
+                geloschteArtikel.add(allItems.get(i));
                 geloschteArtikelPositionen.add(i);
-                itemAdapter.remove(items.get(i));
+                itemAdapter.remove(allItems.get(i));
                 articleDelete = true;
             }
 
