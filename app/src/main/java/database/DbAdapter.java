@@ -230,7 +230,7 @@ public class DbAdapter
         Einkaufsliste einkaufsliste = new Einkaufsliste();
         einkaufsliste.setId(cursor.getLong(0));
         einkaufsliste.setName(cursor.getString(1));
-        einkaufsliste.setBestTime(cursor.getInt(2));
+        einkaufsliste.setBestTime(cursor.getString(2));
         einkaufsliste.setStartTime(cursor.getInt(3));
         return einkaufsliste;
     }
@@ -356,6 +356,30 @@ public class DbAdapter
         cursor.close();
 
         return  artikelNotBought;
+    }
+
+    public long getStartzeit(String table)
+    {
+        String[] startTime = {"start_time"};
+        Einkaufsliste liste = new Einkaufsliste();
+
+        ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
+
+        Cursor cursor = database.query("einkaufslisten", startTime, "name = '" + table + "'", null, null, null, null);
+        cursor.moveToFirst();
+
+        if(cursor.getCount() == 0) return 0;
+
+        while (!cursor.isAfterLast()) {
+            Einkaufsliste einkaufsliste = cursorToEntryEinkaufsliste(cursor);
+            EntriesList.add(einkaufsliste);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        liste = EntriesList.get(0);
+
+        return liste.getStartTime();
     }
 
     public void deleteTableEinkaufliste(String table)

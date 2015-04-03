@@ -1,7 +1,5 @@
 package database;
 
-import java.util.ArrayList;
-
 /**
  * Created by Christian Meisberger on 09.03.2015.
  */
@@ -9,8 +7,8 @@ public class Einkaufsliste
 {
     private long id;
     private String name;
-    private int bestTime;
-    private int startTime;
+    private String bestTime;
+    private long startTime;
 
     public long getId()
     {
@@ -38,7 +36,7 @@ public class Einkaufsliste
     }
 
 
-    public int getStartTime()
+    public long getStartTime()
     {
         return startTime;
     }
@@ -48,12 +46,12 @@ public class Einkaufsliste
         this.startTime = startTime;
     }
 
-    public int getBestTime()
+    public String getBestTime()
     {
         return bestTime;
     }
 
-    public void setBestTime(int bestTime)
+    public void setBestTime(String bestTime)
     {
         this.bestTime = bestTime;
     }

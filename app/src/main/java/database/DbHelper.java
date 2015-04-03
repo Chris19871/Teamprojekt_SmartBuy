@@ -42,7 +42,7 @@ public class DbHelper extends SQLiteOpenHelper
                 EINKAUFSLISTEN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "name TEXT, "+
                         "best_time TEXT, "+
-                        "start_time TEXT);";
+                        "start_time INTEGER);";
 
 
 
