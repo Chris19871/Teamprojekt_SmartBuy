@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SmartBuy</string>
     <string name="Best_Time">Bestzeit</string>
     <string name="Change_Name">Name ändern</string>
     <string name="Delete">Löschen</string>
     <string name="Reset">Zurücksetzen</string>
     <string name="Shopping_mode">Einkaufmodus</string>
-    <string name="bestTimeDialogTime" translatable="false">00:00:00</string>
     <string name="bestTimeDialogTitle">Bestzeit</string>
     <string name="einstellungen">Einstellungen</string>
     <string name="generally">Allgemein</string>
