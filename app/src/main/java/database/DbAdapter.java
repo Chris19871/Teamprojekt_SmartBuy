@@ -358,9 +358,9 @@ public class DbAdapter
         return EntriesList.get(0).getStartTime();
     }
 
-    public void setStartzeit(String table, long startTime)
+    public void setStartzeit(String table, String startTime)
     {
-        database.execSQL("UPDATE einkaufslisten set start_time = " + startTime +" WHERE name = '" + table + "';");
+        database.execSQL("UPDATE einkaufslisten set start_time = '" + startTime +"' WHERE name = '" + table + "';");
     }
 
     public String getBestzeit(String table)
