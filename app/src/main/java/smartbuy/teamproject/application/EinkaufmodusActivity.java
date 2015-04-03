@@ -231,7 +231,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
                     });
                 }
                 dbAdapter.openWrite();
-                //dbAdapter.setBestzeit(aktListe, badgetime.getText().toString());
+                dbAdapter.setBestzeit(aktListe, badgetime.getText().toString());
                 dbAdapter.resetStartTime(aktListe);
                 dbAdapter.close();
             }
@@ -250,6 +250,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
     }
     public static void setStopWatch(boolean stopWatch) {
         EinkaufmodusActivity.stopWatch = stopWatch;
+
     }
 
 }
