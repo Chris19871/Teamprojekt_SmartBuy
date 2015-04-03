@@ -341,7 +341,7 @@ public class DbAdapter
 
     public long getStartzeit(String table)
     {
-        String[] startTime = {"start_time"};
+        String[] startTime = {"name", "start_time"};
         Einkaufsliste liste = new Einkaufsliste();
 
         ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
