@@ -50,4 +50,3 @@ public class EinkaufsArtikel
         this.pic = pic;
     }
 }
-
