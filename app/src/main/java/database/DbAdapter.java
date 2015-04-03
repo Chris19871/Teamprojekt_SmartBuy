@@ -101,23 +101,7 @@ public class DbAdapter
         dbHelper.close();
     }
 
-    public EinkaufsArtikel createEntryEinkaufsArtikel(String name, String desc, int image)
-    {
-        ContentValues values = new ContentValues();
-        values.put("name", name);
-        values.put("desc", desc);
-        values.put("image", image);
-        values.put("bought", bought);
-
-        long insertId = database.insert("einkaufsartikel", null, values);
-
-        Cursor cursor = database.query("einkaufsartikel", einkaufsArtikelAllColumns, "id = " + insertId, null, null, null, null);
-        cursor.moveToFirst();
-
-        return cursorToEntryArtikel(cursor);
-    }
-
-    public Einkaufsliste createEntryEinkaufsliste(String name, String bestTime, String startTime)
+    public Einkaufsliste createEntryEinkaufsliste(String name, String bestTime, long startTime)
     {
         ContentValues values = new ContentValues();
         values.put("name", name);
@@ -144,7 +128,6 @@ public class DbAdapter
 
         return cursorToEntryVorauswahlliste(cursor);
     }
-
 
     public ArrayList<EinkaufsArtikel> getAllEntriesArtikel(String table) {
         ArrayList<EinkaufsArtikel> EntriesList = new ArrayList<>();
@@ -202,7 +185,6 @@ public class DbAdapter
 
     public EinkaufsArtikel getArtikel(String table, String name)
     {
-
         EinkaufsArtikel artikel = null;
         ArrayList<EinkaufsArtikel> artikelList = getAllEntriesArtikel(table);
         for(int i = 0; i < artikelList.size(); i++)
@@ -212,7 +194,6 @@ public class DbAdapter
                 artikel = artikelList.get(i);
             }
         }
-
         return artikel;
     }
 
@@ -282,7 +263,7 @@ public class DbAdapter
 
     public void createEinkaufsliste(String tableName, ArrayList<EinkaufsArtikel> artikel)
     {
-        createEntryEinkaufsliste(tableName,"00:00:00", "00:00:00");
+        createEntryEinkaufsliste(tableName,"00:00:00", 0);
         addListe(tableName);
         for(int i = 0; i < artikel.size(); i++)
         {
