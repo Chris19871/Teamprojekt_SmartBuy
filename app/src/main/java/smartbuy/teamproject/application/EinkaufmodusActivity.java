@@ -248,4 +248,9 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         badgeCount.decrement(1);
 
     }
+    public static void setStopWatch(boolean stopWatch) {
+        EinkaufmodusActivity.stopWatch = stopWatch;
+
+    }
+
 }

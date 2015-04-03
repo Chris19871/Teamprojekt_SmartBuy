@@ -60,6 +60,7 @@ public class EinkaufmodusAdapter extends BaseAdapter
     public View getView(final int position, View convertView, ViewGroup parent)
     {
         final LinearLayout layout = new LinearLayout(mContext);
+        EinkaufmodusActivity.setStopWatch(false);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setMinimumWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         layout.setMinimumHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -113,14 +114,18 @@ public class EinkaufmodusAdapter extends BaseAdapter
                             dbAdapter.openRead();
                             if(dbAdapter.getAllItemsNotBought(aktListe).size() == 0)
                             {
-                                dbAdapter.close();
                                 EinkaufmodusActivity.setStopWatch(true);
+
+                            }
+                            else
+                            {
+                                EinkaufmodusActivity.setStopWatch(false);
                             }
                             dbAdapter.close();
 
-                            delet =false;
-                        }
 
+                        }
+                        delet =false;
                     }
                 });
                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
