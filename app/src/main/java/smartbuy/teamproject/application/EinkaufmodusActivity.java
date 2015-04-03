@@ -146,15 +146,18 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         DecimalFormat df = new DecimalFormat("00");
 
         dbAdapter.openRead();
-        startzeit = dbAdapter.getStartzeit(aktListe);
+        startzeit = Long.parseLong(dbAdapter.getStartzeit(aktListe));
         dbAdapter.close();
         if(startzeit == 0 )
         {
             startzeit = aktTime;
             dbAdapter.openWrite();
-            dbAdapter.setStartzeit(aktListe,startzeit);
+            dbAdapter.setStartzeit(aktListe,Long.toString(startzeit));
             dbAdapter.close();
 
+            hoursCount = 0;
+            minutesCount = 0;
+            secondsCount = 0;
             hours = df.format(hoursCount);
             minutes = df.format(minutesCount);
             seconds = df.format(secondsCount);
@@ -167,13 +170,13 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
             stopWatchTime = aktTime - startzeit;
 
-            long s = stopWatchTime % 60;
-            secondsCount = (int)s;
-            long m = (stopWatchTime / 60) % 60;
-            minutesCount = (int) m;
-            long h = (stopWatchTime / (60 * 60)) % 24;
-            hoursCount = (int) h;
-            String hms = String.format("%d:%02d:%02d", h,m,s);
+            int h = (int) (TimeUnit.MILLISECONDS.toHours(stopWatchTime) % 24);
+            hoursCount = h;
+            int m = (int) (TimeUnit.MILLISECONDS.toMinutes(stopWatchTime) % 60);
+            minutesCount =  m;
+            int s = (int) (TimeUnit.MILLISECONDS.toSeconds(stopWatchTime) % 60);
+            secondsCount =  s;
+            String hms = String.format("%02d:%02d:%02d", h,m,s);
 
 
             badgetime.setText(hms);
@@ -218,7 +221,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
                     });
                 }
                 dbAdapter.openWrite();
-                dbAdapter.setBestzeit(aktListe,badgetime.getText().toString());
+                dbAdapter.setBestzeit(aktListe, badgetime.getText().toString());
                 dbAdapter.resetStartTime(aktListe);
                 dbAdapter.close();
             }
