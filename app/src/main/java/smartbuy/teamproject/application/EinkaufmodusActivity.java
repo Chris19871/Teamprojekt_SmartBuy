@@ -187,7 +187,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
         refreshThread = new Thread(new Runnable() {
             public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
+                while (!refreshThread.isInterrupted()) {
                     try {
                         Thread.sleep(SLEEPTIME);
                     } catch (InterruptedException ex) {

@@ -110,9 +110,10 @@ public class EinkaufmodusAdapter extends BaseAdapter
                     public void onDismiss(DialogInterface dialog) {
                         dbAdapter.openRead();
 
-                        if ((delet == false) && dbAdapter.getAllItemsNotBought(aktListe).size() == 0)
+                        if (dbAdapter.getAllItemsNotBought(aktListe).size() > 0)
                         {
                             EinkaufmodusActivity.refreshThread.interrupt();
+
 
                         }
                         dbAdapter.close();
