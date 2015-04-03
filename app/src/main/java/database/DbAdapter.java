@@ -341,8 +341,6 @@ public class DbAdapter
 
     public long getStartzeit(String table)
     {
-        Einkaufsliste liste;
-
         ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
 
         Cursor cursor = database.query("einkaufslisten", einkaufslistenAllColums, "name = '" + table + "'", null, null, null, null);
@@ -357,14 +355,36 @@ public class DbAdapter
         }
         cursor.close();
 
-        liste = EntriesList.get(0);
-
-        return liste.getStartTime();
+        return EntriesList.get(0).getStartTime();
     }
 
     public void setStartzeit(String table, long startzeit)
     {
         database.execSQL("UPDATE einkaufslisten set start_zeit = " + startzeit +" WHERE name = '" + table + "';");
+    }
+
+    public String getBestzeit(String table)
+    {
+        ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
+
+        Cursor cursor = database.query("einkaufslisten", einkaufslistenAllColums, "name = '" + table + "'", null, null, null, null);
+        cursor.moveToFirst();
+
+        if(cursor.getCount() == 0) return "00:00:00";
+
+        while (!cursor.isAfterLast()) {
+            Einkaufsliste einkaufsliste = cursorToEntryEinkaufsliste(cursor);
+            EntriesList.add(einkaufsliste);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return EntriesList.get(0).getBestTime();
+    }
+
+    public void setBestzeit(String table, String bestTime)
+    {
+        database.execSQL("UPDATE einkaufslisten set best_zeit = " + bestTime +" WHERE name = '" + table + "';");
     }
 
     public void deleteTableEinkaufliste(String table)
