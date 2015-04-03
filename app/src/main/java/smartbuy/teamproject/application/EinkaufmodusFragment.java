@@ -7,14 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-public class EinkaufmodusFragment extends Fragment {
+public class EinkaufmodusFragment extends Fragment
+{
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_einkaufmodus, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.einkaufmodusView);
         EinkaufmodusAdapter adapter = new EinkaufmodusAdapter(view.getContext());

@@ -25,20 +25,17 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import database.DbAdapter;
 import database.Vorauswahl;
 import swipe.SwipeDismissListViewTouchListener;
 
-public class StartbildschirmActivity extends ActionBarActivity {
+public class StartbildschirmActivity extends ActionBarActivity
+{
     private final Context context = this;
     private ArrayAdapter<Vorauswahl> vorauswahllistenitemListsAdapter;
     private ArrayAdapter<database.Einkaufsliste> itemListsAdapter;
-
     private boolean delet = false;
-    private ArrayList<database.EinkaufsArtikel> addNewList;
     private ArrayList<database.Einkaufsliste> einkaufsliste;
     private ArrayList<Vorauswahl> vorauswahllisten;
     private EditText listName;
@@ -48,7 +45,8 @@ public class StartbildschirmActivity extends ActionBarActivity {
     private static DbAdapter dbAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.startbildschirm);
 
@@ -78,9 +76,11 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 R.layout.listview_design, R.id.listViewDesign, einkaufsliste);
         listView.setAdapter(itemListsAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
                 aktListe = einkaufsliste.get(position).getName();
                 wechsel();
             }
@@ -89,15 +89,19 @@ public class StartbildschirmActivity extends ActionBarActivity {
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         listView,
-                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                        new SwipeDismissListViewTouchListener.DismissCallbacks()
+                        {
                             @Override
-                            public boolean canDismiss(int position) {
+                            public boolean canDismiss(int position)
+                            {
                                 return true;
                             }
 
                             @Override
-                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions)
+                            {
+                                for (int position : reverseSortedPositions)
+                                {
                                     zuletztGeleoschtPosition = position;
                                     zuletztGeleoscht = itemListsAdapter.getItem(position);
                                     itemListsAdapter.remove(itemListsAdapter.getItem(position));
@@ -112,7 +116,7 @@ public class StartbildschirmActivity extends ActionBarActivity {
                                     @Override
                                     public void onDismiss(DialogInterface dialog)
                                     {
-                                        if (delet == false)
+                                        if (!delet)
                                         {
                                             dbAdapter.openWrite();
                                             dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName());
@@ -129,9 +133,11 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
 
                                 final Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
-                                loeschen_Ruck.setOnClickListener(new OnClickListener() {
+                                loeschen_Ruck.setOnClickListener(new OnClickListener()
+                                {
                                     @Override
-                                    public void onClick(View v) {
+                                    public void onClick(View v)
+                                    {
                                         delet = true;
                                         itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                                         itemListsAdapter.notifyDataSetChanged();
@@ -139,7 +145,6 @@ public class StartbildschirmActivity extends ActionBarActivity {
                                         loeschen_rueck.dismiss();
                                     }
                                 });
-
                                 loeschen_rueck.show();
                             }
                         });
@@ -150,33 +155,39 @@ public class StartbildschirmActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds vorauswahllistenitemListsAdapter to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_startbildschirm, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
+        if (id == R.id.settings)
+        {
             settingsOpen();
             return true;
         }
-        if (id == R.id.about) {
+        if (id == R.id.about)
+        {
             aboutOpen();
             return true;
         }
-        if (id == R.id.vorAuswahlliste) {
+        if (id == R.id.vorAuswahlliste)
+        {
             vorAuswahllisteOpen();
             return true;
         }
-        if (id == R.id.action_add) {
+        if (id == R.id.action_add)
+        {
             newEinkaufslisteOpen();
             return true;
         }
@@ -185,24 +196,29 @@ public class StartbildschirmActivity extends ActionBarActivity {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == R.id.startscreenListView) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        if (v.getId() == R.id.startscreenListView)
+        {
             getMenuInflater().inflate(R.menu.startbildschirm_contextmenu, menu);
         }
         super.onCreateContextMenu(menu, v, menuInfo);
-
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item)
+    {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.action_ContextMenu_Einkaufsmodus: {
+        switch (item.getItemId())
+        {
+            case R.id.action_ContextMenu_Einkaufsmodus:
+            {
                 aktListe = itemListsAdapter.getItem(info.position).getName();
                 openEinkaufsmodus();
                 break;
             }
-            case R.id.action_ContextMenu_Change_Name: {
+            case R.id.action_ContextMenu_Change_Name:
+            {
                 final Dialog nameAndern = new Dialog(context);
                 nameAndern.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 nameAndern.setContentView(R.layout.neue_vorauswahllisten_dialog);
@@ -211,16 +227,20 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 name.setText(itemListsAdapter.getItem(info.position).getName());
 
                 Button dialogButtonSave = (Button) nameAndern.findViewById(R.id.addVorauswahllisteSave);
-                dialogButtonSave.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        if (name.getText().toString().equals("")) {
+                dialogButtonSave.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        if (name.getText().toString().equals(""))
+                        {
                             name.setHintTextColor(Color.parseColor("#FF0000"));
                             name.setHint("Feld muss ausgefüllt werden!");
-                        } else {
+                        }
+                        else
+                        {
                             dbAdapter.openWrite();
-                            dbAdapter.changeListNameEinkaufsliste(itemListsAdapter.getItem(info.position).getName(),name.getText().toString());
+                            dbAdapter.changeListNameEinkaufsliste(itemListsAdapter.getItem(info.position).getName(), name.getText().toString());
                             dbAdapter.close();
-
 
                             itemListsAdapter.getItem(info.position).setName(name.getText().toString());
                             itemListsAdapter.notifyDataSetChanged();
@@ -230,15 +250,18 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 });
 
                 Button dialogButtonCancel = (Button) nameAndern.findViewById(R.id.addVorauswahllisteCancel);
-                dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
+                dialogButtonCancel.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
                         nameAndern.dismiss();
                     }
                 });
                 nameAndern.show();
                 break;
             }
-            case R.id.action_ContextMenu_Best_Time: {
+            case R.id.action_ContextMenu_Best_Time:
+            {
                 final Dialog bestzeit = new Dialog(context);
                 bestzeit.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 bestzeit.setContentView(R.layout.bestzeit_dialog);
@@ -255,23 +278,23 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
                 bestzeitText.setText(stopWatchTime);
 
-                bestzeitButton.setOnClickListener(new OnClickListener() {
+                bestzeitButton.setOnClickListener(new OnClickListener()
+                {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v)
+                    {
                         bestzeitText.setText("00:00:00");
                         dbAdapter.openWrite();
                         dbAdapter.resetBestTime(aktListe);
                         dbAdapter.close();
-
-
-
                     }
                 });
-
                 bestzeit.show();
+                break;
             }
-            break;
-            case R.id.action_ContextMenu_delete: {
+
+            case R.id.action_ContextMenu_delete:
+            {
                 zuletztGeleoschtPosition = info.position;
                 zuletztGeleoscht = itemListsAdapter.getItem(info.position);
                 itemListsAdapter.remove(itemListsAdapter.getItem(info.position));
@@ -280,10 +303,12 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
                 final Dialog loeschen_rueck = new Dialog(context);
 
-                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
+                {
                     @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        if (delet == false)
+                    public void onDismiss(DialogInterface dialog)
+                    {
+                        if (!delet)
                         {
                             dbAdapter.openWrite();
                             dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName());
@@ -299,9 +324,11 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
                 Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
-                loeschen_Ruck.setOnClickListener(new OnClickListener() {
+                loeschen_Ruck.setOnClickListener(new OnClickListener()
+                {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v)
+                    {
                         delet = true;
                         itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                         itemListsAdapter.notifyDataSetChanged();
@@ -314,19 +341,20 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 break;
 
             }
-            case R.id.action_ContextMenu_reset: {
+            case R.id.action_ContextMenu_reset:
+            {
                 resetList(info.position);
+                break;
             }
-            break;
         }
         return super.onContextItemSelected(item);
     }
 
-    public void newEinkaufslisteOpen() {
+    public void newEinkaufslisteOpen()
+    {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.neue_einkaufsliste_dialog);
-        final String empty = "";
 
         listName = (EditText) dialog.findViewById(R.id.dialogName);
 
@@ -339,28 +367,26 @@ public class StartbildschirmActivity extends ActionBarActivity {
         vorauswahllistenitemListsAdapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_dropdown_item_1line, vorauswahllisten);
 
-
         // set the neue_einkaufsliste_dialog dialog components - text, spinner, layout and button
         Spinner spinner = (Spinner) dialog.findViewById(R.id.dialogSpinner);
         spinner.setAdapter(vorauswahllistenitemListsAdapter);
 
         Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
+                                       int arg2, long arg3)
+            {
                 String item = vorauswahllistenitemListsAdapter.getItem(arg2).getName();
 
                 dbAdapter.openRead();
                 ArrayList<database.EinkaufsArtikel> pItems = dbAdapter.getAllEntriesArtikel(item);
                 dbAdapter.close();
 
-
-                addNewList = pItems;
                 database.EinkaufsArtikel artikel[] = new database.EinkaufsArtikel[pItems.size()];
-                for(int i = 0; i < artikel.length; i++)
+                for (int i = 0; i < artikel.length; i++)
                 {
                     artikel[i] = pItems.get(i);
                 }
@@ -369,19 +395,25 @@ public class StartbildschirmActivity extends ActionBarActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
+            public void onNothingSelected(AdapterView<?> arg0)
+            {
                 // TODO Auto-generated method stub
             }
         });
 
-        dialogButtonOk.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) throws IllegalArgumentException {
+        dialogButtonOk.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v) throws IllegalArgumentException
+            {
                 // Prüfung, ob der neuen Liste ein Name gegeben wurde.
-                if (listName.getText().toString().equals("")) {
+                if (listName.getText().toString().equals(""))
+                {
                     listName.setHintTextColor(Color.parseColor("#FF0000"));
                     listName.setHint("Feld muss ausgefüllt werden!");
-                } else {
-                    NeueEinkaufslisteAdapter adapter = (NeueEinkaufslisteAdapter)grid.getAdapter();
+                }
+                else
+                {
+                    NeueEinkaufslisteAdapter adapter = (NeueEinkaufslisteAdapter) grid.getAdapter();
                     ArrayList<database.EinkaufsArtikel> checkArticle = adapter.getCheckedItems();
                     dbAdapter.openWrite();
                     dbAdapter.createEinkaufsliste(listName.getText().toString(), checkArticle);
@@ -399,8 +431,10 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
         // if button is clicked, close the custom neue_einkaufsliste_dialog
-        dialogButtonCancel.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+        dialogButtonCancel.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 dialog.dismiss();
             }
         });
@@ -408,47 +442,47 @@ public class StartbildschirmActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    public void addList(database.Einkaufsliste list) {
-        einkaufsliste.add(list);
-    }
-
-    public void settingsOpen() {
+    public void settingsOpen()
+    {
         final Intent settings = new Intent(this, EinstellungenActivity.class);
         startActivity(settings);
     }
 
-    public void aboutOpen() {
+    public void aboutOpen()
+    {
         final Dialog uberDialog = new Dialog(context);
         uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         uberDialog.setContentView(R.layout.ueber_dialog);
-
         uberDialog.show();
     }
 
-    public void vorAuswahllisteOpen() {
+    public void vorAuswahllisteOpen()
+    {
         final Intent auswahl = new Intent(this, VorauswahllistenActivity.class);
         startActivity(auswahl);
     }
 
-    public void wechsel() {
+    public void wechsel()
+    {
         final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
         startActivity(einkaufsliste);
     }
 
-    public void openEinkaufsmodus() {
+    public void openEinkaufsmodus()
+    {
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
         startActivity(einkaufsmodus);
-
     }
 
-    public void resetList(int pos) {
+    public void resetList(int pos)
+    {
         dbAdapter.openWrite();
         dbAdapter.resetList(itemListsAdapter.getItem(pos).getName());
         dbAdapter.close();
     }
 
-
-    public static String getAktListe() {
+    public static String getAktListe()
+    {
         return aktListe;
     }
 

@@ -14,23 +14,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TabWidget;
+
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import badge.BadgeView;
 import database.DbAdapter;
 
 
-public class EinkaufmodusActivity extends ActionBarActivity {
+public class EinkaufmodusActivity extends ActionBarActivity
+{
     private final Context context = this;
     private FragmentTabHost einkaufmodusTabHost;
-    private ActionBar einkaufsmodusActionBar;
     private static final long SLEEPTIME = 1000;
     private boolean running;
     static boolean stopWatch = false;
-    private boolean stopWatchState;
-    private Thread refreshThread;
     private String seconds = "";
     private int secondsCount = 0;
     private String minutes = "";
@@ -42,13 +42,15 @@ public class EinkaufmodusActivity extends ActionBarActivity {
     private String aktListe;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.einkaufmodus);
         dbAdapter = StartbildschirmActivity.getDbAdapter();
 
         aktListe = StartbildschirmActivity.getAktListe();
 
+        ActionBar einkaufsmodusActionBar;
         einkaufsmodusActionBar = getSupportActionBar();
         einkaufsmodusActionBar.setTitle(aktListe);
         einkaufsmodusActionBar.setDisplayShowTitleEnabled(true);
@@ -59,12 +61,12 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkaufwagen").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_shoppingcar_black)), EinkaufswagenFragment.class, null);
 
 
-
         SharedPreferences einstellungen = PreferenceManager.getDefaultSharedPreferences(context);
-        stopWatchState = einstellungen.getBoolean("example_checkbox", false);
+        boolean stopWatchState = einstellungen.getBoolean("example_checkbox", false);
 
         dbAdapter.openRead();
-        if ((stopWatchState == true) && (dbAdapter.getAllItemsNotBought(aktListe).size() > 0)) {
+        if ((stopWatchState) && (dbAdapter.getAllItemsNotBought(aktListe).size() > 0))
+        {
             running = true;
             dbAdapter.close();
             initThread();
@@ -76,7 +78,6 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         badgeTime.setTextColor(Color.GRAY);
         badgeTime.setText("00:00:00");
         badgeTime.toggle();
-
 
 
         badgeCount = new BadgeView(this, tabs, 1);
@@ -91,41 +92,48 @@ public class EinkaufmodusActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_einkaufmodus, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
+        if (id == R.id.settings)
+        {
             settingsOpen();
             return true;
         }
-        if (id == R.id.about) {
+        if (id == R.id.about)
+        {
             aboutOpen();
             return true;
         }
-        if (id == R.id.vorAuswahlliste) {
+        if (id == R.id.vorAuswahlliste)
+        {
             vorAuswahllisteOpen();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void settingsOpen() {
+    public void settingsOpen()
+    {
         final Intent settings = new Intent(this, EinstellungenActivity.class);
         startActivity(settings);
     }
 
-    public void aboutOpen() {
+    public void aboutOpen()
+    {
         final Dialog uberDialog = new Dialog(context);
         uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         uberDialog.setContentView(R.layout.ueber_dialog);
@@ -133,12 +141,14 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         uberDialog.show();
     }
 
-    public void vorAuswahllisteOpen() {
+    public void vorAuswahllisteOpen()
+    {
         final Intent auswahl = new Intent(this, VorauswahllistenActivity.class);
         startActivity(auswahl);
     }
 
-    public void initThread() {
+    public void initThread()
+    {
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
         final BadgeView badgetime = new BadgeView(this, tabs, 0);
         badgetime.setBadgePosition(BadgeView.POSITION_CENTER);
@@ -152,11 +162,11 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         dbAdapter.openRead();
         startzeit = Long.parseLong(dbAdapter.getStartzeit(aktListe));
         dbAdapter.close();
-        if(startzeit == 0 )
+        if (startzeit == 0)
         {
             startzeit = aktTime;
             dbAdapter.openWrite();
-            dbAdapter.setStartzeit(aktListe,Long.toString(startzeit));
+            dbAdapter.setStartzeit(aktListe, Long.toString(startzeit));
             dbAdapter.close();
 
             hoursCount = 0;
@@ -168,8 +178,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
             badgetime.setText(hours + ":" + minutes + ":" + seconds);
 
-        }
-        else
+        } else
         {
 
             stopWatchTime = aktTime - startzeit;
@@ -177,10 +186,10 @@ public class EinkaufmodusActivity extends ActionBarActivity {
             int h = (int) (TimeUnit.MILLISECONDS.toHours(stopWatchTime) % 24);
             hoursCount = h;
             int m = (int) (TimeUnit.MILLISECONDS.toMinutes(stopWatchTime) % 60);
-            minutesCount =  m;
+            minutesCount = m;
             int s = (int) (TimeUnit.MILLISECONDS.toSeconds(stopWatchTime) % 60);
-            secondsCount =  s;
-            String hms = String.format("%02d:%02d:%02d", h,m,s);
+            secondsCount = s;
+            String hms = String.format("%02d:%02d:%02d", h, m, s);
 
 
             badgetime.setText(hms);
@@ -189,29 +198,40 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
         badgetime.toggle();
 
-        refreshThread = new Thread(new Runnable() {
-            public void run() {
-                while (running) {
-                    try {
+        Thread refreshThread = new Thread(new Runnable()
+        {
+            public void run()
+            {
+                while (running)
+                {
+                    try
+                    {
                         Thread.sleep(SLEEPTIME);
-                    } catch (InterruptedException ex) {
+                    } catch (InterruptedException ex)
+                    {
                         Logger.getLogger(StartbildschirmActivity.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    runOnUiThread(new Runnable() {
-                        public void run() {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
                             secondsCount++;
-                            if (secondsCount <= 59) {
+                            if (secondsCount <= 59)
+                            {
                                 DecimalFormat df = new DecimalFormat("00");
                                 seconds = df.format(secondsCount);
-                            } else {
+                            } else
+                            {
                                 secondsCount = 0;
                                 minutesCount++;
                             }
 
-                            if (minutesCount <= 59) {
+                            if (minutesCount <= 59)
+                            {
                                 DecimalFormat df = new DecimalFormat("00");
                                 minutes = df.format(minutesCount);
-                            } else {
+                            } else
+                            {
                                 minutesCount = 0;
                                 hoursCount++;
                             }
@@ -221,7 +241,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
                             badgetime.setText(hours + ":" + minutes + ":" + seconds);
 
-                            if(stopWatch == true)
+                            if (stopWatch)
                             {
                                 running = false;
                             }
@@ -238,17 +258,21 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         });
         refreshThread.start();
     }
+
     public static void increment()
     {
-       badgeCount.increment(1);
+        badgeCount.increment(1);
 
     }
+
     public static void decrement()
     {
         badgeCount.decrement(1);
 
     }
-    public static void setStopWatch(boolean stopWatch) {
+
+    public static void setStopWatch(boolean stopWatch)
+    {
         EinkaufmodusActivity.stopWatch = stopWatch;
 
     }

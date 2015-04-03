@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 
-public class EinkaufsArtikelImageAdapter extends BaseAdapter {
+public class EinkaufsArtikelImageAdapter extends BaseAdapter
+{
     private Context mContext;
     private Dialog dialog;
     private int click = 0;
@@ -39,43 +40,52 @@ public class EinkaufsArtikelImageAdapter extends BaseAdapter {
             R.string.yogurt
     };
 
-    public EinkaufsArtikelImageAdapter(Context c, Dialog d) {
+    public EinkaufsArtikelImageAdapter(Context c, Dialog d)
+    {
         mContext = c;
         dialog = d;
-     }
+    }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return imageId.length;
     }
 
     @Override
-    public Object getItem(int position) {
+    public Object getItem(int position)
+    {
         return imageId[position];
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(int position)
+    {
         return position;
     }
 
-    public int getImage() {
+    public int getImage()
+    {
         return imageId[click];
     }
 
-    public int getImageName() {
+    public int getImageName()
+    {
         return name;
     }
 
     @Override
-    public View getView(final int position, final View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent)
+    {
         final ImageButton image = new ImageButton(mContext);
         image.setImageResource(imageId[position]);
         image.setClickable(true);
         image.setBackgroundColor(Color.parseColor("#1D5C6A"));
-        image.setOnClickListener(new View.OnClickListener() {
+        image.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 click = position;
                 name = imageString[position];
                 dialog.dismiss();

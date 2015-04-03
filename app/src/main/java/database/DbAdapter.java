@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import smartbuy.teamproject.application.R;
 
@@ -23,8 +22,6 @@ public class DbAdapter
 
     private String[] vorauswahllistenAllColums = { "id" , "name"};
 
-    private int bought = 0;
-    private String desc = "";
     private String[] vorauswahllisten = {"Party","Geburtstag"};
     private String[] partyArtikel = {
             "Fleisch",
@@ -230,6 +227,8 @@ public class DbAdapter
 
     public EinkaufsArtikel createEntryEinkaufArtikeltoTable(String table, String name, String desc, int image)
     {
+        int bought = 0;
+
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("desc", desc);
@@ -246,10 +245,12 @@ public class DbAdapter
 
     public void createVorauswahllisten()
     {
-        for(int i=0; i < vorauswahllisten.length; i++)
+        String desc = "";
+
+        for (String aVorauswahllisten : vorauswahllisten)
         {
-            addListe(vorauswahllisten[i]);
-            createEntryVorauswahlliste(vorauswahllisten[i]);
+            addListe(aVorauswahllisten);
+            createEntryVorauswahlliste(aVorauswahllisten);
         }
         for(int i=0; i < partyArtikel.length; i++)
         {

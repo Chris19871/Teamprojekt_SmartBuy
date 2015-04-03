@@ -24,9 +24,9 @@ import database.DbAdapter;
 import database.Vorauswahl;
 import swipe.SwipeDismissListViewTouchListener;
 
-public class VorauswahllistenActivity extends ActionBarActivity {
-
-    private boolean delet = false;
+public class VorauswahllistenActivity extends ActionBarActivity
+{
+    private boolean delete = false;
     private final Context context = this;
     private ArrayAdapter<Vorauswahl> newVorauswahllistenListsAdapter;
     private ArrayList<Vorauswahl> newVorauswahllisten;
@@ -36,7 +36,8 @@ public class VorauswahllistenActivity extends ActionBarActivity {
     private int zuletztGeleoschtPosition;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.vorauswahllisten);
 
@@ -52,98 +53,111 @@ public class VorauswahllistenActivity extends ActionBarActivity {
 
         listView.setAdapter(newVorauswahllistenListsAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
                 aktVorauswahlListe = newVorauswahllisten.get(position).getName();
                 change();
             }
         });
 
-    SwipeDismissListViewTouchListener touchListener =
-            new SwipeDismissListViewTouchListener(
-                    listView,
-                    new SwipeDismissListViewTouchListener.DismissCallbacks() {
-                        @Override
-                        public boolean canDismiss(int position) {
-                            return true;
-                        }
-
-                        @Override
-                        public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                            for (int position : reverseSortedPositions) {
-                                zuletztGeleoschtPosition = position;
-                                zuletztGeleoscht = newVorauswahllistenListsAdapter.getItem(position);
-                                newVorauswahllistenListsAdapter.remove(newVorauswahllistenListsAdapter.getItem(position));
-
-                                newVorauswahllistenListsAdapter.notifyDataSetChanged();
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        listView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks()
+                        {
+                            @Override
+                            public boolean canDismiss(int position)
+                            {
+                                return true;
                             }
 
-                            final Dialog loeschen_rueck = new Dialog(context);
-
-                            loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    if (delet == false)
-                                    {
-                                        dbAdapter.openWrite();
-                                        dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName());
-                                        dbAdapter.close();
-                                        delet =false;
-                                    }
-                                }
-                            });
-                            loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
-                            loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                            loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
-                            loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-
-                            final Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
-                            loeschen_Ruck.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    delet = true;
-                                    newVorauswahllistenListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions)
+                            {
+                                for (int position : reverseSortedPositions)
+                                {
+                                    zuletztGeleoschtPosition = position;
+                                    zuletztGeleoscht = newVorauswahllistenListsAdapter.getItem(position);
+                                    newVorauswahllistenListsAdapter.remove(newVorauswahllistenListsAdapter.getItem(position));
                                     newVorauswahllistenListsAdapter.notifyDataSetChanged();
-
-                                    loeschen_rueck.dismiss();
                                 }
-                            });
 
-                            loeschen_rueck.show();
-                        }
-                    });
+                                final Dialog loeschen_rueck = new Dialog(context);
+
+                                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
+                                {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog)
+                                    {
+                                        if (!delete)
+                                        {
+                                            dbAdapter.openWrite();
+                                            dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName());
+                                            dbAdapter.close();
+                                            delete = false;
+                                        }
+                                    }
+                                });
+                                loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
+                                loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                                loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
+                                loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                                final Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
+                                loeschen_Ruck.setOnClickListener(new View.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View v)
+                                    {
+                                        delete = true;
+                                        newVorauswahllistenListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
+                                        newVorauswahllistenListsAdapter.notifyDataSetChanged();
+
+                                        loeschen_rueck.dismiss();
+                                    }
+                                });
+                                loeschen_rueck.show();
+                            }
+                        });
         listView.setOnTouchListener(touchListener);
         // Setting this scroll listener is required to ensure that during ListView scrolling,
         // we don't look for swipes.
         listView.setOnScrollListener(touchListener.makeScrollListener());
     }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_vorauswahllisten, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
+        if (id == R.id.settings)
+        {
             settingsOpen();
             return true;
         }
-        if (id == R.id.about) {
+        if (id == R.id.about)
+        {
             aboutOpen();
             return true;
         }
-        if (id == R.id.action_add_Auswahlliste) {
+        if (id == R.id.action_add_Auswahlliste)
+        {
             addAuswahllisteOpen();
             return true;
         }
@@ -151,19 +165,23 @@ public class VorauswahllistenActivity extends ActionBarActivity {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == R.id.vorauswahllistenlistView) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        if (v.getId() == R.id.vorauswahllistenlistView)
+        {
             getMenuInflater().inflate(R.menu.vorauswahllisten_contextmenu, menu);
         }
         super.onCreateContextMenu(menu, v, menuInfo);
-
     }
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
 
-            case R.id.action_ContextMenu_Change_Name: {
+    @Override
+    public boolean onContextItemSelected(MenuItem item)
+    {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId())
+        {
+            case R.id.action_ContextMenu_Change_Name:
+            {
                 final Dialog nameAndern = new Dialog(context);
                 nameAndern.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 nameAndern.setContentView(R.layout.neue_vorauswahllisten_dialog);
@@ -172,14 +190,19 @@ public class VorauswahllistenActivity extends ActionBarActivity {
                 name.setText(newVorauswahllistenListsAdapter.getItem(info.position).getName());
 
                 Button dialogButtonSave = (Button) nameAndern.findViewById(R.id.addVorauswahllisteSave);
-                dialogButtonSave.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        if (name.getText().toString().equals("")) {
+                dialogButtonSave.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        if (name.getText().toString().equals(""))
+                        {
                             name.setHintTextColor(Color.parseColor("#FF0000"));
                             name.setHint("Feld muss ausgefüllt werden!");
-                        } else {
+                        }
+                        else
+                        {
                             dbAdapter.openWrite();
-                            dbAdapter.changeListNameVorauswahlliste(newVorauswahllistenListsAdapter.getItem(info.position).getName(),name.getText().toString());
+                            dbAdapter.changeListNameVorauswahlliste(newVorauswahllistenListsAdapter.getItem(info.position).getName(), name.getText().toString());
                             dbAdapter.close();
 
 
@@ -191,15 +214,18 @@ public class VorauswahllistenActivity extends ActionBarActivity {
                 });
 
                 Button dialogButtonCancel = (Button) nameAndern.findViewById(R.id.addVorauswahllisteCancel);
-                dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
+                dialogButtonCancel.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
                         nameAndern.dismiss();
                     }
                 });
                 nameAndern.show();
                 break;
             }
-            case R.id.action_ContextMenu_delete: {
+            case R.id.action_ContextMenu_delete:
+            {
                 zuletztGeleoschtPosition = info.position;
                 zuletztGeleoscht = newVorauswahllistenListsAdapter.getItem(info.position);
                 newVorauswahllistenListsAdapter.remove(newVorauswahllistenListsAdapter.getItem(info.position));
@@ -208,15 +234,17 @@ public class VorauswahllistenActivity extends ActionBarActivity {
 
                 final Dialog loeschen_rueck = new Dialog(context);
 
-                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
+                {
                     @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        if (delet == false)
+                    public void onDismiss(DialogInterface dialog)
+                    {
+                        if (!delete)
                         {
                             dbAdapter.openWrite();
                             dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName());
                             dbAdapter.close();
-                            delet =false;
+                            delete = false;
                         }
                     }
                 });
@@ -227,44 +255,46 @@ public class VorauswahllistenActivity extends ActionBarActivity {
                 loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
                 Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
-                loeschen_Ruck.setOnClickListener(new View.OnClickListener() {
+                loeschen_Ruck.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
-                    public void onClick(View v) {
-                        delet = true;
+                    public void onClick(View v)
+                    {
+                        delete = true;
                         newVorauswahllistenListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                         newVorauswahllistenListsAdapter.notifyDataSetChanged();
-
                         loeschen_rueck.dismiss();
                     }
                 });
-
                 loeschen_rueck.show();
                 break;
-
             }
         }
         return super.onContextItemSelected(item);
     }
 
-    public void change() {
+    public void change()
+    {
         final Intent vorauswahlliste = new Intent(this, VorauswahllistenBearbeitenActivity.class);
         startActivity(vorauswahlliste);
     }
 
-    public void settingsOpen() {
+    public void settingsOpen()
+    {
         final Intent settings = new Intent(this, EinstellungenActivity.class);
         startActivity(settings);
     }
 
-    public void aboutOpen() {
+    public void aboutOpen()
+    {
         final Dialog uberDialog = new Dialog(context);
         uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         uberDialog.setContentView(R.layout.ueber_dialog);
-
         uberDialog.show();
     }
 
-    public void addAuswahllisteOpen() {
+    public void addAuswahllisteOpen()
+    {
         final Dialog auswahllistenDialog = new Dialog(context);
         auswahllistenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         auswahllistenDialog.setContentView(R.layout.neue_vorauswahllisten_dialog);
@@ -272,21 +302,21 @@ public class VorauswahllistenActivity extends ActionBarActivity {
         final EditText name = (EditText) auswahllistenDialog.findViewById(R.id.addVorauswahllisteTextView);
 
         Button dialogButtonSave = (Button) auswahllistenDialog.findViewById(R.id.addVorauswahllisteSave);
-        dialogButtonSave.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (name.getText().toString().equals("")) {
+        dialogButtonSave.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if (name.getText().toString().equals(""))
+                {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
-                } else {
-                   // ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
-                   // VorauswahlListe liste = new VorauswahlListe(name.getText().toString(), newList);
-                   // newVorauswahllisten.add(liste);
-
+                }
+                else
+                {
                     dbAdapter.openWrite();
                     dbAdapter.createEntryVorauswahlliste(name.getText().toString());
                     dbAdapter.addListe(name.getText().toString());
                     dbAdapter.close();
-
 
                     newVorauswahllisten.clear();
 
@@ -301,17 +331,18 @@ public class VorauswahllistenActivity extends ActionBarActivity {
         });
 
         Button dialogButtonCancel = (Button) auswahllistenDialog.findViewById(R.id.addVorauswahllisteCancel);
-        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 auswahllistenDialog.dismiss();
             }
         });
         auswahllistenDialog.show();
-
     }
-    public static String getAktVorauswahlListe() {
+
+    public static String getAktVorauswahlListe()
+    {
         return aktVorauswahlListe;
     }
-
-
 }

@@ -15,8 +15,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import java.util.ArrayList;
+
 import database.DbAdapter;
+
 public class EinkaufmodusAdapter extends BaseAdapter
 {
     private Context mContext;
@@ -25,7 +28,7 @@ public class EinkaufmodusAdapter extends BaseAdapter
     private ArrayList<database.EinkaufsArtikel> listeArtikel;
     private ArrayList<database.EinkaufsArtikel> listeArtikelGekauft;
     private database.EinkaufsArtikel zuletztGekauft;
-    private boolean delet = false;
+    private boolean delete = false;
 
     public EinkaufmodusAdapter(Context c)
     {
@@ -84,9 +87,6 @@ public class EinkaufmodusAdapter extends BaseAdapter
                 dbAdapter.buyArtikel(aktListe, listeArtikel.get(position).getId());
                 dbAdapter.close();
                 zuletztGekauft = listeArtikel.get(position);
-                //listeArtikel.remove(position);
-
-
 
                 dbAdapter.openRead();
                 listeArtikel.clear();
@@ -96,28 +96,23 @@ public class EinkaufmodusAdapter extends BaseAdapter
                 dbAdapter.close();
 
                 notifyDataSetChanged();
-
-
-                //liste.setItems(listeArtikel);
-                //liste.setItemsBought(listeArtikelGekauft);
-                //StartbildschirmActivity.setAktListe(liste);
-
                 EinkaufmodusActivity.increment();
 
                 final Dialog loeschen_rueck = new Dialog(mContext);
 
-                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
+                {
                     @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        if (delet == false)
+                    public void onDismiss(DialogInterface dialog)
+                    {
+                        if (!delete)
                         {
                             dbAdapter.openRead();
-                            if(dbAdapter.getAllItemsNotBought(aktListe).size() == 0)
+                            if (dbAdapter.getAllItemsNotBought(aktListe).size() == 0)
                             {
                                 EinkaufmodusActivity.setStopWatch(true);
 
-                            }
-                            else
+                            } else
                             {
                                 EinkaufmodusActivity.setStopWatch(false);
                             }
@@ -125,7 +120,7 @@ public class EinkaufmodusAdapter extends BaseAdapter
 
 
                         }
-                        delet =false;
+                        delete = false;
                     }
                 });
                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -140,7 +135,7 @@ public class EinkaufmodusAdapter extends BaseAdapter
                     @Override
                     public void onClick(View v)
                     {
-                        delet = true;
+                        delete = true;
                         dbAdapter.openWrite();
                         dbAdapter.undoBuyArtikel(aktListe, zuletztGekauft.getId());
                         listeArtikel.add(position, zuletztGekauft);
@@ -151,10 +146,6 @@ public class EinkaufmodusAdapter extends BaseAdapter
                         dbAdapter.close();
 
                         notifyDataSetChanged();
-
-                        // liste.setItems(listeArtikel);
-                        // liste.setItemsBought(listeArtikelGekauft);
-                        // StartbildschirmActivity.setAktListe(liste);
                         EinkaufmodusActivity.decrement();
                         loeschen_rueck.dismiss();
                     }
