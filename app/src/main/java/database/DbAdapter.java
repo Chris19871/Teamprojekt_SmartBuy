@@ -324,7 +324,7 @@ public class DbAdapter
     {
         ArrayList<EinkaufsArtikel> artikelBought = new ArrayList<>();
 
-        Cursor cursor = database.query(table, einkaufsArtikelAllColumns, "WHERE bought = 1", null, null, null, null);
+        Cursor cursor = database.query(table, einkaufsArtikelAllColumns, "bought = 1", null, null, null, null);
         cursor.moveToFirst();
 
         if(cursor.getCount() == 0) return artikelBought;
