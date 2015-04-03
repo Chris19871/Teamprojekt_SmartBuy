@@ -384,7 +384,7 @@ public class DbAdapter
 
     public void setBestzeit(String table, String bestTime)
     {
-        database.execSQL("UPDATE einkaufslisten set best_time = " + bestTime +" WHERE name = '" + table + "';");
+        database.execSQL("UPDATE einkaufslisten set best_time = '" + bestTime + "' WHERE name = '" + table + "';");
     }
 
     public void resetStartTime(String table)
