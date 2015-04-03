@@ -30,7 +30,6 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/bestTimeDialogTime"
         android:id="@+id/bestTime"
         android:layout_below="@+id/bestTimeList"
         android:layout_toRightOf="@+id/bestTimeTitle"

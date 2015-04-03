@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TabWidget;
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import badge.BadgeView;
@@ -27,7 +28,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
     private ActionBar einkaufsmodusActionBar;
     private static final long SLEEPTIME = 1000;
     private boolean running;
-    private Thread refreshThread;
+    static Thread refreshThread;
     private String seconds = "";
     private int secondsCount = 0;
     private String minutes = "";
@@ -61,6 +62,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         running = einstellungen.getBoolean("example_checkbox", false);
 
         if (running) {
+
             initThread();
         }
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
@@ -137,12 +139,52 @@ public class EinkaufmodusActivity extends ActionBarActivity {
         final BadgeView badgetime = new BadgeView(this, tabs, 0);
         badgetime.setBadgePosition(BadgeView.POSITION_CENTER);
         badgetime.setBadgeBackgroundColor(Color.RED);
-        badgetime.setText("00:00:00");
+
+        long aktTime = System.currentTimeMillis();
+        long startzeit;
+        long stopWatchTime;
+        DecimalFormat df = new DecimalFormat("00");
+
+        dbAdapter.openRead();
+        startzeit = dbAdapter.getStartzeit(aktListe);
+        dbAdapter.close();
+        if(startzeit == 0 )
+        {
+            startzeit = aktTime;
+            dbAdapter.openWrite();
+            dbAdapter.setStartzeit(aktListe,startzeit);
+            dbAdapter.close();
+
+            hours = df.format(hoursCount);
+            minutes = df.format(minutesCount);
+            seconds = df.format(secondsCount);
+
+            badgetime.setText(hours + ":" + minutes + ":" + seconds);
+
+        }
+        else
+        {
+
+            stopWatchTime = aktTime - startzeit;
+
+            long s = stopWatchTime % 60;
+            secondsCount = (int)s;
+            long m = (stopWatchTime / 60) % 60;
+            minutesCount = (int) m;
+            long h = (stopWatchTime / (60 * 60)) % 24;
+            hoursCount = (int) h;
+            String hms = String.format("%d:%02d:%02d", h,m,s);
+
+
+            badgetime.setText(hms);
+
+        }
+
         badgetime.toggle();
 
         refreshThread = new Thread(new Runnable() {
             public void run() {
-                while (running) {
+                while (!Thread.currentThread().isInterrupted()) {
                     try {
                         Thread.sleep(SLEEPTIME);
                     } catch (InterruptedException ex) {
@@ -175,6 +217,10 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
                     });
                 }
+                dbAdapter.openWrite();
+                dbAdapter.setBestzeit(aktListe,badgetime.getText().toString());
+                dbAdapter.resetStartTime(aktListe);
+                dbAdapter.close();
             }
         });
         refreshThread.start();

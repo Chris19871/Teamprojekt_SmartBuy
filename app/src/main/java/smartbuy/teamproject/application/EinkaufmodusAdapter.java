@@ -2,6 +2,7 @@ package smartbuy.teamproject.application;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
@@ -24,7 +25,7 @@ public class EinkaufmodusAdapter extends BaseAdapter
     private ArrayList<database.EinkaufsArtikel> listeArtikel;
     private ArrayList<database.EinkaufsArtikel> listeArtikelGekauft;
     private database.EinkaufsArtikel zuletztGekauft;
-    private boolean bought = false;
+    private boolean delet = false;
 
     public EinkaufmodusAdapter(Context c)
     {
@@ -103,6 +104,21 @@ public class EinkaufmodusAdapter extends BaseAdapter
                 EinkaufmodusActivity.increment();
 
                 final Dialog loeschen_rueck = new Dialog(mContext);
+
+                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        dbAdapter.openRead();
+
+                        if ((delet == false) && dbAdapter.getAllItemsNotBought(aktListe).size() == 0)
+                        {
+                            EinkaufmodusActivity.refreshThread.interrupt();
+
+                        }
+                        dbAdapter.close();
+
+                    }
+                });
                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
                 loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -115,6 +131,7 @@ public class EinkaufmodusAdapter extends BaseAdapter
                     @Override
                     public void onClick(View v)
                     {
+                        delet = true;
                         dbAdapter.openWrite();
                         dbAdapter.undoBuyArtikel(aktListe, zuletztGekauft.getId());
                         listeArtikel.add(position, zuletztGekauft);
@@ -131,7 +148,6 @@ public class EinkaufmodusAdapter extends BaseAdapter
                         // StartbildschirmActivity.setAktListe(liste);
                         EinkaufmodusActivity.decrement();
                         loeschen_rueck.dismiss();
-                        bought = false;
                     }
                 });
                 loeschen_rueck.show();

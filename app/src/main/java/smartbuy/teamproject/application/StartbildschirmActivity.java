@@ -25,6 +25,8 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import database.DbAdapter;
 import database.Vorauswahl;
@@ -247,10 +249,23 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
                 liste.setText(itemListsAdapter.getItem(info.position).getName());
 
+                DecimalFormat df = new DecimalFormat("00");
+
+                dbAdapter.openRead();
+                String stopWatchTime = dbAdapter.getBestzeit(aktListe);
+                dbAdapter.close();
+
+                bestzeitText.setText(stopWatchTime);
+
                 bestzeitButton.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         bestzeitText.setText("00:00:00");
+                        dbAdapter.openWrite();
+                        dbAdapter.resetBestTime(aktListe);
+                        dbAdapter.close();
+
+
 
                     }
                 });
