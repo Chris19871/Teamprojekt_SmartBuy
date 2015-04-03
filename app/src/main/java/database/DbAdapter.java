@@ -360,7 +360,7 @@ public class DbAdapter
 
     public void setStartzeit(String table, long startTime)
     {
-        database.execSQL("UPDATE einkaufslisten set start_zeit = " + startTime +" WHERE name = '" + table + "';");
+        database.execSQL("UPDATE einkaufslisten set start_time = " + startTime +" WHERE name = '" + table + "';");
     }
 
     public String getBestzeit(String table)
@@ -384,7 +384,7 @@ public class DbAdapter
 
     public void setBestzeit(String table, String bestTime)
     {
-        database.execSQL("UPDATE einkaufslisten set best_zeit = " + bestTime +" WHERE name = '" + table + "';");
+        database.execSQL("UPDATE einkaufslisten set best_time = " + bestTime +" WHERE name = '" + table + "';");
     }
 
     public void deleteTableEinkaufliste(String table)
