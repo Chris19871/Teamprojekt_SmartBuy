@@ -322,25 +322,39 @@ public class DbAdapter
 
     public ArrayList<EinkaufsArtikel> getAllItemsBought(String table)
     {
-        ArrayList<EinkaufsArtikel> artikel = getAllEntriesArtikel(table);
         ArrayList<EinkaufsArtikel> artikelBought = new ArrayList<>();
-        for(int i = 0; i < artikel.size(); i++)
-        {
-            if(artikel.get(i).getBought() == 1)
-                artikelBought.add(artikel.get(i));
+
+        Cursor cursor = database.query(table, einkaufsArtikelAllColumns, "WHERE bought = 1", null, null, null, null);
+        cursor.moveToFirst();
+
+        if(cursor.getCount() == 0) return artikelBought;
+
+        while (!cursor.isAfterLast()) {
+            EinkaufsArtikel artikel = cursorToEntryArtikel(cursor);
+            artikelBought.add(artikel);
+            cursor.moveToNext();
         }
+        cursor.close();
+
         return  artikelBought;
     }
 
     public ArrayList<EinkaufsArtikel> getAllItemsNotBought(String table)
     {
-        ArrayList<EinkaufsArtikel> artikel = getAllEntriesArtikel(table);
         ArrayList<EinkaufsArtikel> artikelNotBought = new ArrayList<>();
-        for(int i = 0; i < artikel.size(); i++)
-        {
-            if(artikel.get(i).getBought() == 0)
-                artikelNotBought.add(artikel.get(i));
+
+        Cursor cursor = database.query(table, einkaufsArtikelAllColumns, "WHERE bought = 0", null, null, null, null);
+        cursor.moveToFirst();
+
+        if(cursor.getCount() == 0) return artikelNotBought;
+
+        while (!cursor.isAfterLast()) {
+            EinkaufsArtikel artikel = cursorToEntryArtikel(cursor);
+            artikelNotBought.add(artikel);
+            cursor.moveToNext();
         }
+        cursor.close();
+
         return  artikelNotBought;
     }
 
@@ -358,36 +372,12 @@ public class DbAdapter
 
     public void changeListNameEinkaufsliste(String oldName, String newName)
     {
-        Einkaufsliste tmp = null;
-        ArrayList<Einkaufsliste> liste = getAllEntriesEinkaufsliste();
-        for (int i = 0; i < liste.size(); i++)
-        {
-            if (liste.get(i).getName().equals(oldName))
-            {
-                tmp = liste.get(i);
-            }
-        }
-
-        long id = tmp.getId();
-
         database.execSQL("ALTER TABLE " + oldName + " RENAME TO " + newName +";");
         database.execSQL("UPDATE einkaufslisten set name = '" + newName +"' WHERE name = '" + oldName + "';");
     }
 
     public void changeListNameVorauswahlliste(String oldName, String newName)
     {
-        Vorauswahl tmp = null;
-        ArrayList<Vorauswahl> liste = getAllEntriesVorauswahlListe();
-        for (int i = 0; i < liste.size(); i++)
-        {
-            if (liste.get(i).getName().equals(oldName))
-            {
-                tmp = liste.get(i);
-            }
-        }
-
-        long id = tmp.getId();
-
         database.execSQL("ALTER TABLE " + oldName + " RENAME TO " + newName +";");
         database.execSQL("UPDATE vorauswahllisten set name = '" + newName +"' WHERE name = '" + oldName + "';");
     }

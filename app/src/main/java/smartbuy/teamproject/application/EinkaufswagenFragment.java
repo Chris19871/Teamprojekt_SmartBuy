@@ -14,6 +14,7 @@ import database.DbAdapter;
 public class EinkaufswagenFragment extends Fragment {
 
     private DbAdapter dbAdapter = StartbildschirmActivity.getDbAdapter();
+    private ArrayList<database.EinkaufsArtikel> itemsBought = new ArrayList<>();
 
 
     @Override
@@ -30,7 +31,8 @@ public class EinkaufswagenFragment extends Fragment {
 
         String aktListe = StartbildschirmActivity.getAktListe();
         dbAdapter.openRead();
-        ArrayList<database.EinkaufsArtikel> itemsBought = dbAdapter.getAllItemsBought(aktListe);
+        itemsBought.clear();
+        itemsBought.addAll(dbAdapter.getAllItemsBought(aktListe));
         dbAdapter.close();
 
 
