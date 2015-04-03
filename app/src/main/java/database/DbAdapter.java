@@ -387,6 +387,16 @@ public class DbAdapter
         database.execSQL("UPDATE einkaufslisten set best_time = " + bestTime +" WHERE name = '" + table + "';");
     }
 
+    public void resetStartTime(String table)
+    {
+        database.execSQL("UPDATE einkaufslisten set start_time = " + 0 +" WHERE name = '" + table + "';");
+    }
+
+    public void resetBestTime(String table)
+    {
+        database.execSQL("UPDATE einkaufslisten set best_time = '00:00:00' WHERE name = '" + table + "';");
+    }
+
     public void deleteTableEinkaufliste(String table)
     {
         database.execSQL("DROP TABLE IF EXISTS " + table);
