@@ -108,15 +108,18 @@ public class EinkaufmodusAdapter extends BaseAdapter
                 loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        dbAdapter.openRead();
-
-                        if (dbAdapter.getAllItemsNotBought(aktListe).size() > 0)
+                        if (delet == false)
                         {
-                            EinkaufmodusActivity.refreshThread.interrupt();
+                            dbAdapter.openRead();
+                            if(dbAdapter.getAllItemsNotBought(aktListe).size() == 0)
+                            {
+                                dbAdapter.close();
+                                EinkaufmodusActivity.setStopWatch(true);
+                            }
+                            dbAdapter.close();
 
-
+                            delet =false;
                         }
-                        dbAdapter.close();
 
                     }
                 });

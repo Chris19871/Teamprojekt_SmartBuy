@@ -28,7 +28,9 @@ public class EinkaufmodusActivity extends ActionBarActivity {
     private ActionBar einkaufsmodusActionBar;
     private static final long SLEEPTIME = 1000;
     private boolean running;
-    static Thread refreshThread;
+    static boolean stopWatch = false;
+    private boolean stopWatchState;
+    private Thread refreshThread;
     private String seconds = "";
     private int secondsCount = 0;
     private String minutes = "";
@@ -59,10 +61,12 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
 
         SharedPreferences einstellungen = PreferenceManager.getDefaultSharedPreferences(context);
-        running = einstellungen.getBoolean("example_checkbox", false);
+        stopWatchState = einstellungen.getBoolean("example_checkbox", false);
 
-        if (running) {
-
+        dbAdapter.openRead();
+        if ((stopWatchState == true) && (dbAdapter.getAllItemsNotBought(aktListe).size() > 0)) {
+            running = true;
+            dbAdapter.close();
             initThread();
         }
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
@@ -187,7 +191,7 @@ public class EinkaufmodusActivity extends ActionBarActivity {
 
         refreshThread = new Thread(new Runnable() {
             public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
+                while (running) {
                     try {
                         Thread.sleep(SLEEPTIME);
                     } catch (InterruptedException ex) {
@@ -216,6 +220,12 @@ public class EinkaufmodusActivity extends ActionBarActivity {
                             hours = df.format(hoursCount);
 
                             badgetime.setText(hours + ":" + minutes + ":" + seconds);
+
+                            if(stopWatch == true)
+                            {
+                                running = false;
+                            }
+
                         }
 
                     });
