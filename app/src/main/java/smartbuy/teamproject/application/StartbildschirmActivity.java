@@ -249,8 +249,6 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
                 liste.setText(itemListsAdapter.getItem(info.position).getName());
 
-                DecimalFormat df = new DecimalFormat("00");
-
                 dbAdapter.openRead();
                 String stopWatchTime = dbAdapter.getBestzeit(aktListe);
                 dbAdapter.close();
