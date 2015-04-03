@@ -306,7 +306,7 @@ public class DbAdapter
 
     public void deleteArtikel(String table, String artikel)
     {
-        database.execSQL("DELETE FROM " + table + " WHERE name = " + artikel + ";");
+        database.execSQL("DELETE FROM " + table + " WHERE name = '" + artikel + "';");
     }
 
     public void changeArtikel(String table, String artikel, String desc, int image, long id)
