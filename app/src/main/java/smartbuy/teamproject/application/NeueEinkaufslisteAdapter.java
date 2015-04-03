@@ -83,3 +83,8 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter {
         return convertView;
     }
 }
+
+class Holder {
+    CheckBox checkBox;
+
+}

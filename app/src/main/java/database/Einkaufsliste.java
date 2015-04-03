@@ -8,7 +8,7 @@ public class Einkaufsliste
     private long id;
     private String name;
     private String bestTime;
-    private long startTime;
+    private String startTime;
 
     public long getId()
     {
@@ -36,12 +36,12 @@ public class Einkaufsliste
     }
 
 
-    public long getStartTime()
+    public String getStartTime()
     {
         return startTime;
     }
 
-    public void setStartTime(int startTime)
+    public void setStartTime(String startTime)
     {
         this.startTime = startTime;
     }
