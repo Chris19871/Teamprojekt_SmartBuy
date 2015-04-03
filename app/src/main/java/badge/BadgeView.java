@@ -26,6 +26,8 @@ import android.widget.TextView;
  * This class is intended to be instantiated at runtime rather than included in XML layouts.
  * 
  * @author Jeff Gilfelt
+ *
+ * !!!Klasse wurde aus Github importiert!!! Teamprojekt SmartBuy
  */
 public class BadgeView extends TextView {
 

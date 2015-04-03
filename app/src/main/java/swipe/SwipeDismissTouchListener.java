@@ -30,6 +30,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 /**
+ * !!!Klasse wurde aus Github importiert!!! Teamprojekt SmartBuy
+ *
+ *
+ *
  * A {@link android.view.View.OnTouchListener} that makes any {@link android.view.View} dismissable when the
  * user swipes (drags her finger) horizontally across the view.
  *
