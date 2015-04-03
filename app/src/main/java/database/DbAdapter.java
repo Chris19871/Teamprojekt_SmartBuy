@@ -341,12 +341,11 @@ public class DbAdapter
 
     public long getStartzeit(String table)
     {
-        String[] startTime = {"name", "start_time"};
-        Einkaufsliste liste = new Einkaufsliste();
+        Einkaufsliste liste;
 
         ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
 
-        Cursor cursor = database.query("einkaufslisten", startTime, "name = '" + table + "'", null, null, null, null);
+        Cursor cursor = database.query("einkaufslisten", einkaufslistenAllColums, "name = '" + table + "'", null, null, null, null);
         cursor.moveToFirst();
 
         if(cursor.getCount() == 0) return 0;
