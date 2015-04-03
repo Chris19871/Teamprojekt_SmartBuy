@@ -304,9 +304,9 @@ public class DbAdapter
         database.execSQL("UPDATE " + table +" set bought = 0 WHERE id = " + id +";");
     }
 
-    public void deleteArtikel(String table, String artikel)
+    public void deleteArtikel(String table, long id)
     {
-        database.execSQL("DELETE FROM " + table + " WHERE name = '" + artikel + "';");
+        database.execSQL("DELETE FROM " + table + " WHERE id = " + id + ";");
     }
 
     public void changeArtikel(String table, String artikel, String desc, int image, long id)

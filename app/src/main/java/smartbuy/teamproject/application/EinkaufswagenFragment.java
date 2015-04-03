@@ -17,6 +17,7 @@ public class EinkaufswagenFragment extends Fragment {
 
     private DbAdapter dbAdapter = StartbildschirmActivity.getDbAdapter();
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
