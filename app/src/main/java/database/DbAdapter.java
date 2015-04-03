@@ -382,6 +382,11 @@ public class DbAdapter
         return liste.getStartTime();
     }
 
+    public void setStartzeit(String table, long startzeit)
+    {
+        database.execSQL("UPDATE einkaufslisten set start_zeit = " + startzeit +" WHERE name = '" + table + "';");
+    }
+
     public void deleteTableEinkaufliste(String table)
     {
         database.execSQL("DROP TABLE IF EXISTS " + table);
