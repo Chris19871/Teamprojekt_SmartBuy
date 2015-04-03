@@ -12,9 +12,11 @@ import java.util.ArrayList;
 
 import database.EinkaufsArtikel;
 
+/**
+ * Create a GridView with a CheckBox for every product in a "Vorauswahlliste".
+ */
 public class NeueEinkaufslisteAdapter extends BaseAdapter
 {
-
     private Context context;
     private EinkaufsArtikel artikel[];
     private ArrayList<database.EinkaufsArtikel> checkItems;
@@ -52,7 +54,6 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter
     @Override
     public View getView(final int position, View convertView, ViewGroup parent)
     {
-
         Holder holder;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -64,12 +65,15 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.newProductcheckBox);
 
             convertView.setTag(holder);
-        } else
+        }
+        else
         {
             holder = (Holder) convertView.getTag();
         }
         holder.checkBox.setText(artikel[position].getName());
         holder.checkBox.setTextSize(10);
+
+        //Check if CheckBox is selected
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @Override
@@ -78,16 +82,14 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter
                 if (isChecked)
                 {
                     checkItems.add(artikel[position]);
-                } else
+                }
+                else
                 {
                     database.EinkaufsArtikel temArtikel = artikel[position];
                     checkItems.remove(temArtikel);
                 }
-
             }
         });
-
-
         return convertView;
     }
 }
@@ -95,5 +97,4 @@ public class NeueEinkaufslisteAdapter extends BaseAdapter
 class Holder
 {
     CheckBox checkBox;
-
 }

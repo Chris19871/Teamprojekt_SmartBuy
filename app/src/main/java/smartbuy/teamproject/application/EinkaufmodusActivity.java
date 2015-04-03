@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 import badge.BadgeView;
 import database.DbAdapter;
 
-
 public class EinkaufmodusActivity extends ActionBarActivity
 {
     private final Context context = this;
@@ -41,6 +40,9 @@ public class EinkaufmodusActivity extends ActionBarActivity
     private DbAdapter dbAdapter;
     private String aktListe;
 
+    /**
+     * Create UI of the shopping mode.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -55,12 +57,13 @@ public class EinkaufmodusActivity extends ActionBarActivity
         einkaufsmodusActionBar.setTitle(aktListe);
         einkaufsmodusActionBar.setDisplayShowTitleEnabled(true);
 
+        //Create Tabs with Fragments, left tab EinkaufsmodusFragment, right tab EinkaufswagenFragment
         einkaufmodusTabHost = (FragmentTabHost) findViewById(R.id.tabHost);
         einkaufmodusTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("regal").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_regal_black)), EinkaufmodusFragment.class, null);
         einkaufmodusTabHost.addTab(einkaufmodusTabHost.newTabSpec("einkaufwagen").setIndicator("", getResources().getDrawable(R.mipmap.ic_launcher_shoppingcar_black)), EinkaufswagenFragment.class, null);
 
-
+        //Check if the stopwatch is enabled
         SharedPreferences einstellungen = PreferenceManager.getDefaultSharedPreferences(context);
         boolean stopWatchState = einstellungen.getBoolean("example_checkbox", false);
 
@@ -71,6 +74,8 @@ public class EinkaufmodusActivity extends ActionBarActivity
             dbAdapter.close();
             initThread();
         }
+
+        //Create badge for stopwatch
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
         final BadgeView badgeTime = new BadgeView(this, tabs, 0);
         badgeTime.setBadgePosition(BadgeView.POSITION_CENTER);
@@ -79,7 +84,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
         badgeTime.setText("00:00:00");
         badgeTime.toggle();
 
-
+        //Create badge for shoppingcart
         badgeCount = new BadgeView(this, tabs, 1);
         dbAdapter.openRead();
         String anzahlGekauft = Integer.toString(dbAdapter.getAllItemsBought(aktListe).size());
@@ -147,6 +152,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
         startActivity(auswahl);
     }
 
+    //Initialize the Thread for the stopwatch counter
     public void initThread()
     {
         TabWidget tabs = einkaufmodusTabHost.getTabWidget();
@@ -160,13 +166,13 @@ public class EinkaufmodusActivity extends ActionBarActivity
         DecimalFormat df = new DecimalFormat("00");
 
         dbAdapter.openRead();
-        startzeit = Long.parseLong(dbAdapter.getStartzeit(aktListe));
+        startzeit = Long.parseLong(dbAdapter.getStartTime(aktListe));
         dbAdapter.close();
         if (startzeit == 0)
         {
             startzeit = aktTime;
             dbAdapter.openWrite();
-            dbAdapter.setStartzeit(aktListe, Long.toString(startzeit));
+            dbAdapter.setStartTime(aktListe, Long.toString(startzeit));
             dbAdapter.close();
 
             hoursCount = 0;
@@ -182,7 +188,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
         {
 
             stopWatchTime = aktTime - startzeit;
-
+            //CurrentTimeMillis to hh:mm:ss
             int h = (int) (TimeUnit.MILLISECONDS.toHours(stopWatchTime) % 24);
             hoursCount = h;
             int m = (int) (TimeUnit.MILLISECONDS.toMinutes(stopWatchTime) % 60);
@@ -191,13 +197,11 @@ public class EinkaufmodusActivity extends ActionBarActivity
             secondsCount = s;
             String hms = String.format("%02d:%02d:%02d", h, m, s);
 
-
             badgetime.setText(hms);
-
         }
-
         badgetime.toggle();
 
+        //Create and start Thread to write data on UI
         Thread refreshThread = new Thread(new Runnable()
         {
             public void run()
@@ -251,7 +255,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
                     });
                 }
                 dbAdapter.openWrite();
-                dbAdapter.setBestzeit(aktListe, badgetime.getText().toString());
+                dbAdapter.setBestTime(aktListe, badgetime.getText().toString());
                 dbAdapter.resetStartTime(aktListe);
                 dbAdapter.close();
             }
@@ -259,22 +263,29 @@ public class EinkaufmodusActivity extends ActionBarActivity
         refreshThread.start();
     }
 
+    /**
+     * increment the shoppingcart badge
+     */
     public static void increment()
     {
         badgeCount.increment(1);
 
     }
 
+    /**
+     * decrement the shoppingcart badge
+     */
     public static void decrement()
     {
         badgeCount.decrement(1);
 
     }
 
+    /**
+     * boolean to stop the counter Thread
+     */
     public static void setStopWatch(boolean stopWatch)
     {
         EinkaufmodusActivity.stopWatch = stopWatch;
-
     }
-
 }

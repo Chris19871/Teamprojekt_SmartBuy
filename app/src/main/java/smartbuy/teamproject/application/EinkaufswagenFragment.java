@@ -24,6 +24,10 @@ public class EinkaufswagenFragment extends Fragment
         super.onCreate(savedInstanceState);
     }
 
+
+    /**
+     * Show bought items in a ListView
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -43,7 +47,6 @@ public class EinkaufswagenFragment extends Fragment
         list.setAdapter(itemAdapter);
 
         itemAdapter.notifyDataSetChanged();
-
 
         return view;
     }

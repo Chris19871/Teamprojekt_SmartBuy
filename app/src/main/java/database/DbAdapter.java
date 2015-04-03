@@ -77,7 +77,13 @@ public class DbAdapter
 
     };
 
-
+    /**
+     * Constructor -
+     *
+     * create a new DbAdapter instance attached to a target.
+     *
+     * @param context context for this view.
+     */
     public DbAdapter(Context context)
     {
         dbHelper = new DbHelper(context);
@@ -98,6 +104,12 @@ public class DbAdapter
         dbHelper.close();
     }
 
+    /**
+     * create a new entry into table "einkaufslisten" .
+     *
+     * @param name Name of the entry.
+     *
+     */
     public Einkaufsliste createEntryEinkaufsliste(String name, String bestTime, long startTime)
     {
         ContentValues values = new ContentValues();
@@ -113,6 +125,12 @@ public class DbAdapter
         return cursorToEntryEinkaufsliste(cursorList);
     }
 
+    /**
+     * create a new entry into table "vorauswahllisten" .
+     *
+     * @param name Name of the entry.
+     *
+     */
     public Vorauswahl createEntryVorauswahlliste(String name)
     {
         ContentValues values = new ContentValues();
@@ -126,6 +144,12 @@ public class DbAdapter
         return cursorToEntryVorauswahlliste(cursor);
     }
 
+    /**
+     * Get all entries <EinkaufsArtikel> from a table.
+     *
+     * @param table Name of the table.
+     *
+     */
     public ArrayList<EinkaufsArtikel> getAllEntriesArtikel(String table) {
         ArrayList<EinkaufsArtikel> EntriesList = new ArrayList<>();
 
@@ -144,6 +168,10 @@ public class DbAdapter
         return EntriesList;
     }
 
+    /**
+     * Get all entries from preselection table.
+     *
+     */
     public ArrayList<Vorauswahl> getAllEntriesVorauswahlListe() {
         ArrayList<Vorauswahl> EntriesList = new ArrayList<>();
 
@@ -162,6 +190,10 @@ public class DbAdapter
         return EntriesList;
     }
 
+    /**
+     * Get all entries from shoppinglist table.
+     *
+     */
     public ArrayList<Einkaufsliste> getAllEntriesEinkaufsliste() {
         ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
 
@@ -225,6 +257,9 @@ public class DbAdapter
         database.execSQL("CREATE TABLE "+ name + "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, desc TEXT, image INTEGER, bought INTEGER);");
     }
 
+    /**
+     * Create a new entry of EinkaufsArtikel to a specific table.
+     */
     public EinkaufsArtikel createEntryEinkaufArtikeltoTable(String table, String name, String desc, int image)
     {
         int bought = 0;
@@ -302,6 +337,10 @@ public class DbAdapter
         database.execSQL("UPDATE " + table + " set bought = 0 WHERE bought = 1;");
     }
 
+    /**
+     * Get all entries of EinkaufsArtikel from a specific table
+     * where bought = 1.
+     */
     public ArrayList<EinkaufsArtikel> getAllItemsBought(String table)
     {
         ArrayList<EinkaufsArtikel> artikelBought = new ArrayList<>();
@@ -321,6 +360,10 @@ public class DbAdapter
         return  artikelBought;
     }
 
+    /**
+     * Get all entries of EinkaufsArtikel from a specific table
+     * where bought = 0.
+     */
     public ArrayList<EinkaufsArtikel> getAllItemsNotBought(String table)
     {
         ArrayList<EinkaufsArtikel> artikelNotBought = new ArrayList<>();
@@ -340,7 +383,7 @@ public class DbAdapter
         return  artikelNotBought;
     }
 
-    public String getStartzeit(String table)
+    public String getStartTime(String table)
     {
         ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
 
@@ -359,12 +402,12 @@ public class DbAdapter
         return EntriesList.get(0).getStartTime();
     }
 
-    public void setStartzeit(String table, String startTime)
+    public void setStartTime(String table, String startTime)
     {
         database.execSQL("UPDATE einkaufslisten set start_time = '" + startTime +"' WHERE name = '" + table + "';");
     }
 
-    public String getBestzeit(String table)
+    public String getBestTime(String table)
     {
         ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
 
@@ -383,7 +426,7 @@ public class DbAdapter
         return EntriesList.get(0).getBestTime();
     }
 
-    public void setBestzeit(String table, String bestTime)
+    public void setBestTime(String table, String bestTime)
     {
         database.execSQL("UPDATE einkaufslisten set best_time = '" + bestTime + "' WHERE name = '" + table + "';");
     }

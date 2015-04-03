@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 
+/**
+ * Adapter to show all product images in a GridView
+ */
 public class EinkaufsArtikelImageAdapter extends BaseAdapter
 {
     private Context mContext;
@@ -81,6 +84,7 @@ public class EinkaufsArtikelImageAdapter extends BaseAdapter
         image.setImageResource(imageId[position]);
         image.setClickable(true);
         image.setBackgroundColor(Color.parseColor("#1D5C6A"));
+
         image.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -94,6 +98,3 @@ public class EinkaufsArtikelImageAdapter extends BaseAdapter
         return image;
     }
 }
-
-
-

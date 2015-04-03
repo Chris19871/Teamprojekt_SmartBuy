@@ -20,6 +20,9 @@ import java.util.ArrayList;
 
 import database.DbAdapter;
 
+/**
+ * Adapter to show ImageView and TextView in the GridLayout from EinkaufsmodusFragment.
+ */
 public class EinkaufmodusAdapter extends BaseAdapter
 {
     private Context mContext;
@@ -72,17 +75,20 @@ public class EinkaufmodusAdapter extends BaseAdapter
 
         ImageView image = new ImageView(layout.getContext());
         image.setBackgroundColor(Color.parseColor("#FF5CC1DE"));
-        //Standard Bild
+
         image.setImageResource(listeArtikel.get(position).getPic());
         image.setClickable(true);
         image.setMinimumWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         image.setMinimumHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+
+        //On click at the image this item will be bought.
+        //The bought item will be moved from the "EinkaufsmodusFragment" to the
+        //"EinkaufswagenFragment".
         image.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-
                 dbAdapter.openWrite();
                 dbAdapter.buyArtikel(aktListe, listeArtikel.get(position).getId());
                 dbAdapter.close();
@@ -98,6 +104,7 @@ public class EinkaufmodusAdapter extends BaseAdapter
                 notifyDataSetChanged();
                 EinkaufmodusActivity.increment();
 
+                //Show a dialog to undo the last action
                 final Dialog loeschen_rueck = new Dialog(mContext);
 
                 loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
@@ -117,8 +124,6 @@ public class EinkaufmodusAdapter extends BaseAdapter
                                 EinkaufmodusActivity.setStopWatch(false);
                             }
                             dbAdapter.close();
-
-
                         }
                         delete = false;
                     }
@@ -162,6 +167,8 @@ public class EinkaufmodusAdapter extends BaseAdapter
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
         textView.setMinimumWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         textView.setMinimumHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        //Show a dialog with product information
         textView.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -191,6 +198,3 @@ public class EinkaufmodusAdapter extends BaseAdapter
         return layout;
     }
 }
-
-
-

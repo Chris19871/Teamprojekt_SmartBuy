@@ -25,6 +25,9 @@ public class DbHelper extends SQLiteOpenHelper
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Create a new Database with default tables.
+     */
     @Override
     public void onCreate(SQLiteDatabase db)
     {
@@ -44,19 +47,14 @@ public class DbHelper extends SQLiteOpenHelper
                         "best_time TEXT, "+
                         "start_time TEXT);";
 
-
-
         // create tables
         db.execSQL(CREATE_VORAUSWAHL_TABLE);
         db.execSQL(CREATE_EINKAUFSARTIKEL_TABLE);
         db.execSQL(CREATE_EINKAUFSLISTEN_TABLE);
-
     }
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-
     }
 }

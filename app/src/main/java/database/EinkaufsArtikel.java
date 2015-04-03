@@ -1,17 +1,11 @@
 package database;
 
-import android.widget.ImageView;
-
-/**
- * Created by Christian Meisberger on 09.03.2015.
- */
 public class EinkaufsArtikel
 {
     private long id;
     private String name;
     private String desc;
     private int pic;
-    private int bought;
 
     public long getId()
     {
@@ -54,16 +48,6 @@ public class EinkaufsArtikel
 
     public void setPic(int pic) {
         this.pic = pic;
-    }
-
-    public int getBought()
-    {
-        return bought;
-    }
-
-    public void setBought(int bought)
-    {
-        this.bought = bought;
     }
 }
 

@@ -1,15 +1,9 @@
 package database;
 
-import java.util.ArrayList;
-
-/**
- * Created by Christian Meisberger on 11.03.2015.
- */
 public class Vorauswahl
 {
     private String name;
     private long id;
-
 
     public long getId()
     {

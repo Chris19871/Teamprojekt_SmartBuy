@@ -35,6 +35,10 @@ public class VorauswahllistenActivity extends ActionBarActivity
     private Vorauswahl zuletztGeleoscht;
     private int zuletztGeleoschtPosition;
 
+
+    /**
+     * Create ListView with all "Vorauswahllisten"
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -63,6 +67,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
             }
         });
 
+        //Swipe to left or right to delete the item
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         listView,
@@ -87,6 +92,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
 
                                 final Dialog loeschen_rueck = new Dialog(context);
 
+                                //Show a dialog to undo the last action
                                 loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
                                 {
                                     @Override
@@ -180,6 +186,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId())
         {
+            //Open dialog to change the list name
             case R.id.action_ContextMenu_Change_Name:
             {
                 final Dialog nameAndern = new Dialog(context);
@@ -224,6 +231,8 @@ public class VorauswahllistenActivity extends ActionBarActivity
                 nameAndern.show();
                 break;
             }
+
+            //delete item
             case R.id.action_ContextMenu_delete:
             {
                 zuletztGeleoschtPosition = info.position;
@@ -234,6 +243,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
 
                 final Dialog loeschen_rueck = new Dialog(context);
 
+                //Show a dialog to undo the last action
                 loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
                 {
                     @Override
@@ -293,6 +303,9 @@ public class VorauswahllistenActivity extends ActionBarActivity
         uberDialog.show();
     }
 
+    /**
+     * Show dialog to add a new "Vorauswahlliste".
+     */
     public void addAuswahllisteOpen()
     {
         final Dialog auswahllistenDialog = new Dialog(context);

@@ -1,8 +1,5 @@
 package database;
 
-/**
- * Created by Christian Meisberger on 09.03.2015.
- */
 public class Einkaufsliste
 {
     private long id;
@@ -34,7 +31,6 @@ public class Einkaufsliste
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getStartTime()
     {

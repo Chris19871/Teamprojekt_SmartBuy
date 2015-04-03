@@ -48,6 +48,9 @@ public class EinkaufslisteActivity extends ActionBarActivity
     private boolean isDeleted = false;
     private boolean delete = false;
 
+    /**
+     * Create ListView with all products from an "Einkaufsliste".
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -97,6 +100,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
             }
         });
 
+        //Swipe to left or right to delete the item
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         listView,
@@ -122,8 +126,9 @@ public class EinkaufslisteActivity extends ActionBarActivity
                                     geloschteArtikel.add(itemAdapter.getItem(position));
                                     itemAdapter.remove(itemAdapter.getItem(position));
                                     isDeleted = true;
-
                                 }
+
+                                //Show a dialog to undo the last action
                                 final Dialog loeschen_rueck = new Dialog(context);
                                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
@@ -180,16 +185,12 @@ public class EinkaufslisteActivity extends ActionBarActivity
             delete.setVisible(true);
             add.setVisible(false);
             cart.setVisible(false);
-
-
-        } else
+        }
+        else
         {
             delete.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             delete.setVisible(false);
-            //add.setVisible(true);
-            // cart.setVisible(true);
         }
-
         return true;
     }
 
@@ -264,6 +265,9 @@ public class EinkaufslisteActivity extends ActionBarActivity
         startActivity(auswahl);
     }
 
+    /**
+     * Open dialog to create a new product and add it to the "Einkaufsliste"
+     */
     public void newProductOpen()
     {
         final Dialog newProducts = new Dialog(context);
@@ -276,22 +280,20 @@ public class EinkaufslisteActivity extends ActionBarActivity
         image.setImageResource(R.mipmap.smartbuy_logo);
         image.setTag(R.mipmap.smartbuy_logo);
 
+        //open EinkaufsArtikelImageAdapter to choose an image
         image.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-
                 final Dialog imageAuswahlDialog = new Dialog(context);
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 imageAuswahlDialog.setContentView(R.layout.einkaufsartikel_image_dialog);
-
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
                 final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
-
 
                 imageAuswahlDialog.setOnDismissListener(new DialogInterface.OnDismissListener()
                 {
@@ -307,7 +309,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
             }
         });
 
-
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
         dialogButtonSave.setOnClickListener(new OnClickListener()
         {
@@ -317,7 +318,8 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
-                } else
+                }
+                else
                 {
                     int resId = (Integer) image.getTag();
                     addArticle(name.getText().toString(), desc.getText().toString(), resId);
@@ -335,17 +337,21 @@ public class EinkaufslisteActivity extends ActionBarActivity
             }
         });
 
-
         newProducts.show();
     }
 
+    /**
+     * Change to the EinkaufsmodusActivity
+     */
     public void einkaufsmodusOpen()
     {
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
         startActivity(einkaufsmodus);
     }
 
-
+    /**
+     * Change the ActionBar-Items and enable multiple choice to delete items
+     */
     public void deleteMode()
     {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -358,9 +364,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
         invalidateOptionsMenu();
     }
 
+    /**
+     * Change the ActionBar-Items and enable single choice mode for ArrayAdapter
+     */
     public void normalMode()
     {
-
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
                 R.layout.listview_design, R.id.listViewDesign, allItems);
         listView.setAdapter(itemAdapter);
@@ -373,6 +381,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
         if (articleDelete)
         {
+            //Show a dialog to undo the last action
             final Dialog loeschen_rueck = new Dialog(context);
 
             loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
@@ -418,6 +427,10 @@ public class EinkaufslisteActivity extends ActionBarActivity
         itemAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Open a dialog to change the values of a product
+     * @param pos Position of item in List
+     */
     public void changeArticlelDialog(final int pos)
     {
         final EditText name;
@@ -445,6 +458,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         image.setImageResource(tmpArtikel.getPic());
         image.setTag(tmpArtikel.getPic());
 
+        //open EinkaufsArtikelImageAdapter to choose an image
         image.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -453,7 +467,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 final Dialog imageAuswahlDialog = new Dialog(context);
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 imageAuswahlDialog.setContentView(R.layout.einkaufsartikel_image_dialog);
-
 
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
                 final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
@@ -470,7 +483,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
                     }
                 });
                 imageAuswahlDialog.show();
-
             }
         });
 
@@ -483,7 +495,8 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
-                } else
+                }
+                else
                 {
                     int resId = (Integer) image.getTag();
                     changeArticle(name.getText().toString(), desc.getText().toString(), resId, id);
@@ -512,7 +525,6 @@ public class EinkaufslisteActivity extends ActionBarActivity
     public void changeArticle(String name, String desc, int image, long id)
     {
         dbAdapter.openWrite();
-
         dbAdapter.changeArtikel(aktListenName, name, desc, image, id);
         dbAdapter.close();
     }

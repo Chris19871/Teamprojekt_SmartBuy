@@ -47,6 +47,9 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
     private boolean isDeleted = false;
     private boolean delete = false;
 
+    /**
+     * Create ListView with all products from a "Vorauswahlliste".
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -96,6 +99,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
             }
         });
 
+        //Swipe to left or right to delete the item
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         listView,
@@ -251,6 +255,9 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         startActivity(auswahl);
     }
 
+    /**
+     * Open dialog to create a new product and add it to the "Vorauswahlliste"
+     */
     public void newProductOpen()
     {
         final Dialog newProducts = new Dialog(context);
@@ -263,6 +270,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         image.setImageResource(R.mipmap.smartbuy_logo);
         image.setTag(R.mipmap.smartbuy_logo);
 
+        //open EinkaufsArtikelImageAdapter to choose an image
         image.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -273,12 +281,10 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 imageAuswahlDialog.setContentView(R.layout.einkaufsartikel_image_dialog);
 
-
                 final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
                 final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
-
 
                 imageAuswahlDialog.setOnDismissListener(new DialogInterface.OnDismissListener()
                 {
@@ -293,7 +299,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                 imageAuswahlDialog.show();
             }
         });
-
 
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
         dialogButtonSave.setOnClickListener(new OnClickListener()
@@ -328,6 +333,9 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         newProducts.show();
     }
 
+    /**
+     * Change the ActionBar-Items and enable multiple choice to delete items
+     */
     public void deleteMode()
     {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -340,6 +348,9 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         invalidateOptionsMenu();
     }
 
+    /**
+     * Change the ActionBar-Items and enable single choice mode for ArrayAdapter
+     */
     public void normalMode()
     {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -354,6 +365,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
 
         if (articleDelete)
         {
+            //Show a dialog to undo the last action
             final Dialog loeschen_rueck = new Dialog(context);
 
 
@@ -400,6 +412,10 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         itemAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Open a dialog to change the values of a product
+     * @param pos Position of item in List
+     */
     public void changeArticlelDialog(final int pos)
     {
         final EditText name;
@@ -428,6 +444,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         image.setImageResource(tmpArtikel.getPic());
         image.setTag(tmpArtikel.getPic());
 
+        //open EinkaufsArtikelImageAdapter to choose an image
         image.setOnClickListener(new OnClickListener()
         {
             @Override
