@@ -25,13 +25,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 import database.DbAdapter;
-import purchase.EinkaufsArtikel;
-import purchase.Einkaufsliste;
 import swipe.SwipeDismissListViewTouchListener;
 
 public class VorauswahllistenBearbeitenActivity extends ActionBarActivity {

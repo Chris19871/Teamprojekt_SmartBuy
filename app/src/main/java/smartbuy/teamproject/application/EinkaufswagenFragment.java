@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.ArrayList;
-
 import database.DbAdapter;
-import purchase.EinkaufsArtikel;
 
 
 public class EinkaufswagenFragment extends Fragment {

@@ -14,13 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
 import database.DbAdapter;
-import purchase.EinkaufsArtikel;
-import purchase.Einkaufsliste;
-
 public class EinkaufmodusAdapter extends BaseAdapter
 {
     private Context mContext;

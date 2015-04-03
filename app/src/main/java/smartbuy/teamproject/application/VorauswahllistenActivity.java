@@ -19,13 +19,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
 import java.util.ArrayList;
-
 import database.DbAdapter;
 import database.Vorauswahl;
-import purchase.EinkaufsArtikel;
-import purchase.VorauswahlListe;
 import swipe.SwipeDismissListViewTouchListener;
 
 public class VorauswahllistenActivity extends ActionBarActivity {

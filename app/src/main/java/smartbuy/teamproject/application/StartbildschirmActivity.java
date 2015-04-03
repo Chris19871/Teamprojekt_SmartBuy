@@ -25,13 +25,9 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
 import database.DbAdapter;
 import database.Vorauswahl;
-import purchase.EinkaufsArtikel;
-import purchase.Einkaufsliste;
 import swipe.SwipeDismissListViewTouchListener;
 
 public class StartbildschirmActivity extends ActionBarActivity {
