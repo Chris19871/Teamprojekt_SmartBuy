@@ -40,6 +40,7 @@ public class StartbildschirmActivity extends ActionBarActivity
     private ArrayList<Vorauswahl> vorauswahllisten;
     private EditText listName;
     private static String aktListe;
+    private static String aktListeName;
     private database.Einkaufsliste zuletztGeleoscht;
     private int zuletztGeleoschtPosition;
     private static DbAdapter dbAdapter;
@@ -87,7 +88,8 @@ public class StartbildschirmActivity extends ActionBarActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                aktListe = einkaufsliste.get(position).getName();
+                aktListeName = einkaufsliste.get(position).getName();
+                aktListe = "'" + String.valueOf(einkaufsliste.get(position).getId()) + "'";
                 wechsel();
             }
         });
@@ -118,7 +120,6 @@ public class StartbildschirmActivity extends ActionBarActivity
 
                                 final Dialog loeschen_rueck = new Dialog(context);
 
-                                //Show a dialog to undo the last action
                                 loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
                                 {
                                     @Override
@@ -127,7 +128,7 @@ public class StartbildschirmActivity extends ActionBarActivity
                                         if (!delet)
                                         {
                                             dbAdapter.openWrite();
-                                            dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName());
+                                            dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
                                             dbAdapter.close();
                                             delet = false;
                                         }
@@ -222,7 +223,8 @@ public class StartbildschirmActivity extends ActionBarActivity
             //Go to EinkaufsmodusActivity
             case R.id.action_ContextMenu_Einkaufsmodus:
             {
-                aktListe = itemListsAdapter.getItem(info.position).getName();
+                aktListeName = itemListsAdapter.getItem(info.position).getName();
+                aktListe = "'" + String.valueOf(einkaufsliste.get(info.position).getId()) + "'";
                 openEinkaufsmodus();
                 break;
             }
@@ -286,7 +288,7 @@ public class StartbildschirmActivity extends ActionBarActivity
                 liste.setText(itemListsAdapter.getItem(info.position).getName());
 
                 dbAdapter.openRead();
-                String stopWatchTime = dbAdapter.getBestTime(aktListe);
+                String stopWatchTime = dbAdapter.getBestTime(aktListeName);
                 dbAdapter.close();
 
                 bestzeitText.setText(stopWatchTime);
@@ -298,7 +300,7 @@ public class StartbildschirmActivity extends ActionBarActivity
                     {
                         bestzeitText.setText("00:00:00");
                         dbAdapter.openWrite();
-                        dbAdapter.resetBestTime(aktListe);
+                        dbAdapter.resetBestTime(aktListeName);
                         dbAdapter.close();
                     }
                 });
@@ -306,7 +308,6 @@ public class StartbildschirmActivity extends ActionBarActivity
                 break;
             }
 
-            //delete item
             case R.id.action_ContextMenu_delete:
             {
                 zuletztGeleoschtPosition = info.position;
@@ -317,7 +318,6 @@ public class StartbildschirmActivity extends ActionBarActivity
 
                 final Dialog loeschen_rueck = new Dialog(context);
 
-                //Show a dialog to undo the last action
                 loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
                 {
                     @Override
@@ -326,7 +326,7 @@ public class StartbildschirmActivity extends ActionBarActivity
                         if (!delet)
                         {
                             dbAdapter.openWrite();
-                            dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName());
+                            dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
                             dbAdapter.close();
                             delet = false;
                         }
@@ -356,8 +356,6 @@ public class StartbildschirmActivity extends ActionBarActivity
                 break;
 
             }
-
-            //reset items bought
             case R.id.action_ContextMenu_reset:
             {
                 resetList(info.position);
@@ -390,14 +388,13 @@ public class StartbildschirmActivity extends ActionBarActivity
 
         Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
 
-        //choose "Vorauswahlliste" in spinner
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3)
             {
-                String item = vorauswahllistenitemListsAdapter.getItem(arg2).getName();
+                String item = "'" + String.valueOf(vorauswahllistenitemListsAdapter.getItem(arg2).getId()) + "'";
 
                 dbAdapter.openRead();
                 ArrayList<database.EinkaufsArtikel> pItems = dbAdapter.getAllEntriesArtikel(item);
@@ -423,6 +420,7 @@ public class StartbildschirmActivity extends ActionBarActivity
         {
             public void onClick(View v) throws IllegalArgumentException
             {
+                // Prüfung, ob der neuen Liste ein Name gegeben wurde.
                 if (listName.getText().toString().equals(""))
                 {
                     listName.setHintTextColor(Color.parseColor("#FF0000"));
@@ -479,18 +477,12 @@ public class StartbildschirmActivity extends ActionBarActivity
         startActivity(auswahl);
     }
 
-    /**
-     * go to EinkaufslisteActivity
-     */
     public void wechsel()
     {
         final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
         startActivity(einkaufsliste);
     }
 
-    /**
-     * go to EinkaufsmodusActivity
-     */
     public void openEinkaufsmodus()
     {
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
@@ -500,13 +492,18 @@ public class StartbildschirmActivity extends ActionBarActivity
     public void resetList(int pos)
     {
         dbAdapter.openWrite();
-        dbAdapter.resetList(itemListsAdapter.getItem(pos).getName());
+        dbAdapter.resetList("'" + String.valueOf(itemListsAdapter.getItem(pos).getId()) + "'");
         dbAdapter.close();
     }
 
     public static String getAktListe()
     {
         return aktListe;
+    }
+
+    public static String getAktListeName()
+    {
+        return aktListeName;
     }
 
     public static DbAdapter getDbAdapter()

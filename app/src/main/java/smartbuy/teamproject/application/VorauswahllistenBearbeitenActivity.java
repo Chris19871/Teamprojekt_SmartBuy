@@ -32,7 +32,8 @@ import swipe.SwipeDismissListViewTouchListener;
 
 public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
 {
-    private String aktListenName;
+    private String aktListe;
+    private String aktListeName;
     private DbAdapter dbAdapter;
     private final Context context = this;
     private ArrayAdapter<database.EinkaufsArtikel> itemAdapter;
@@ -61,15 +62,16 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         geloschteArtikelPositionen = new ArrayList<>();
 
         dbAdapter = StartbildschirmActivity.getDbAdapter();
-        aktListenName = VorauswahllistenActivity.getAktVorauswahlListe();
+        aktListe = VorauswahllistenActivity.getAktVorauswahlListe();
+        aktListeName = VorauswahllistenActivity.getAktVorauswahlListeName();
 
-        einkaufslisteActionBar.setTitle(aktListenName);
+        einkaufslisteActionBar.setTitle(aktListeName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
 
         listView = (ListView) findViewById(R.id.vorAuswahllistebearbietenListView);
 
         dbAdapter.openRead();
-        allItems = dbAdapter.getAllEntriesArtikel(aktListenName);
+        allItems = dbAdapter.getAllEntriesArtikel(aktListe);
         dbAdapter.close();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -150,9 +152,9 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                                 if (isDeleted)
                                 {
                                     dbAdapter.openWrite();
-                                    dbAdapter.deleteArtikel(aktListenName, geloschteArtikel.get(0).getId());
+                                    dbAdapter.deleteArtikel(aktListe, geloschteArtikel.get(0).getId());
                                     allItems.clear();
-                                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+                                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListe));
                                     dbAdapter.close();
                                     itemAdapter.notifyDataSetChanged();
                                 }
@@ -300,6 +302,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
             }
         });
 
+
         Button dialogButtonSave = (Button) newProducts.findViewById(R.id.newProductSave);
         dialogButtonSave.setOnClickListener(new OnClickListener()
         {
@@ -333,9 +336,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         newProducts.show();
     }
 
-    /**
-     * Change the ActionBar-Items and enable multiple choice to delete items
-     */
     public void deleteMode()
     {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -348,9 +348,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         invalidateOptionsMenu();
     }
 
-    /**
-     * Change the ActionBar-Items and enable single choice mode for ArrayAdapter
-     */
     public void normalMode()
     {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -365,7 +362,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
 
         if (articleDelete)
         {
-            //Show a dialog to undo the last action
             final Dialog loeschen_rueck = new Dialog(context);
 
 
@@ -379,7 +375,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                         dbAdapter.openWrite();
                         for (int i = geloschteArtikel.size() - 1; i >= 0; i--)
                         {
-                            dbAdapter.deleteArtikel(aktListenName, geloschteArtikel.get(i).getId());
+                            dbAdapter.deleteArtikel(aktListe, geloschteArtikel.get(i).getId());
                         }
                         dbAdapter.close();
                     }
@@ -412,10 +408,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         itemAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * Open a dialog to change the values of a product
-     * @param pos Position of item in List
-     */
     public void changeArticlelDialog(final int pos)
     {
         final EditText name;
@@ -423,7 +415,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         final ImageView image;
 
         dbAdapter.openRead();
-        database.EinkaufsArtikel tmpArtikel = dbAdapter.getArtikel(aktListenName, allItems.get(pos).getName());
+        database.EinkaufsArtikel tmpArtikel = dbAdapter.getArtikel(aktListe, allItems.get(pos).getName());
         dbAdapter.close();
 
 
@@ -436,7 +428,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
 
         dbAdapter.openRead();
-        final long id = dbAdapter.getArtikel(aktListenName, tmpArtikel.getName()).getId();
+        final long id = dbAdapter.getArtikel(aktListe, tmpArtikel.getName()).getId();
         dbAdapter.close();
 
         name.setText(tmpArtikel.getName());
@@ -444,7 +436,6 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         image.setImageResource(tmpArtikel.getPic());
         image.setTag(tmpArtikel.getPic());
 
-        //open EinkaufsArtikelImageAdapter to choose an image
         image.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -491,7 +482,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
 
                     allItems.clear();
                     dbAdapter.openWrite();
-                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListe));
                     dbAdapter.close();
                     itemAdapter.notifyDataSetChanged();
                     newProducts.dismiss();
@@ -513,16 +504,16 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
     public void changeArticle(String name, String desc, int image, long id)
     {
         dbAdapter.openWrite();
-        dbAdapter.changeArtikel(aktListenName, name, desc, image, id);
+        dbAdapter.changeArtikel(aktListe, name, desc, image, id);
         dbAdapter.close();
     }
 
     public void addArticle(String name, String desc, int image)
     {
         dbAdapter.openWrite();
-        dbAdapter.createEntryEinkaufArtikeltoTable(aktListenName, name, desc, image);
+        dbAdapter.createEntryEinkaufArtikeltoTable(aktListe, name, desc, image);
         allItems.clear();
-        allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+        allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListe));
         dbAdapter.close();
         itemAdapter.notifyDataSetChanged();
     }

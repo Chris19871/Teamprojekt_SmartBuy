@@ -31,6 +31,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
     private ArrayAdapter<Vorauswahl> newVorauswahllistenListsAdapter;
     private ArrayList<Vorauswahl> newVorauswahllisten;
     private static String aktVorauswahlListe;
+    private static String aktVorauswahlListeName;
     private DbAdapter dbAdapter;
     private Vorauswahl zuletztGeleoscht;
     private int zuletztGeleoschtPosition;
@@ -62,7 +63,8 @@ public class VorauswahllistenActivity extends ActionBarActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                aktVorauswahlListe = newVorauswahllisten.get(position).getName();
+                aktVorauswahlListeName = newVorauswahllisten.get(position).getName();
+                aktVorauswahlListe = "'" + String.valueOf(newVorauswahllisten.get(position).getId()) + "'";
                 change();
             }
         });
@@ -101,7 +103,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
                                         if (!delete)
                                         {
                                             dbAdapter.openWrite();
-                                            dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName());
+                                            dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
                                             dbAdapter.close();
                                             delete = false;
                                         }
@@ -252,7 +254,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
                         if (!delete)
                         {
                             dbAdapter.openWrite();
-                            dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName());
+                            dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
                             dbAdapter.close();
                             delete = false;
                         }
@@ -357,5 +359,10 @@ public class VorauswahllistenActivity extends ActionBarActivity
     public static String getAktVorauswahlListe()
     {
         return aktVorauswahlListe;
+    }
+
+    public static String getAktVorauswahlListeName()
+    {
+        return aktVorauswahlListeName;
     }
 }

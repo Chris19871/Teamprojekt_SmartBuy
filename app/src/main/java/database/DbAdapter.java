@@ -254,7 +254,7 @@ public class DbAdapter
 
     public void addListe(String name)
     {
-        database.execSQL("CREATE TABLE "+ name + "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, desc TEXT, image INTEGER, bought INTEGER);");
+        database.execSQL("CREATE TABLE IF NOT EXISTS " + name + "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, desc TEXT, image INTEGER, bought INTEGER);");
     }
 
     /**
@@ -284,30 +284,48 @@ public class DbAdapter
 
         for (String aVorauswahllisten : vorauswahllisten)
         {
-            addListe(aVorauswahllisten);
             createEntryVorauswahlliste(aVorauswahllisten);
         }
+
+        ArrayList<Vorauswahl> list = getAllEntriesVorauswahlListe();
+        for (int i = 0; i < list.size(); i++)
+        {
+            addListe("'" + String.valueOf(list.get(i).getId()) + "'");
+        }
+
         for(int i=0; i < partyArtikel.length; i++)
         {
-            createEntryEinkaufArtikeltoTable(vorauswahllisten[0],partyArtikel[i],desc,partArtikelImage[i]);
+            createEntryEinkaufArtikeltoTable("'" + String.valueOf(list.get(0).getId())+ "'",partyArtikel[i],desc,partArtikelImage[i]);
         }
+
         for(int i=0; i < geburstagArtikel.length; i++)
         {
-            createEntryEinkaufArtikeltoTable(vorauswahllisten[1],geburstagArtikel[i],desc,geburstagArtikelImage[i]);
+            createEntryEinkaufArtikeltoTable("'" + String.valueOf(list.get(1).getId()) + "'",geburstagArtikel[i],desc,geburstagArtikelImage[i]);
         }
     }
 
     public void createEinkaufsliste(String tableName, ArrayList<EinkaufsArtikel> artikel)
     {
+        String listname = "";
         createEntryEinkaufsliste(tableName,"00:00:00", 0);
-        addListe(tableName);
+        ArrayList<Einkaufsliste> list = getAllEntriesEinkaufsliste();
+        for (int i = 0; i < list.size(); i++)
+        {
+            if(list.get(i).getName().equals(tableName))
+            {
+                listname = "'" + String.valueOf(list.get(i).getId()) + "'";
+            }
+
+        }
+        addListe(listname);
+
         for(int i = 0; i < artikel.size(); i++)
         {
             String name = artikel.get(i).getName();
             String desc = artikel.get(i).getDesc();
             int image = artikel.get(i).getPic();
 
-            createEntryEinkaufArtikeltoTable(tableName,name,desc,image);
+            createEntryEinkaufArtikeltoTable(listname,name,desc,image);
         }
     }
 
@@ -387,7 +405,7 @@ public class DbAdapter
     {
         ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
 
-        Cursor cursor = database.query("einkaufslisten", einkaufslistenAllColums, "name = '" + table + "'", null, null, null, null);
+        Cursor cursor = database.query("einkaufslisten", einkaufslistenAllColums, "name = " + table , null, null, null, null);
         cursor.moveToFirst();
 
         if(cursor.getCount() == 0) return "0";
@@ -404,14 +422,14 @@ public class DbAdapter
 
     public void setStartTime(String table, String startTime)
     {
-        database.execSQL("UPDATE einkaufslisten set start_time = '" + startTime +"' WHERE name = '" + table + "';");
+        database.execSQL("UPDATE einkaufslisten set start_time = '" + startTime +"' WHERE name = " + table + ";");
     }
 
     public String getBestTime(String table)
     {
         ArrayList<Einkaufsliste> EntriesList = new ArrayList<>();
 
-        Cursor cursor = database.query("einkaufslisten", einkaufslistenAllColums, "name = '" + table + "'", null, null, null, null);
+        Cursor cursor = database.query("einkaufslisten", einkaufslistenAllColums, "name = '" + table + "'" , null, null, null, null);
         cursor.moveToFirst();
 
         if(cursor.getCount() == 0) return "00:00:00";
@@ -441,27 +459,25 @@ public class DbAdapter
         database.execSQL("UPDATE einkaufslisten set best_time = '00:00:00' WHERE name = '" + table + "';");
     }
 
-    public void deleteTableEinkaufliste(String table)
+    public void deleteTableEinkaufliste(String tableName, String tableId)
     {
-        database.execSQL("DROP TABLE IF EXISTS " + table);
-        database.execSQL("DELETE FROM einkaufslisten WHERE name = '" + table +"';");
+        database.execSQL("DROP TABLE IF EXISTS '" + tableId + "'");
+        database.execSQL("DELETE FROM einkaufslisten WHERE name = '" + tableName +"';");
     }
 
-    public void deleteTableVorauswahl(String table)
+    public void deleteTableVorauswahl(String tableName, String tableId)
     {
-        database.execSQL("DROP TABLE IF EXISTS " + table);
-        database.execSQL("DELETE FROM vorauswahllisten WHERE name = '" + table +"';");
+        database.execSQL("DROP TABLE IF EXISTS '" + tableId + "'");
+        database.execSQL("DELETE FROM vorauswahllisten WHERE name = '" + tableName +"';");
     }
 
     public void changeListNameEinkaufsliste(String oldName, String newName)
     {
-        database.execSQL("ALTER TABLE " + oldName + " RENAME TO " + newName +";");
         database.execSQL("UPDATE einkaufslisten set name = '" + newName +"' WHERE name = '" + oldName + "';");
     }
 
     public void changeListNameVorauswahlliste(String oldName, String newName)
     {
-        database.execSQL("ALTER TABLE " + oldName + " RENAME TO " + newName +";");
         database.execSQL("UPDATE vorauswahllisten set name = '" + newName +"' WHERE name = '" + oldName + "';");
     }
 }

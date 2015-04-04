@@ -39,6 +39,7 @@ public class EinkaufmodusActivity extends ActionBarActivity
     private static BadgeView badgeCount;
     private DbAdapter dbAdapter;
     private String aktListe;
+    private String aktListeName;
 
     /**
      * Create UI of the shopping mode.
@@ -51,10 +52,11 @@ public class EinkaufmodusActivity extends ActionBarActivity
         dbAdapter = StartbildschirmActivity.getDbAdapter();
 
         aktListe = StartbildschirmActivity.getAktListe();
+        aktListeName = StartbildschirmActivity.getAktListeName();
 
         ActionBar einkaufsmodusActionBar;
         einkaufsmodusActionBar = getSupportActionBar();
-        einkaufsmodusActionBar.setTitle(aktListe);
+        einkaufsmodusActionBar.setTitle(aktListeName);
         einkaufsmodusActionBar.setDisplayShowTitleEnabled(true);
 
         //Create Tabs with Fragments, left tab EinkaufsmodusFragment, right tab EinkaufswagenFragment
@@ -254,9 +256,16 @@ public class EinkaufmodusActivity extends ActionBarActivity
 
                     });
                 }
+                String aktTime = badgetime.getText().toString();
+
+                if(checkBestTime(aktTime))
+                {
+                    dbAdapter.openWrite();
+                    dbAdapter.setBestTime(aktListeName, aktTime);
+                    dbAdapter.close();
+                }
                 dbAdapter.openWrite();
-                dbAdapter.setBestTime(aktListe, badgetime.getText().toString());
-                dbAdapter.resetStartTime(aktListe);
+                dbAdapter.resetStartTime(aktListeName);
                 dbAdapter.close();
             }
         });
@@ -269,7 +278,6 @@ public class EinkaufmodusActivity extends ActionBarActivity
     public static void increment()
     {
         badgeCount.increment(1);
-
     }
 
     /**
@@ -278,7 +286,6 @@ public class EinkaufmodusActivity extends ActionBarActivity
     public static void decrement()
     {
         badgeCount.decrement(1);
-
     }
 
     /**
@@ -287,5 +294,58 @@ public class EinkaufmodusActivity extends ActionBarActivity
     public static void setStopWatch(boolean stopWatch)
     {
         EinkaufmodusActivity.stopWatch = stopWatch;
+    }
+
+    /**
+     * Checks if the new time is a besttime.
+     * @param time time of last shopping
+     * @return returns boolean if new time is besttime or not
+     */
+    public boolean checkBestTime(String time)
+    {
+        boolean isBestTime = false;
+
+        dbAdapter.openRead();
+        String bestTime = dbAdapter.getBestTime(aktListeName);
+        dbAdapter.close();
+
+        String[] oldBestTime = bestTime.split(":");
+        String[] aktTime = time.split(":");
+        boolean[] isEqual = new boolean[aktTime.length];
+        boolean[] isBetter = new boolean[aktTime.length];
+
+        for(int i = 0; i < isBetter.length; i++ )
+        {
+            if(Integer.parseInt(oldBestTime[i]) > Integer.parseInt(aktTime[i]))
+            {
+                isBetter[i] = true;
+            }
+            if(Integer.parseInt(oldBestTime[i]) == Integer.parseInt(aktTime[i]))
+            {
+                isEqual[i] = true;
+            }
+        }
+
+        if(bestTime.equals("00:00:00"))
+        {
+            isBestTime = true;
+        }
+
+        if(isBetter[0] && isBetter[1] && isBetter[2])
+        {
+            isBestTime = true;
+        }
+
+        if(isEqual[0] && isBetter[1] && !isBetter[2])
+        {
+            isBestTime = true;
+        }
+
+        if(isEqual[0] && isEqual[1] && isBetter[2])
+        {
+            isBestTime = true;
+        }
+
+        return isBestTime;
     }
 }

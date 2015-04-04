@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,7 +34,8 @@ import swipe.SwipeDismissListViewTouchListener;
 
 public class EinkaufslisteActivity extends ActionBarActivity
 {
-    private String aktListenName;
+    private String aktListeName;
+    private String aktListe;
     private DbAdapter dbAdapter;
     private final Context context = this;
     private ArrayAdapter<database.EinkaufsArtikel> itemAdapter;
@@ -62,15 +64,16 @@ public class EinkaufslisteActivity extends ActionBarActivity
         geloschteArtikelPositionen = new ArrayList<>();
 
         dbAdapter = StartbildschirmActivity.getDbAdapter();
-        aktListenName = StartbildschirmActivity.getAktListe();
+        aktListe = StartbildschirmActivity.getAktListe();
+        aktListeName = StartbildschirmActivity.getAktListeName();
 
-        einkaufslisteActionBar.setTitle(aktListenName);
+        einkaufslisteActionBar.setTitle(aktListeName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
 
         listView = (ListView) findViewById(R.id.einkaufslisteListView);
 
         dbAdapter.openRead();
-        allItems = dbAdapter.getAllEntriesArtikel(aktListenName);
+        allItems = dbAdapter.getAllEntriesArtikel(aktListe);
         dbAdapter.close();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -153,9 +156,9 @@ public class EinkaufslisteActivity extends ActionBarActivity
                                 if (isDeleted)
                                 {
                                     dbAdapter.openWrite();
-                                    dbAdapter.deleteArtikel(aktListenName, geloschteArtikel.get(0).getId());
+                                    dbAdapter.deleteArtikel(aktListe, geloschteArtikel.get(0).getId());
                                     allItems.clear();
-                                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+                                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListe));
                                     dbAdapter.close();
                                     itemAdapter.notifyDataSetChanged();
                                 }
@@ -277,6 +280,8 @@ public class EinkaufslisteActivity extends ActionBarActivity
         final EditText name = (EditText) newProducts.findViewById(R.id.productName);
         final TextView desc = (TextView) newProducts.findViewById(R.id.descNewProduct);
         final ImageView image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
+
+        name.setImeOptions(EditorInfo.IME_ACTION_DONE);
         image.setImageResource(R.mipmap.smartbuy_logo);
         image.setTag(R.mipmap.smartbuy_logo);
 
@@ -314,10 +319,19 @@ public class EinkaufslisteActivity extends ActionBarActivity
         {
             public void onClick(View v)
             {
+                String last = name.getText().toString().substring(name.getText().toString().length()-1);
+
                 if (name.getText().toString().equals(""))
                 {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
+                }
+                if(last.equals("."))
+                {
+                    name.getText().clear();
+                    name.setHintTextColor(Color.parseColor("#FF0000"));
+                    name.setHint("Punkt am Ende ist unzulässig");
+
                 }
                 else
                 {
@@ -347,6 +361,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
     {
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
         startActivity(einkaufsmodus);
+        finish();
     }
 
     /**
@@ -394,7 +409,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
                         dbAdapter.openWrite();
                         for (int i = geloschteArtikel.size() - 1; i >= 0; i--)
                         {
-                            dbAdapter.deleteArtikel(aktListenName, geloschteArtikel.get(i).getId());
+                            dbAdapter.deleteArtikel(aktListe, geloschteArtikel.get(i).getId());
                         }
                         dbAdapter.close();
                     }
@@ -438,7 +453,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
         final ImageView image;
 
         dbAdapter.openRead();
-        database.EinkaufsArtikel tmpArtikel = dbAdapter.getArtikel(aktListenName, allItems.get(pos).getName());
+        database.EinkaufsArtikel tmpArtikel = dbAdapter.getArtikel(aktListe, allItems.get(pos).getName());
         dbAdapter.close();
 
         final Dialog newProducts = new Dialog(context);
@@ -450,10 +465,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
         image = (ImageView) newProducts.findViewById(R.id.newProductLogo);
 
         dbAdapter.openRead();
-        final long id = dbAdapter.getArtikel(aktListenName, tmpArtikel.getName()).getId();
+        final long id = dbAdapter.getArtikel(aktListe, tmpArtikel.getName()).getId();
         dbAdapter.close();
 
         name.setText(tmpArtikel.getName());
+        name.setImeOptions(EditorInfo.IME_ACTION_DONE);
         desc.setText(tmpArtikel.getDesc());
         image.setImageResource(tmpArtikel.getPic());
         image.setTag(tmpArtikel.getPic());
@@ -491,10 +507,19 @@ public class EinkaufslisteActivity extends ActionBarActivity
         {
             public void onClick(View v)
             {
+                String last = name.getText().toString().substring(name.getText().toString().length()-1);
+
                 if (name.getText().toString().equals(""))
                 {
                     name.setHintTextColor(Color.parseColor("#FF0000"));
                     name.setHint("Feld muss ausgefüllt werden!");
+                }
+                if(last.equals("."))
+                {
+                    name.getText().clear();
+                    name.setHintTextColor(Color.parseColor("#FF0000"));
+                    name.setHint("Punkt am Ende ist unzulässig");
+
                 }
                 else
                 {
@@ -503,7 +528,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
                     allItems.clear();
                     dbAdapter.openWrite();
-                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListe));
                     dbAdapter.close();
                     itemAdapter.notifyDataSetChanged();
                     newProducts.dismiss();
@@ -525,16 +550,16 @@ public class EinkaufslisteActivity extends ActionBarActivity
     public void changeArticle(String name, String desc, int image, long id)
     {
         dbAdapter.openWrite();
-        dbAdapter.changeArtikel(aktListenName, name, desc, image, id);
+        dbAdapter.changeArtikel(aktListe, name, desc, image, id);
         dbAdapter.close();
     }
 
     public void addArticle(String name, String desc, int image)
     {
         dbAdapter.openWrite();
-        dbAdapter.createEntryEinkaufArtikeltoTable(aktListenName, name, desc, image);
+        dbAdapter.createEntryEinkaufArtikeltoTable(aktListe, name, desc, image);
         allItems.clear();
-        allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListenName));
+        allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListe));
         dbAdapter.close();
         itemAdapter.notifyDataSetChanged();
     }

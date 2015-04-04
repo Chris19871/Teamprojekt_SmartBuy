@@ -51,6 +51,8 @@ public class DbHelper extends SQLiteOpenHelper
         db.execSQL(CREATE_VORAUSWAHL_TABLE);
         db.execSQL(CREATE_EINKAUFSARTIKEL_TABLE);
         db.execSQL(CREATE_EINKAUFSLISTEN_TABLE);
+        db.execSQL("INSERT INTO " + EINKAUFSLISTEN_TABLE + "(id, name, best_time, start_time) VALUES(999, 'test', '00:00:00' , 0);");
+        db.execSQL("DELETE FROM " + EINKAUFSLISTEN_TABLE +";");
     }
 
     @Override
