@@ -3,7 +3,7 @@
     <string name="Best_Time">Bestzeit</string>
     <string name="Change_Name">Name ändern</string>
     <string name="Delete">Löschen</string>
-    <string name="Reset">Zurücksetzen</string>
+    <string name="Reset">Liste Zurücksetzen</string>
     <string name="Shopping_mode">Einkaufmodus</string>
     <string name="bestTimeDialogTitle">Bestzeit</string>
     <string name="einstellungen">Einstellungen</string>
@@ -16,7 +16,7 @@
     <string name="stopwathdesc">Aktiviert oder deaktiviert das Stoppen der Zeit während eines Einkaufs</string>
     <string name="title_activity_einkaufmodus">Einkaufmodus</string>
     <string name="title_activity_settings">Einstellungen</string>
-    <string name="title_activity_vorauswahllisten">Vorauswahlliste</string>
+    <string name="title_activity_vorauswahllisten">Vorauswahllisten</string>
     <string name="title_einkauflisten_activitiy">Einkaufsliste</string>
     <string name="ueber">Über</string>
     <string name="ueber_dialog"> Team-Projekt der Hochschule Trier</string>
@@ -30,6 +30,6 @@
     <string name="meat">Fleisch</string>
     <string name="milk">Milch</string>
     <string name="vegetable">Gemüse</string>
-    <string name="yogurt">Yogurt</string>
+    <string name="yogurt">Jogurt</string>
     <string name="title_activity_vorauswahllistenbearbeiten">Vorauswahliste bearbeiten</string>
 </resources>
