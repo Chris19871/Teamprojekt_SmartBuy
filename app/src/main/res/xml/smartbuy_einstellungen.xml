@@ -3,7 +3,6 @@
         android:title="@string/generally"
         android:textColor="@color/actionBar">
 
-
         <SwitchPreference
             android:key="example_checkbox"
             android:title="@string/stopwatchSettings"
