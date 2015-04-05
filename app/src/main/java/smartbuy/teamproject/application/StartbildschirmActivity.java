@@ -2,6 +2,7 @@ package smartbuy.teamproject.application;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -19,39 +20,48 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
-import purchase.EinkaufsArtikel;
-import purchase.Einkaufsliste;
-import purchase.VorauswahlListe;
+import database.DbAdapter;
+import database.Vorauswahl;
 import swipe.SwipeDismissListViewTouchListener;
 
-public class StartbildschirmActivity extends ActionBarActivity {
+public class StartbildschirmActivity extends ActionBarActivity
+{
     private final Context context = this;
-    private GridLayout grid;
-    private ArrayAdapter<VorauswahlListe> vorauswahllistenitemListsAdapter;
-    private ArrayAdapter<Einkaufsliste> itemListsAdapter;
-    private CheckBox[] boxes;
-    private int boxCounter = 0;
-    private ArrayList<EinkaufsArtikel> addNewList;
-    private ArrayList<Einkaufsliste> einkaufsliste;
-    private ArrayList<VorauswahlListe> vorauswahllisten;
+    private ArrayAdapter<Vorauswahl> vorauswahllistenitemListsAdapter;
+    private ArrayAdapter<database.Einkaufsliste> itemListsAdapter;
+    private boolean delet = false;
+    private ArrayList<database.Einkaufsliste> einkaufsliste;
+    private ArrayList<Vorauswahl> vorauswahllisten;
     private EditText listName;
-    private static Einkaufsliste aktListe;
-    private Einkaufsliste zuletztGeleoscht;
+    private static String aktListe;
+    private static String aktListeName;
+    private database.Einkaufsliste zuletztGeleoscht;
     private int zuletztGeleoschtPosition;
+    private static DbAdapter dbAdapter;
 
+
+    /**
+     * Create ListView with all "Einkaufslisten"
+     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.startbildschirm);
+
+        dbAdapter = new DbAdapter(this);
+        dbAdapter.openWrite();
+        if (dbAdapter.getAllEntriesVorauswahlListe().size() == 0)
+        {
+            dbAdapter.createVorauswahllisten();
+        }
+        dbAdapter.close();
 
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/BAUHS93.TTF");
         TextView startText = (TextView) findViewById(R.id.startScreenText);
@@ -62,55 +72,88 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
         vorauswahllisten = new ArrayList<>();
 
-        einkaufsliste = new ArrayList<>();
+        dbAdapter.openRead();
+        einkaufsliste = dbAdapter.getAllEntriesEinkaufsliste();
+        dbAdapter.close();
+
         registerForContextMenu(findViewById(R.id.startscreenListView));
+
         ListView listView = (ListView) findViewById(R.id.startscreenListView);
         itemListsAdapter = new ArrayAdapter<>(this,
                 R.layout.listview_design, R.id.listViewDesign, einkaufsliste);
         listView.setAdapter(itemListsAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                aktListe = einkaufsliste.get(position);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                aktListeName = einkaufsliste.get(position).getName();
+                aktListe = "'" + String.valueOf(einkaufsliste.get(position).getId()) + "'";
                 wechsel();
             }
         });
 
+        //Swipe to left or right to delete the item
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         listView,
-                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                        new SwipeDismissListViewTouchListener.DismissCallbacks()
+                        {
                             @Override
-                            public boolean canDismiss(int position) {
+                            public boolean canDismiss(int position)
+                            {
                                 return true;
                             }
 
                             @Override
-                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions)
+                            {
+                                for (int position : reverseSortedPositions)
+                                {
                                     zuletztGeleoschtPosition = position;
                                     zuletztGeleoscht = itemListsAdapter.getItem(position);
                                     itemListsAdapter.remove(itemListsAdapter.getItem(position));
+
+                                    itemListsAdapter.notifyDataSetChanged();
                                 }
 
                                 final Dialog loeschen_rueck = new Dialog(context);
+
+                                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
+                                {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog)
+                                    {
+                                        if (!delet)
+                                        {
+                                            dbAdapter.openWrite();
+                                            dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
+                                            dbAdapter.close();
+                                            delet = false;
+                                        }
+                                    }
+                                });
                                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
                                 loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                                 loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
                                 loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-                                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
-                                loeschen_Ruck.setOnClickListener(new OnClickListener() {
+
+                                final Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
+                                loeschen_Ruck.setOnClickListener(new OnClickListener()
+                                {
                                     @Override
-                                    public void onClick(View v) {
+                                    public void onClick(View v)
+                                    {
+                                        delet = true;
                                         itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                                         itemListsAdapter.notifyDataSetChanged();
+
                                         loeschen_rueck.dismiss();
                                     }
                                 });
-
                                 loeschen_rueck.show();
                             }
                         });
@@ -121,33 +164,39 @@ public class StartbildschirmActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds vorauswahllistenitemListsAdapter to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_startbildschirm, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
+        if (id == R.id.settings)
+        {
             settingsOpen();
             return true;
         }
-        if (id == R.id.about) {
+        if (id == R.id.about)
+        {
             aboutOpen();
             return true;
         }
-        if (id == R.id.vorAuswahlliste) {
+        if (id == R.id.vorAuswahlliste)
+        {
             vorAuswahllisteOpen();
             return true;
         }
-        if (id == R.id.action_add) {
+        if (id == R.id.action_add)
+        {
             newEinkaufslisteOpen();
             return true;
         }
@@ -156,24 +205,33 @@ public class StartbildschirmActivity extends ActionBarActivity {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == R.id.startscreenListView) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        if (v.getId() == R.id.startscreenListView)
+        {
             getMenuInflater().inflate(R.menu.startbildschirm_contextmenu, menu);
         }
         super.onCreateContextMenu(menu, v, menuInfo);
-
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item)
+    {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.action_ContextMenu_Einkaufsmodus: {
-                aktListe = itemListsAdapter.getItem(info.position);
+        switch (item.getItemId())
+        {
+            //Go to EinkaufsmodusActivity
+            case R.id.action_ContextMenu_Einkaufsmodus:
+            {
+                aktListeName = itemListsAdapter.getItem(info.position).getName();
+                aktListe = "'" + String.valueOf(einkaufsliste.get(info.position).getId()) + "'";
                 openEinkaufsmodus();
                 break;
             }
-            case R.id.action_ContextMenu_Change_Name: {
+
+            //Open dialog to change the list name
+            case R.id.action_ContextMenu_Change_Name:
+            {
                 final Dialog nameAndern = new Dialog(context);
                 nameAndern.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 nameAndern.setContentView(R.layout.neue_vorauswahllisten_dialog);
@@ -182,12 +240,20 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 name.setText(itemListsAdapter.getItem(info.position).getName());
 
                 Button dialogButtonSave = (Button) nameAndern.findViewById(R.id.addVorauswahllisteSave);
-                dialogButtonSave.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        if (name.getText().toString().equals("")) {
+                dialogButtonSave.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                        if (name.getText().toString().equals(""))
+                        {
                             name.setHintTextColor(Color.parseColor("#FF0000"));
                             name.setHint("Feld muss ausgefüllt werden!");
-                        } else {
+                        }
+                        else
+                        {
+                            dbAdapter.openWrite();
+                            dbAdapter.changeListNameEinkaufsliste(itemListsAdapter.getItem(info.position).getName(), name.getText().toString());
+                            dbAdapter.close();
 
                             itemListsAdapter.getItem(info.position).setName(name.getText().toString());
                             itemListsAdapter.notifyDataSetChanged();
@@ -197,15 +263,20 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 });
 
                 Button dialogButtonCancel = (Button) nameAndern.findViewById(R.id.addVorauswahllisteCancel);
-                dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
+                dialogButtonCancel.setOnClickListener(new View.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
                         nameAndern.dismiss();
                     }
                 });
                 nameAndern.show();
                 break;
             }
-            case R.id.action_ContextMenu_Best_Time: {
+
+            //open dialog to show best time and reset it
+            case R.id.action_ContextMenu_Best_Time:
+            {
                 final Dialog bestzeit = new Dialog(context);
                 bestzeit.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 bestzeit.setContentView(R.layout.bestzeit_dialog);
@@ -216,23 +287,51 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
                 liste.setText(itemListsAdapter.getItem(info.position).getName());
 
-                bestzeitButton.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bestzeitText.setText("00:00:00");
+                dbAdapter.openRead();
+                String stopWatchTime = dbAdapter.getBestTime(aktListeName);
+                dbAdapter.close();
 
+                bestzeitText.setText(stopWatchTime);
+
+                bestzeitButton.setOnClickListener(new OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        bestzeitText.setText("00:00:00");
+                        dbAdapter.openWrite();
+                        dbAdapter.resetBestTime(aktListeName);
+                        dbAdapter.close();
                     }
                 });
-
                 bestzeit.show();
+                break;
             }
-            break;
-            case R.id.action_ContextMenu_delete: {
+
+            case R.id.action_ContextMenu_delete:
+            {
                 zuletztGeleoschtPosition = info.position;
                 zuletztGeleoscht = itemListsAdapter.getItem(info.position);
                 itemListsAdapter.remove(itemListsAdapter.getItem(info.position));
 
+                itemListsAdapter.notifyDataSetChanged();
+
                 final Dialog loeschen_rueck = new Dialog(context);
+
+                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
+                {
+                    @Override
+                    public void onDismiss(DialogInterface dialog)
+                    {
+                        if (!delet)
+                        {
+                            dbAdapter.openWrite();
+                            dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
+                            dbAdapter.close();
+                            delet = false;
+                        }
+                    }
+                });
                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
                 loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -240,11 +339,15 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
                 Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
-                loeschen_Ruck.setOnClickListener(new OnClickListener() {
+                loeschen_Ruck.setOnClickListener(new OnClickListener()
+                {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v)
+                    {
+                        delet = true;
                         itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                         itemListsAdapter.notifyDataSetChanged();
+
                         loeschen_rueck.dismiss();
                     }
                 });
@@ -253,50 +356,31 @@ public class StartbildschirmActivity extends ActionBarActivity {
                 break;
 
             }
-            case R.id.action_ContextMenu_reset: {
+            case R.id.action_ContextMenu_reset:
+            {
                 resetList(info.position);
+                break;
             }
-            break;
         }
         return super.onContextItemSelected(item);
     }
 
-    public void newEinkaufslisteOpen() {
+    public void newEinkaufslisteOpen()
+    {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.neue_einkaufsliste_dialog);
-        final String empty = "";
 
         listName = (EditText) dialog.findViewById(R.id.dialogName);
-        grid = (GridLayout) dialog.findViewById(R.id.gridLayout);
 
-        // SmartBuy Vorauswahllisten erstellen
-        String[] geburstagArtikel = {"Partyhüte", "Besteck"};
-        ArrayList<EinkaufsArtikel> gebItems = new ArrayList<>();
-        EinkaufsArtikel artikel;
-        for (int i = 0; i < geburstagArtikel.length; i++) {
-            artikel = new EinkaufsArtikel(geburstagArtikel[i], "", null);
-            gebItems.add(artikel);
+        final GridView grid = (GridView) dialog.findViewById(R.id.gridViewCheckbox);
 
-        }
-
-        VorauswahlListe geburtstag = new VorauswahlListe("Geburtstag", gebItems);
-        vorauswahllisten.add(geburtstag);
-
-        String[] partyArtikel = {"Fleisch", "Bier"};
-        ArrayList<EinkaufsArtikel> partyItems = new ArrayList<>();
-        for (int i = 0; i < partyArtikel.length; i++) {
-            artikel = new EinkaufsArtikel(partyArtikel[i], "", null);
-            partyItems.add(artikel);
-
-        }
-        VorauswahlListe party = new VorauswahlListe("Party", partyItems);
-        vorauswahllisten.add(party);
-
+        dbAdapter.openRead();
+        vorauswahllisten = dbAdapter.getAllEntriesVorauswahlListe();
+        dbAdapter.close();
 
         vorauswahllistenitemListsAdapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_dropdown_item_1line, vorauswahllisten);
-
 
         // set the neue_einkaufsliste_dialog dialog components - text, spinner, layout and button
         Spinner spinner = (Spinner) dialog.findViewById(R.id.dialogSpinner);
@@ -304,29 +388,57 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
         Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
-                addBox(arg2);
+                                       int arg2, long arg3)
+            {
+                String item = "'" + String.valueOf(vorauswahllistenitemListsAdapter.getItem(arg2).getId()) + "'";
+
+                dbAdapter.openRead();
+                ArrayList<database.EinkaufsArtikel> pItems = dbAdapter.getAllEntriesArtikel(item);
+                dbAdapter.close();
+
+                database.EinkaufsArtikel artikel[] = new database.EinkaufsArtikel[pItems.size()];
+                for (int i = 0; i < artikel.length; i++)
+                {
+                    artikel[i] = pItems.get(i);
+                }
+                NeueEinkaufslisteAdapter adapter = new NeueEinkaufslisteAdapter(context, artikel);
+                grid.setAdapter(adapter);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
+            public void onNothingSelected(AdapterView<?> arg0)
+            {
                 // TODO Auto-generated method stub
             }
         });
 
-        dialogButtonOk.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) throws IllegalArgumentException {
+        dialogButtonOk.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v) throws IllegalArgumentException
+            {
                 // Prüfung, ob der neuen Liste ein Name gegeben wurde.
-                if (listName.getText().toString().equals("")) {
+                if (listName.getText().toString().equals(""))
+                {
                     listName.setHintTextColor(Color.parseColor("#FF0000"));
                     listName.setHint("Feld muss ausgefüllt werden!");
-                } else {
-                    generateItemList();
+                }
+                else
+                {
+                    NeueEinkaufslisteAdapter adapter = (NeueEinkaufslisteAdapter) grid.getAdapter();
+                    ArrayList<database.EinkaufsArtikel> checkArticle = adapter.getCheckedItems();
+                    dbAdapter.openWrite();
+                    dbAdapter.createEinkaufsliste(listName.getText().toString(), checkArticle);
+                    dbAdapter.close();
+
+                    einkaufsliste.clear();
+                    dbAdapter.openRead();
+                    einkaufsliste.addAll(dbAdapter.getAllEntriesEinkaufsliste());
                     itemListsAdapter.notifyDataSetChanged();
+
                     dialog.dismiss();
                 }
             }
@@ -334,8 +446,10 @@ public class StartbildschirmActivity extends ActionBarActivity {
 
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
         // if button is clicked, close the custom neue_einkaufsliste_dialog
-        dialogButtonCancel.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+        dialogButtonCancel.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 dialog.dismiss();
             }
         });
@@ -343,107 +457,57 @@ public class StartbildschirmActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    public void addBox(int index) {
-        VorauswahlListe item = vorauswahllistenitemListsAdapter.getItem(index);
-        ArrayList<EinkaufsArtikel> pItems = item.getItems();
-        addNewList = pItems;
-        grid.removeAllViews();
-        grid.setColumnCount(2);
-
-        int columnIndex = 0;
-        int rowIndex = 0;
-
-        boxes = new CheckBox[pItems.size()];
-        for (int i = 0; i < pItems.size(); i++) {
-            boxes[i] = new CheckBox(this);
-            boxes[i].setText(pItems.get(i).getName());
-            boxes[i].setMinimumWidth(255);
-        }
-
-        boxCounter = boxes.length;
-
-        for (int i = 0; i < boxes.length; i++) {
-            if (i > 1 && i % 2 == 0) {
-                rowIndex++;
-            }
-
-            GridLayout.Spec row = GridLayout.spec(rowIndex, 1);
-            GridLayout.Spec colspan = GridLayout.spec(columnIndex, 1);
-            GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(row, colspan);
-            grid.addView(boxes[i], gridLayoutParam);
-            columnIndex++;
-        }
-
-    }
-
-    public void generateItemList() {
-        ArrayList<EinkaufsArtikel> newList = new ArrayList<>();
-        ArrayList<EinkaufsArtikel> newListBought = new ArrayList<>();
-        for (int i = 0; i < boxCounter; i++) {
-            if (boxes[i].isChecked()) {
-                newList.add(addNewList.get(i));
-            }
-        }
-        addList(new Einkaufsliste(listName.getText().toString(), newList, newListBought));
-    }
-
-    public void addList(Einkaufsliste list) {
-        einkaufsliste.add(list);
-    }
-
-    public void settingsOpen() {
+    public void settingsOpen()
+    {
         final Intent settings = new Intent(this, EinstellungenActivity.class);
         startActivity(settings);
     }
 
-    public void aboutOpen() {
+    public void aboutOpen()
+    {
         final Dialog uberDialog = new Dialog(context);
         uberDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         uberDialog.setContentView(R.layout.ueber_dialog);
-
         uberDialog.show();
     }
 
-    public void vorAuswahllisteOpen() {
+    public void vorAuswahllisteOpen()
+    {
         final Intent auswahl = new Intent(this, VorauswahllistenActivity.class);
         startActivity(auswahl);
     }
 
-    public void wechsel() {
+    public void wechsel()
+    {
         final Intent einkaufsliste = new Intent(this, EinkaufslisteActivity.class);
         startActivity(einkaufsliste);
     }
 
-    public void openEinkaufsmodus() {
+    public void openEinkaufsmodus()
+    {
         final Intent einkaufsmodus = new Intent(this, EinkaufmodusActivity.class);
         startActivity(einkaufsmodus);
-
     }
 
-    public void resetList(int pos) {
-        Einkaufsliste list = itemListsAdapter.getItem(pos);
-        ArrayList<EinkaufsArtikel> itemList = list.getItems();
-        ArrayList<EinkaufsArtikel> itemListBought = list.getItemsBought();
-
-        for (int i = 0; i < itemList.size(); i++) {
-            itemListBought.add(itemList.get(i));
-        }
-
-        itemList.clear();
-        itemList = itemListBought;
-        itemListBought.clear();
-
-        list.setItems(itemList);
-        list.setItemsBought(itemListBought);
+    public void resetList(int pos)
+    {
+        dbAdapter.openWrite();
+        dbAdapter.resetList("'" + String.valueOf(itemListsAdapter.getItem(pos).getId()) + "'");
+        dbAdapter.close();
     }
 
-
-    public static Einkaufsliste getAktListe() {
+    public static String getAktListe()
+    {
         return aktListe;
     }
 
-    public static void setAktListe(Einkaufsliste aktListe) {
-        StartbildschirmActivity.aktListe = aktListe;
+    public static String getAktListeName()
+    {
+        return aktListeName;
+    }
 
+    public static DbAdapter getDbAdapter()
+    {
+        return dbAdapter;
     }
 }

@@ -35,6 +35,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * !!!Klasse wurde aus Github importiert!!! Teamprojekt SmartBuy
+ *
+ *
+ *
  * A {@link android.view.View.OnTouchListener} that makes the list items in a {@link android.widget.ListView}
  * dismissable. {@link android.widget.ListView} is given special treatment because by default it handles touches
  * for its list items... i.e. it's in charge of drawing the pressed state (the list selector),

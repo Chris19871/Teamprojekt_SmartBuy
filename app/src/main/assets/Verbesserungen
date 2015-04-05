@@ -1,8 +1,2 @@
 
--eigene Vorauswahllisten
-
--Zahl über dem Einkaufswagen(BatchIcon)
-    -Inkrement
-    -Dekrement
-
-- Datenbank
+Datenbankabsturz bei Zahlen als Name

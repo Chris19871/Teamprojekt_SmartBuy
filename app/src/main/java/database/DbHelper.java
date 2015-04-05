@@ -4,11 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import purchase.AuswahllistenDb;
-
-/**
- * Created by Christian Meisberger on 21.03.2015.
- */
 public class DbHelper extends SQLiteOpenHelper
 {
     private static final String DATABASE_NAME = "smartbuy.db";
@@ -24,11 +19,15 @@ public class DbHelper extends SQLiteOpenHelper
     private final static String EINKAUFSLISTEN_ID = "id";
 
 
+
     public DbHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Create a new Database with default tables.
+     */
     @Override
     public void onCreate(SQLiteDatabase db)
     {
@@ -45,23 +44,19 @@ public class DbHelper extends SQLiteOpenHelper
         String CREATE_EINKAUFSLISTEN_TABLE = "CREATE TABLE " + EINKAUFSLISTEN_TABLE + " (" +
                 EINKAUFSLISTEN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "name TEXT, "+
-                        "best_time INTEGER, "+
-                        "start_time INTEGER);";
-
-
+                        "best_time TEXT, "+
+                        "start_time TEXT);";
 
         // create tables
         db.execSQL(CREATE_VORAUSWAHL_TABLE);
         db.execSQL(CREATE_EINKAUFSARTIKEL_TABLE);
         db.execSQL(CREATE_EINKAUFSLISTEN_TABLE);
-
-
+        db.execSQL("INSERT INTO " + EINKAUFSLISTEN_TABLE + "(id, name, best_time, start_time) VALUES(999, 'test', '00:00:00' , 0);");
+        db.execSQL("DELETE FROM " + EINKAUFSLISTEN_TABLE +";");
     }
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-
     }
 }

@@ -2,6 +2,7 @@ package smartbuy.teamproject.application;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
@@ -17,41 +18,55 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import purchase.EinkaufsArtikel;
-import purchase.Einkaufsliste;
+import database.DbAdapter;
 
-public class EinkaufmodusAdapter extends BaseAdapter {
+/**
+ * Adapter to show ImageView and TextView in the GridLayout from EinkaufsmodusFragment.
+ */
+public class EinkaufmodusAdapter extends BaseAdapter
+{
     private Context mContext;
-    private Einkaufsliste liste = StartbildschirmActivity.getAktListe();
-    private ArrayList<EinkaufsArtikel> listeArtikel;
-    private ArrayList<EinkaufsArtikel> listeArtikelGekauft;
-    private EinkaufsArtikel zuletztGekauft;
+    private String aktListe;
+    private DbAdapter dbAdapter;
+    private ArrayList<database.EinkaufsArtikel> listeArtikel;
+    private ArrayList<database.EinkaufsArtikel> listeArtikelGekauft;
+    private database.EinkaufsArtikel zuletztGekauft;
+    private boolean delete = false;
 
-    public EinkaufmodusAdapter(Context c) {
+    public EinkaufmodusAdapter(Context c)
+    {
         mContext = c;
-        liste = StartbildschirmActivity.getAktListe();
-        listeArtikel = liste.getItems();
-        listeArtikelGekauft = liste.getItemsBought();
+        aktListe = StartbildschirmActivity.getAktListe();
+        dbAdapter = StartbildschirmActivity.getDbAdapter();
+        dbAdapter.openRead();
+        listeArtikel = dbAdapter.getAllItemsNotBought(aktListe);
+        listeArtikelGekauft = dbAdapter.getAllItemsBought(aktListe);
+        dbAdapter.close();
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return listeArtikel.size();
     }
 
     @Override
-    public Object getItem(int position) {
+    public Object getItem(int position)
+    {
         return listeArtikel.get(position);
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(int position)
+    {
         return position;
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent)
+    {
         final LinearLayout layout = new LinearLayout(mContext);
+        EinkaufmodusActivity.setStopWatch(false);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setMinimumWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         layout.setMinimumHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -60,24 +75,59 @@ public class EinkaufmodusAdapter extends BaseAdapter {
 
         ImageView image = new ImageView(layout.getContext());
         image.setBackgroundColor(Color.parseColor("#FF5CC1DE"));
-        //Standard Bild
-        image.setImageResource(R.mipmap.smartbuy_logo);
+
+        image.setImageResource(listeArtikel.get(position).getPic());
         image.setClickable(true);
         image.setMinimumWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         image.setMinimumHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        image.setOnClickListener(new View.OnClickListener() {
+
+        //On click at the image this item will be bought.
+        //The bought item will be moved from the "EinkaufsmodusFragment" to the
+        //"EinkaufswagenFragment".
+        image.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                listeArtikelGekauft.add(listeArtikel.get(position));
+            public void onClick(View v)
+            {
+                dbAdapter.openWrite();
+                dbAdapter.buyArtikel(aktListe, listeArtikel.get(position).getId());
+                dbAdapter.close();
                 zuletztGekauft = listeArtikel.get(position);
-                listeArtikel.remove(position);
+
+                dbAdapter.openRead();
+                listeArtikel.clear();
+                listeArtikel.addAll(dbAdapter.getAllItemsNotBought(aktListe));
+                listeArtikelGekauft.clear();
+                listeArtikelGekauft.addAll(dbAdapter.getAllItemsBought(aktListe));
+                dbAdapter.close();
+
                 notifyDataSetChanged();
-                liste.setItems(listeArtikel);
-                liste.setItemsBought(listeArtikelGekauft);
-                StartbildschirmActivity.setAktListe(liste);
                 EinkaufmodusActivity.increment();
 
+                //Show a dialog to undo the last action
                 final Dialog loeschen_rueck = new Dialog(mContext);
+
+                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
+                {
+                    @Override
+                    public void onDismiss(DialogInterface dialog)
+                    {
+                        if (!delete)
+                        {
+                            dbAdapter.openRead();
+                            if (dbAdapter.getAllItemsNotBought(aktListe).size() == 0)
+                            {
+                                EinkaufmodusActivity.setStopWatch(true);
+
+                            } else
+                            {
+                                EinkaufmodusActivity.setStopWatch(false);
+                            }
+                            dbAdapter.close();
+                        }
+                        delete = false;
+                    }
+                });
                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
                 loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -85,27 +135,30 @@ public class EinkaufmodusAdapter extends BaseAdapter {
                 loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
                 Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
-                loeschen_Ruck.setOnClickListener(new View.OnClickListener() {
+                loeschen_Ruck.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v)
+                    {
+                        delete = true;
+                        dbAdapter.openWrite();
+                        dbAdapter.undoBuyArtikel(aktListe, zuletztGekauft.getId());
                         listeArtikel.add(position, zuletztGekauft);
-                        listeArtikelGekauft.remove(zuletztGekauft);
+                        listeArtikel.clear();
+                        listeArtikel.addAll(dbAdapter.getAllItemsNotBought(aktListe));
+                        listeArtikelGekauft.clear();
+                        listeArtikelGekauft.addAll(dbAdapter.getAllItemsBought(aktListe));
+                        dbAdapter.close();
 
                         notifyDataSetChanged();
-
-                        liste.setItems(listeArtikel);
-                        liste.setItemsBought(listeArtikelGekauft);
-                        StartbildschirmActivity.setAktListe(liste);
                         EinkaufmodusActivity.decrement();
                         loeschen_rueck.dismiss();
                     }
                 });
-
                 loeschen_rueck.show();
             }
 
         });
-
         layout.addView(image);
 
         TextView textView = new TextView(layout.getContext());
@@ -114,9 +167,13 @@ public class EinkaufmodusAdapter extends BaseAdapter {
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
         textView.setMinimumWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         textView.setMinimumHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        textView.setOnClickListener(new View.OnClickListener() {
+
+        //Show a dialog with product information
+        textView.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 final EditText name;
                 final EditText desc;
                 final ImageView image;
@@ -127,18 +184,17 @@ public class EinkaufmodusAdapter extends BaseAdapter {
 
                 name = (EditText) products.findViewById(R.id.productName);
                 desc = (EditText) products.findViewById(R.id.descNewProduct);
-                // image = aktArtikel.getImage();
+                image = (ImageView) products.findViewById(R.id.newProductLogo);
 
                 name.setText(listeArtikel.get(position).getName());
                 desc.setText(listeArtikel.get(position).getDesc());
+                image.setImageResource(listeArtikel.get(position).getPic());
 
                 products.show();
             }
         });
         layout.addView(textView);
+
         return layout;
     }
 }
-
-
-
