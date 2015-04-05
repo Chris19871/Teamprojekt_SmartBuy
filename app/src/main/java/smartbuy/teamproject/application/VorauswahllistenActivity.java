@@ -329,8 +329,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
                 else
                 {
                     dbAdapter.openWrite();
-                    dbAdapter.createEntryVorauswahlliste(name.getText().toString());
-                    dbAdapter.addListe(name.getText().toString());
+                    dbAdapter.createNewVorauswahlliste(name.getText().toString());
                     dbAdapter.close();
 
                     newVorauswahllisten.clear();

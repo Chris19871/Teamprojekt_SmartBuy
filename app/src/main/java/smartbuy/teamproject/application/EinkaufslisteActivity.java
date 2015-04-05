@@ -305,9 +305,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
                     @Override
                     public void onDismiss(DialogInterface dialog)
                     {
-                        image.setImageResource(Iadapter.getImage());
-                        image.setTag(Iadapter.getImage());
-                        name.setText(Iadapter.getImageName());
+                        if(Iadapter.getImageName() != 0) {
+                            name.setText(Iadapter.getImageName());
+                            image.setImageResource(Iadapter.getImage());
+                            image.setTag(Iadapter.getImage());
+                        }
                     }
                 });
                 imageAuswahlDialog.show();
