@@ -34,7 +34,6 @@ import swipe.SwipeDismissListViewTouchListener;
 
 public class EinkaufslisteActivity extends ActionBarActivity
 {
-    private String aktListeName;
     private String aktListe;
     private DbAdapter dbAdapter;
     private final Context context = this;
@@ -65,7 +64,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
         dbAdapter = StartbildschirmActivity.getDbAdapter();
         aktListe = StartbildschirmActivity.getAktListe();
-        aktListeName = StartbildschirmActivity.getAktListeName();
+        String aktListeName = StartbildschirmActivity.getAktListeName();
 
         einkaufslisteActionBar.setTitle(aktListeName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
@@ -146,22 +145,32 @@ public class EinkaufslisteActivity extends ActionBarActivity
                                     public void onClick(View v)
                                     {
                                         isDeleted = false;
-                                        itemAdapter.insert(geloschteArtikel.get(0), geloschteArtikelPositionen.get(0));
+                                        itemAdapter.insert(geloschteArtikel.get(0),
+                                                           geloschteArtikelPositionen.get(0));
                                         itemAdapter.notifyDataSetChanged();
                                         loeschen_rueck.dismiss();
                                     }
                                 });
 
-                                loeschen_rueck.show();
-                                if (isDeleted)
+                                loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
                                 {
-                                    dbAdapter.openWrite();
-                                    dbAdapter.deleteArtikel(aktListe, geloschteArtikel.get(0).getId());
-                                    allItems.clear();
-                                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListe));
-                                    dbAdapter.close();
-                                    itemAdapter.notifyDataSetChanged();
-                                }
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog)
+                                    {
+                                        if (isDeleted)
+                                        {
+                                            dbAdapter.openWrite();
+                                            dbAdapter.deleteArtikel(aktListe, geloschteArtikel.get(0).getId());
+                                            allItems.clear();
+                                            allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListe));
+                                            dbAdapter.close();
+                                            itemAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                });
+
+                                loeschen_rueck.show();
+
                             }
 
                         });
@@ -398,6 +407,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
         if (articleDelete)
         {
+            delete = true;
             //Show a dialog to undo the last action
             final Dialog loeschen_rueck = new Dialog(context);
 
@@ -406,7 +416,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 @Override
                 public void onDismiss(DialogInterface dialog)
                 {
-                    if (!delete)
+                    if (delete)
                     {
                         dbAdapter.openWrite();
                         for (int i = geloschteArtikel.size() - 1; i >= 0; i--)
@@ -414,6 +424,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
                             dbAdapter.deleteArtikel(aktListe, geloschteArtikel.get(i).getId());
                         }
                         dbAdapter.close();
+                        delete = false;
                     }
                 }
             });
@@ -430,11 +441,11 @@ public class EinkaufslisteActivity extends ActionBarActivity
                 @Override
                 public void onClick(View v)
                 {
-                    delete = true;
                     for (int i = (geloschteArtikel.size() - 1); i >= 0; i--)
                     {
                         itemAdapter.insert(geloschteArtikel.get(i), geloschteArtikelPositionen.get(i));
                     }
+                    delete = false;
                     loeschen_rueck.dismiss();
                 }
             });
@@ -568,6 +579,7 @@ public class EinkaufslisteActivity extends ActionBarActivity
 
     public void deleteSelectedItems()
     {
+
         geloschteArtikel.clear();
         geloschteArtikelPositionen.clear();
         SparseBooleanArray checkedItemPositions = listView.getCheckedItemPositions();

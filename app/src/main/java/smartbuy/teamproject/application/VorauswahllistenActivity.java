@@ -90,6 +90,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
                                     zuletztGeleoscht = newVorauswahllistenListsAdapter.getItem(position);
                                     newVorauswahllistenListsAdapter.remove(newVorauswahllistenListsAdapter.getItem(position));
                                     newVorauswahllistenListsAdapter.notifyDataSetChanged();
+                                    delete = true;
                                 }
 
                                 final Dialog loeschen_rueck = new Dialog(context);
@@ -100,7 +101,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
                                     @Override
                                     public void onDismiss(DialogInterface dialog)
                                     {
-                                        if (!delete)
+                                        if (delete)
                                         {
                                             dbAdapter.openWrite();
                                             dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
@@ -121,7 +122,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
                                     @Override
                                     public void onClick(View v)
                                     {
-                                        delete = true;
+                                        delete = false;
                                         newVorauswahllistenListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                                         newVorauswahllistenListsAdapter.notifyDataSetChanged();
 
@@ -237,6 +238,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
             //delete item
             case R.id.action_ContextMenu_delete:
             {
+                delete = true;
                 zuletztGeleoschtPosition = info.position;
                 zuletztGeleoscht = newVorauswahllistenListsAdapter.getItem(info.position);
                 newVorauswahllistenListsAdapter.remove(newVorauswahllistenListsAdapter.getItem(info.position));
@@ -251,7 +253,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
                     @Override
                     public void onDismiss(DialogInterface dialog)
                     {
-                        if (!delete)
+                        if (delete)
                         {
                             dbAdapter.openWrite();
                             dbAdapter.deleteTableVorauswahl(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
@@ -272,7 +274,7 @@ public class VorauswahllistenActivity extends ActionBarActivity
                     @Override
                     public void onClick(View v)
                     {
-                        delete = true;
+                        delete = false;
                         newVorauswahllistenListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                         newVorauswahllistenListsAdapter.notifyDataSetChanged();
                         loeschen_rueck.dismiss();
