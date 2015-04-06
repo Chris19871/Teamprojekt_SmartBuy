@@ -33,7 +33,6 @@ import swipe.SwipeDismissListViewTouchListener;
 public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
 {
     private String aktListe;
-    private String aktListeName;
     private DbAdapter dbAdapter;
     private final Context context = this;
     private ArrayAdapter<database.EinkaufsArtikel> itemAdapter;
@@ -63,7 +62,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
 
         dbAdapter = StartbildschirmActivity.getDbAdapter();
         aktListe = VorauswahllistenActivity.getAktVorauswahlListe();
-        aktListeName = VorauswahllistenActivity.getAktVorauswahlListeName();
+        String aktListeName = VorauswahllistenActivity.getAktVorauswahlListeName();
 
         einkaufslisteActionBar.setTitle(aktListeName);
         einkaufslisteActionBar.setDisplayShowTitleEnabled(true);
@@ -75,7 +74,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         dbAdapter.close();
 
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                R.layout.listview_design, R.id.listViewDesign, allItems);
+                                         R.layout.listview_design, R.id.listViewDesign, allItems);
         listView.setAdapter(itemAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -128,36 +127,54 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                                     itemAdapter.remove(itemAdapter.getItem(position));
                                     isDeleted = true;
                                 }
+
                                 final Dialog loeschen_rueck = new Dialog(context);
                                 loeschen_rueck.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
-                                loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                                loeschen_rueck.getWindow().clearFlags(
+                                        WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                                 loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
-                                loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                                loeschen_rueck.getWindow().setLayout(
+                                        WindowManager.LayoutParams.MATCH_PARENT,
+                                        WindowManager.LayoutParams.WRAP_CONTENT);
 
-                                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
+                                Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(
+                                        R.id.deleteUndoButton);
                                 loeschen_Ruck.setOnClickListener(new OnClickListener()
                                 {
                                     @Override
                                     public void onClick(View v)
                                     {
                                         isDeleted = false;
-                                        itemAdapter.insert(geloschteArtikel.get(0), geloschteArtikelPositionen.get(0));
+                                        itemAdapter.insert(geloschteArtikel.get(0),
+                                                           geloschteArtikelPositionen.get(0));
                                         itemAdapter.notifyDataSetChanged();
                                         loeschen_rueck.dismiss();
                                     }
                                 });
 
+                                loeschen_rueck.setOnDismissListener(
+                                        new DialogInterface.OnDismissListener()
+                                        {
+                                            @Override
+                                            public void onDismiss(DialogInterface dialog)
+                                            {
+                                                if (isDeleted)
+                                                {
+                                                    dbAdapter.openWrite();
+                                                    dbAdapter.deleteArtikel(aktListe,
+                                                                            geloschteArtikel.get(0)
+                                                                                    .getId());
+                                                    allItems.clear();
+                                                    allItems.addAll(dbAdapter.getAllEntriesArtikel(
+                                                            aktListe));
+                                                    dbAdapter.close();
+                                                    itemAdapter.notifyDataSetChanged();
+                                                }
+                                            }
+                                        });
                                 loeschen_rueck.show();
-                                if (isDeleted)
-                                {
-                                    dbAdapter.openWrite();
-                                    dbAdapter.deleteArtikel(aktListe, geloschteArtikel.get(0).getId());
-                                    allItems.clear();
-                                    allItems.addAll(dbAdapter.getAllEntriesArtikel(aktListe));
-                                    dbAdapter.close();
-                                    itemAdapter.notifyDataSetChanged();
-                                }
+
                             }
                         });
         listView.setOnTouchListener(touchListener);
@@ -283,8 +300,10 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                 imageAuswahlDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 imageAuswahlDialog.setContentView(R.layout.einkaufsartikel_image_dialog);
 
-                final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
-                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
+                final GridView gridView = (GridView) imageAuswahlDialog.findViewById(
+                        R.id.einkaufartikelImagelView);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(
+                        context, imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 
@@ -339,7 +358,8 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
     public void deleteMode()
     {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_multiple_choice, allItems);
+                                         android.R.layout.simple_list_item_multiple_choice,
+                                         allItems);
         listView.setAdapter(itemAdapter);
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -351,7 +371,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
     public void normalMode()
     {
         itemAdapter = new ArrayAdapter<>(getApplicationContext(),
-                R.layout.listview_design, R.id.listViewDesign, allItems);
+                                         R.layout.listview_design, R.id.listViewDesign, allItems);
         listView.setAdapter(itemAdapter);
 
         einkaufslisteActionBar.setDisplayHomeAsUpEnabled(false);
@@ -362,6 +382,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
 
         if (articleDelete)
         {
+            delete = true;
             final Dialog loeschen_rueck = new Dialog(context);
 
 
@@ -370,7 +391,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                 @Override
                 public void onDismiss(DialogInterface dialog)
                 {
-                    if (!delete)
+                    if (delete)
                     {
                         dbAdapter.openWrite();
                         for (int i = geloschteArtikel.size() - 1; i >= 0; i--)
@@ -378,6 +399,7 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                             dbAdapter.deleteArtikel(aktListe, geloschteArtikel.get(i).getId());
                         }
                         dbAdapter.close();
+                        delete = false;
                     }
                 }
             });
@@ -386,7 +408,8 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
             loeschen_rueck.setContentView(R.layout.loeschen_rueck_dialog);
             loeschen_rueck.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             loeschen_rueck.getWindow().setGravity(Gravity.BOTTOM);
-            loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            loeschen_rueck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                                                 WindowManager.LayoutParams.WRAP_CONTENT);
 
             Button loeschen_Ruck = (Button) loeschen_rueck.findViewById(R.id.deleteUndoButton);
             loeschen_Ruck.setOnClickListener(new OnClickListener()
@@ -394,12 +417,14 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                 @Override
                 public void onClick(View v)
                 {
-                    delete = true;
+
                     for (int i = (geloschteArtikel.size() - 1); i >= 0; i--)
                     {
-                        itemAdapter.insert(geloschteArtikel.get(i), geloschteArtikelPositionen.get(i));
+                        itemAdapter.insert(geloschteArtikel.get(i), geloschteArtikelPositionen.get(
+                                i));
                     }
                     loeschen_rueck.dismiss();
+                    delete = false;
                 }
             });
             loeschen_rueck.show();
@@ -415,7 +440,8 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
         final ImageView image;
 
         dbAdapter.openRead();
-        database.EinkaufsArtikel tmpArtikel = dbAdapter.getArtikel(aktListe, allItems.get(pos).getName());
+        database.EinkaufsArtikel tmpArtikel = dbAdapter.getArtikel(aktListe, allItems.get(pos)
+                .getName());
         dbAdapter.close();
 
 
@@ -446,8 +472,10 @@ public class VorauswahllistenBearbeitenActivity extends ActionBarActivity
                 imageAuswahlDialog.setContentView(R.layout.einkaufsartikel_image_dialog);
 
 
-                final GridView gridView = (GridView) imageAuswahlDialog.findViewById(R.id.einkaufartikelImagelView);
-                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(context, imageAuswahlDialog);
+                final GridView gridView = (GridView) imageAuswahlDialog.findViewById(
+                        R.id.einkaufartikelImagelView);
+                final EinkaufsArtikelImageAdapter Iadapter = new EinkaufsArtikelImageAdapter(
+                        context, imageAuswahlDialog);
 
                 gridView.setAdapter(Iadapter);
 

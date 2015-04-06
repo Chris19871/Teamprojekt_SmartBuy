@@ -35,7 +35,7 @@ public class StartbildschirmActivity extends ActionBarActivity
     private final Context context = this;
     private ArrayAdapter<Vorauswahl> vorauswahllistenitemListsAdapter;
     private ArrayAdapter<database.Einkaufsliste> itemListsAdapter;
-    private boolean delet = false;
+    private boolean delete = false;
     private ArrayList<database.Einkaufsliste> einkaufsliste;
     private ArrayList<Vorauswahl> vorauswahllisten;
     private EditText listName;
@@ -109,6 +109,8 @@ public class StartbildschirmActivity extends ActionBarActivity
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions)
                             {
+
+
                                 for (int position : reverseSortedPositions)
                                 {
                                     zuletztGeleoschtPosition = position;
@@ -116,21 +118,23 @@ public class StartbildschirmActivity extends ActionBarActivity
                                     itemListsAdapter.remove(itemListsAdapter.getItem(position));
 
                                     itemListsAdapter.notifyDataSetChanged();
+                                    delete = true;
                                 }
 
                                 final Dialog loeschen_rueck = new Dialog(context);
+
 
                                 loeschen_rueck.setOnDismissListener(new DialogInterface.OnDismissListener()
                                 {
                                     @Override
                                     public void onDismiss(DialogInterface dialog)
                                     {
-                                        if (!delet)
+                                        if (delete)
                                         {
                                             dbAdapter.openWrite();
                                             dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
                                             dbAdapter.close();
-                                            delet = false;
+                                            delete = false;
                                         }
                                     }
                                 });
@@ -147,7 +151,7 @@ public class StartbildschirmActivity extends ActionBarActivity
                                     @Override
                                     public void onClick(View v)
                                     {
-                                        delet = true;
+                                        delete = false;
                                         itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                                         itemListsAdapter.notifyDataSetChanged();
 
@@ -310,6 +314,7 @@ public class StartbildschirmActivity extends ActionBarActivity
 
             case R.id.action_ContextMenu_delete:
             {
+                delete = true;
                 zuletztGeleoschtPosition = info.position;
                 zuletztGeleoscht = itemListsAdapter.getItem(info.position);
                 itemListsAdapter.remove(itemListsAdapter.getItem(info.position));
@@ -323,12 +328,12 @@ public class StartbildschirmActivity extends ActionBarActivity
                     @Override
                     public void onDismiss(DialogInterface dialog)
                     {
-                        if (!delet)
+                        if (delete)
                         {
                             dbAdapter.openWrite();
                             dbAdapter.deleteTableEinkaufliste(zuletztGeleoscht.getName(), String.valueOf(zuletztGeleoscht.getId()));
                             dbAdapter.close();
-                            delet = false;
+                            delete = false;
                         }
                     }
                 });
@@ -344,7 +349,7 @@ public class StartbildschirmActivity extends ActionBarActivity
                     @Override
                     public void onClick(View v)
                     {
-                        delet = true;
+                        delete = false;
                         itemListsAdapter.insert(zuletztGeleoscht, zuletztGeleoschtPosition);
                         itemListsAdapter.notifyDataSetChanged();
 
