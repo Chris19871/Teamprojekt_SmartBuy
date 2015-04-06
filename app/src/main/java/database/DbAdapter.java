@@ -304,6 +304,22 @@ public class DbAdapter
         }
     }
 
+    public void createNewVorauswahlliste(String tableName)
+    {
+        String listname = "";
+        createEntryVorauswahlliste(tableName);
+        ArrayList<Vorauswahl> list = getAllEntriesVorauswahlListe();
+        for (int i = 0; i < list.size(); i++)
+        {
+            if(list.get(i).getName().equals(tableName))
+            {
+                listname = "'" + String.valueOf(list.get(i).getId()) + "'";
+            }
+
+        }
+        addListe(listname);
+    }
+
     public void createEinkaufsliste(String tableName, ArrayList<EinkaufsArtikel> artikel)
     {
         String listname = "";
