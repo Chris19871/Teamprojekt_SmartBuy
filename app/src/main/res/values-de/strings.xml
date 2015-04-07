@@ -21,7 +21,7 @@
     <string name="ueber">Über</string>
     <string name="ueber_dialog"> Team-Projekt der Hochschule Trier</string>
     <string name="add">Hinzufügen</string>
-    <string name="battery">Battery</string>
+    <string name="battery">Batterie</string>
     <string name="butter">Butter</string>
     <string name="cheese">Käse</string>
     <string name="fish">Fisch</string>
@@ -30,6 +30,6 @@
     <string name="meat">Fleisch</string>
     <string name="milk">Milch</string>
     <string name="vegetable">Gemüse</string>
-    <string name="yogurt">Jogurt</string>
+    <string name="yogurt">Joghurt</string>
     <string name="title_activity_vorauswahllistenbearbeiten">Vorauswahliste bearbeiten</string>
 </resources>
